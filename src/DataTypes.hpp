@@ -86,13 +86,13 @@ class VarCharArray : public DataType
   friend class TestCn;
 
   public:
-    ~VarCharArray() {}
+    ~VarCharArray() {delete[] mData;}
     VarCharArray(const string& str = "") {init(); fill(str);}
     VarCharArray(const char* str) {assert(str != NULL); init(); fill(string(str));}
-    VarCharArray(const VarCharArray& rhs) : mSize(rhs.mSize) {memcpy(mData, rhs.mData, capacity());}
+    VarCharArray(const VarCharArray& rhs) : mSize(rhs.mSize) {mData = new char[capacity()]; memcpy(mData, rhs.mData, capacity());}
     VarCharArray& operator=(const VarCharArray& rhs);
     VarCharArray& operator+=(const string& str) {fill(str); return *this;}
-    void clear() { init();}
+    void clear() { mSize = 0; memset(mData, 0, capacity());}
     void write(ofstream& outfile) {outfile.write(mData, sizeof(T)+mSize);}
     void read(ifstream& infile);
     size_t max_size() const {return ((1<<(8*sizeof(T)))-1);}
@@ -100,8 +100,8 @@ class VarCharArray : public DataType
     string to_string() const;
 
   private:
-    inline size_t capacity() const {return sizeof(mData)/sizeof(char);}
-    inline void init() {mSize = 0; memset(mData, 0, capacity());}
+    inline size_t capacity() const {return sizeof(T)+((1<<(8*sizeof(T)))-1);}
+    inline void init() {mSize = 0; mData = new char[capacity()]; memset(mData, 0, capacity());}
     inline size_t merged_size(const string& str) const
     {
       return (mSize+str.size() > max_size())? max_size()-mSize : str.size();
@@ -116,7 +116,7 @@ class VarCharArray : public DataType
 
   private:
     T               mSize;
-    char            mData[sizeof(T)+((1<<(8*sizeof(T)))-1)];
+    char*           mData;
 };
 
 template <typename T>
@@ -319,7 +319,7 @@ class BitArray : public DataType
 
     ~BitArray() {}
     BitArray(const string& str = "");
-    BitArray(const char* str) {assert(str != NULL); *this = BitArray(string(str));}
+    BitArray(const char* str);
     BitArray(const BitArray& rhs) {memcpy(mData, rhs.mData, SIZE);}
     BitArray& operator=(const BitArray& rhs);
     bool operator[] (size_t pos) const {assert(pos < 8*SIZE); return ((mData[pos/8] & (1 << (pos%8))) != 0);}
@@ -346,6 +346,24 @@ BitArray<SIZE>::BitArray(const string& str)
   memset(mData, '\0', SIZE);
 
   for(size_t i = 0; ((i < 8*SIZE) && (i < str.size())); i++)
+  {
+    if('1' == str[i])      mData[i/8] |=  (1 << (i%8));
+    else if('0' == str[i]) mData[i/8] &= ~(1 << (i%8));
+  }
+}
+
+template <size_t SIZE>
+BitArray<SIZE>::BitArray(const char* str)
+{
+  assert(str != NULL);
+  for(size_t i = 0; i < strlen(str); i++)
+  {
+    assert(('1' == str[i]) || ('0' == str[i]));
+  }
+
+  memset(mData, '\0', SIZE);
+
+  for(size_t i = 0; ((i < 8*SIZE) && (i < strlen(str))); i++)
   {
     if('1' == str[i])      mData[i/8] |=  (1 << (i%8));
     else if('0' == str[i]) mData[i/8] &= ~(1 << (i%8));
@@ -419,10 +437,10 @@ class VarBitArray : public DataType
         size_t pos;
     };
 
-    ~VarBitArray() {}
+    ~VarBitArray() {delete[] mData;}
     VarBitArray(const string& str = "");
-    VarBitArray(const char* str) {assert(str != NULL); *this = VarBitArray(string(str));}
-    VarBitArray(const VarBitArray& rhs) : mSize(rhs.mSize) {memcpy(mData, rhs.mData, capacity());}
+    VarBitArray(const char* str);
+    VarBitArray(const VarBitArray& rhs) : mSize(rhs.mSize) {mData = new char[capacity()]; memcpy(mData, rhs.mData, capacity());}
     VarBitArray& operator=(const VarBitArray& rhs);
     VarBitArray& operator+=(const string& str) {fill(str); return *this;}
     bool operator[] (size_t pos) const {assert(pos < mSize); return ((mData[sizeof(T)+(pos/8)] & (1 << (pos%8))) != 0);}
@@ -435,7 +453,7 @@ class VarBitArray : public DataType
     string to_string() const;
 
   private:
-    inline size_t capacity() const {return sizeof(mData)/sizeof(char);}
+    inline size_t capacity() const {return sizeof(T)+(1<<(8*sizeof(T)-3));}
     inline size_t merged_size(const string& str) const
     {
       return (mSize+str.size() > max_size())? max_size()-mSize : str.size();
@@ -454,7 +472,7 @@ class VarBitArray : public DataType
 
   private:
     T               mSize;
-    char            mData[sizeof(T)+(1<<(8*sizeof(T)-3))];
+    char*           mData;
 };
 
 template <typename T>
@@ -462,6 +480,18 @@ VarBitArray<T>::VarBitArray(const string& str) : mSize(0)
 {
   for(size_t i = 0; i < str.size(); i++) assert(('1' == str[i]) || ('0' == str[i]));
 
+  mData = new char[capacity()];
+  memset(mData, 0, capacity());
+  fill(str);
+}
+
+template <typename T>
+VarBitArray<T>::VarBitArray(const char* str) : mSize(0)
+{
+  assert(str != NULL);
+  for(size_t i = 0; i < strlen(str); i++) assert(('1' == str[i]) || ('0' == str[i]));
+
+  mData = new char[capacity()];
   memset(mData, 0, capacity());
   fill(str);
 }
@@ -535,10 +565,10 @@ class JxN1 : public DataType
         size_t          pos;
     };
 
-    ~JxN1() {}
+    ~JxN1() {delete[] mData;}
     JxN1(const string& str = "");
-    JxN1(const char* str) {assert(str != NULL); *this = JxN1(string(str));}
-    JxN1(const JxN1& rhs) {memcpy(mData, rhs.mData, capacity());}
+    JxN1(const char* str);
+    JxN1(const JxN1& rhs) {mData = new char[capacity()]; memcpy(mData, rhs.mData, capacity());}
     JxN1& operator=(const JxN1& rhs);
     unsigned char operator[] (size_t pos) const {assert(pos < SIZE); return (((mData[pos/2] >> ((0==(pos%2))?0:4))) & 0xF);}
     Reference operator[] (size_t pos) {assert(pos < SIZE); return Reference(mData, pos);}
@@ -550,7 +580,7 @@ class JxN1 : public DataType
     string to_string() const;
 
   private:
-    inline size_t capacity() const {return sizeof(mData)/sizeof(char);}
+    inline size_t capacity() const {return (SIZE%2)?(SIZE/2+1):(SIZE/2);}
     inline void fill(const string& str)
     {
       for(size_t i = 0; (i < SIZE) && (i < str.size()); i++)
@@ -567,7 +597,7 @@ class JxN1 : public DataType
     }
 
   private:
-    char            mData[(SIZE%2)?(SIZE/2+1):(SIZE/2)];
+    char*           mData;
 };
 
 template <size_t SIZE>
@@ -581,6 +611,24 @@ JxN1<SIZE>::JxN1(const string& str)
         );
   }
 
+  mData = new char[capacity()];
+  memset(mData, 0, capacity());
+  fill(str);
+}
+
+template <size_t SIZE>
+JxN1<SIZE>::JxN1(const char* str)
+{
+  assert(str != NULL);
+  for(size_t i = 0; i < strlen(str); i++)
+  {
+    assert( ((str[i] >= '0') && (str[i] <= '9')) ||
+        ((str[i] >= 'A') && (str[i] <= 'F')) ||
+        ((str[i] >= 'a') && (str[i] <= 'f'))
+        );
+  }
+
+  mData = new char[capacity()];
   memset(mData, 0, capacity());
   fill(str);
 }
@@ -647,8 +695,8 @@ class KxTYPE
         size_t pos;
     };
 
-    ~KxTYPE() {}
-    KxTYPE() {}
+    ~KxTYPE() {delete[] mData;}
+    KxTYPE() {mData = new T[SIZE];}
     T operator[] (size_t pos) const {assert(pos < SIZE); return mData[pos];}
     Reference operator[] (size_t pos) {assert(pos < SIZE); return Reference(mData, pos);}
     void clear() {for(size_t i = 0; i < SIZE; i++) mData[i].clear();}
@@ -668,7 +716,7 @@ class KxTYPE
     KxTYPE& operator=(const KxTYPE& rhs);
 
   private:
-    T                 mData[SIZE];
+    T*                mData;
 };
 
 template <typename T, size_t SIZE>
