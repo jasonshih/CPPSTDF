@@ -149,7 +149,7 @@ class TestKxCf : public CxxTest::TestSuite
       TS_ASSERT_EQUALS(stdfStrOut.size(), 120u);
       TS_ASSERT_EQUALS(stdfStrIn.to_string(), stdfStrOut.to_string());
       string str;
-      for(size_t i =  0; i < size-1; i++) str.append("ABCD,"); str.append("ABCD");
+      for(size_t i =  0; i < size-1; i++) str.append("ABCDEF,"); str.append("ABCDEF");
       TS_ASSERT_EQUALS(stdfStrIn.to_string(), str);
       TS_ASSERT_EQUALS(stdfStrOut.to_string(), str);
     }
