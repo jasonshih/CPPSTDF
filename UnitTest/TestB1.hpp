@@ -18,7 +18,7 @@ class TestB1 : public CxxTest::TestSuite
       unsigned char ch = '\0';
       TS_ASSERT_SAME_DATA(stdfStr.mData, &ch, 1);
       TS_ASSERT_EQUALS(stdfStr.to_string(), "00000000");
-      TS_ASSERT_EQUALS(stdfStr.size(), 1);
+      TS_ASSERT_EQUALS(stdfStr.size(), 1u);
     }
 
     void testConstructor2()
@@ -27,7 +27,7 @@ class TestB1 : public CxxTest::TestSuite
       unsigned char ch = '\0';
       TS_ASSERT_SAME_DATA(stdfStr.mData, &ch, 1);
       TS_ASSERT_EQUALS(stdfStr.to_string(), "00000000");
-      TS_ASSERT_EQUALS(stdfStr.size(), 1);
+      TS_ASSERT_EQUALS(stdfStr.size(), 1u);
     }
 
     void testConstructor3()
@@ -110,8 +110,8 @@ class TestB1 : public CxxTest::TestSuite
       TS_ASSERT_EQUALS(stdfStrOut[0], 1);
       TS_ASSERT_EQUALS(stdfStrIn[6], 1);
       TS_ASSERT_EQUALS(stdfStrOut[6], 1);
-      TS_ASSERT_EQUALS(stdfStrIn.size(), 1);
-      TS_ASSERT_EQUALS(stdfStrOut.size(), 1);
+      TS_ASSERT_EQUALS(stdfStrIn.size(), 1u);
+      TS_ASSERT_EQUALS(stdfStrOut.size(), 1u);
     }
 
 };

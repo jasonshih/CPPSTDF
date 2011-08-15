@@ -14,7 +14,7 @@ class TestKxU8 : public CxxTest::TestSuite
 
     void testConstructor0()
     {
-      const int size = 0;
+      const size_t size = 0;
       KxTYPE<U8, size> stdfStr;
       U8 data[size];
       TS_ASSERT_SAME_DATA(stdfStr.mData, data, size);
@@ -25,7 +25,7 @@ class TestKxU8 : public CxxTest::TestSuite
 
     void testConstructor1()
     {
-      const int size = 10;
+      const size_t size = 10;
       KxTYPE<U8, size> stdfStr;
       U8 data[size];
       TS_ASSERT_SAME_DATA(stdfStr.mData, data, size);
@@ -36,7 +36,7 @@ class TestKxU8 : public CxxTest::TestSuite
 
     void testConstructor2()
     {
-      const int size = 100;
+      const size_t size = 100;
       KxTYPE<U8, size> stdfStr;
       U8 data[size];
       for(size_t i = 0; i < size; i++)
@@ -47,10 +47,10 @@ class TestKxU8 : public CxxTest::TestSuite
       TS_ASSERT_EQUALS(stdfStr.max_size(), size);
       TS_ASSERT_EQUALS(stdfStr.size(), 8*size);
       U8 data88 = stdfStr[88];
-      TS_ASSERT_EQUALS(data88.getValue(), 88);
+      TS_ASSERT_EQUALS(data88.getValue(), 88u);
       TS_ASSERT_EQUALS(data88.to_string(), data[88].to_string());
       U8 data99 = stdfStr[99];
-      TS_ASSERT_EQUALS(data99.getValue(), 99);
+      TS_ASSERT_EQUALS(data99.getValue(), 99u);
       TS_ASSERT_EQUALS(data99.to_string(), data[99].to_string());
       TS_ASSERT_EQUALS(stdfStr.to_string(), "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99");
       stdfStr.clear();
@@ -61,7 +61,7 @@ class TestKxU8 : public CxxTest::TestSuite
     {
       const char *filename = "TestKxU8.testWriteRead1.txt";
 
-      const int size = 1;
+      const size_t size = 1;
       U8 data[size];
 
       KxTYPE<U8, size> stdfStrIn;
@@ -84,7 +84,7 @@ class TestKxU8 : public CxxTest::TestSuite
     {
       const char *filename = "TestKxU8.testWriteRead2.txt";
 
-      const int size = 10;
+      const size_t size = 10;
       U8 data[size];
 
       KxTYPE<U8, size> stdfStrIn;
@@ -107,7 +107,7 @@ class TestKxU8 : public CxxTest::TestSuite
     {
       const char *filename = "TestKxU8.testWriteRead3.txt";
 
-      const int size = 20;
+      const size_t size = 20;
       U8 data[size];
 
       KxTYPE<U8, size> stdfStrIn;

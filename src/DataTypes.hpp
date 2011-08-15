@@ -324,7 +324,7 @@ class BitArray : public DataType
     BitArray& operator=(const BitArray& rhs);
     bool operator[] (size_t pos) const {assert(pos < 8*SIZE); return ((mData[pos/8] & (1 << (pos%8))) != 0);}
     BitReference operator[] (size_t pos) {assert(pos < 8*SIZE); return BitReference(mData, pos);}
-    BitArray& reset(bool x) {for(size_t i = 0; i < SIZE; ++i){if(x) mData[i] = 0xFF;else mData[i] = 0x00;}}
+    BitArray& reset(bool x) {for(size_t i = 0; i < SIZE; ++i){if(x) mData[i] = 0xFF;else mData[i] = 0x00;} return *this;}
     void clear() {reset(false);}
     void write(ofstream& outfile) {outfile.write(mData, SIZE);}
     void read(ifstream& infile) {infile.read(mData, SIZE);}
@@ -550,10 +550,11 @@ class JxN1 : public DataType
           pos = rhs.pos;
           return *this;
         }
-        Reference operator=(unsigned char x)
+        Reference& operator=(unsigned char x)
         {
           if(0==(pos%2)) pType[pos/2] |= (x);       // low  4 bits
           else           pType[pos/2] |= (x << 4);  // high 4 bits
+          return *this;
         }
         operator unsigned char() const {return (((pType[pos/2] >> ((0==(pos%2))?0:4))) & 0xF);}
 
@@ -681,9 +682,10 @@ class KxTYPE
           pos = rhs.pos;
           return *this;
         }
-        Reference operator=(const T& x)
+        Reference& operator=(const T& x)
         {
-          pType[pos] = x; 
+          pType[pos] = x;
+          return *this;
         }
         operator T() const {return pType[pos];}
 
@@ -787,21 +789,21 @@ class VarTypeArray
         ~VnType() {}
         VnType(Type type) : mData(type) {}
         VnType(const VnType& rhs) : mData(rhs.mData) {}
-        VnType& operator =(const VnType& rhs) {if(this == &rhs) return *this; mData = rhs.mData; return *this;}
+        VnType& operator=(const VnType& rhs) {if(this == &rhs) return *this; mData = rhs.mData; return *this;}
         void write(ofstream& outfile) {outfile.write(&mData, size());}
         void read(ifstream& infile) {}
         size_t size() const {return sizeof(mData);}
         string to_string() const
         {
           const string NAME[14] = {"B0", "U1", "U2", "U4", "I1", "I2", "I4", "R4", "R8", "", "Cn", "Bn", "Dn", "N1"};
-          return NAME[mData];
+          return NAME[static_cast<int>(mData)];
         }
       private:
         char                 mData;
     };
 
     VarTypeArray(const VarTypeArray& rhs);
-    VarTypeArray& operator =(const VarTypeArray& rhs);
+    VarTypeArray& operator=(const VarTypeArray& rhs);
 
     inline void addTypeB0() {VnType* pad = new VnType(VnType::VN_B0); mData.push_back(pad);}
     inline void addTypeU1() {VnType* pad = new VnType(VnType::VN_U1); mData.push_back(pad);}

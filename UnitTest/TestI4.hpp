@@ -114,8 +114,8 @@ class TestI4 : public CxxTest::TestSuite
       outfile.close();
 
       TS_ASSERT(stdfStrIn.mData == stdfStrOut.mData);
-      TS_ASSERT(stdfStrIn.mData == -0x80000000);
-      TS_ASSERT(stdfStrOut.mData == -0x80000000);
+      TS_ASSERT(stdfStrIn.mData == (int)-0x80000000);
+      TS_ASSERT(stdfStrOut.mData == (int)-0x80000000);
       TS_ASSERT(stdfStrIn.getValue() == -2147483648);
       TS_ASSERT(stdfStrOut.getValue() == -2147483648);
       TS_ASSERT(stdfStrOut.to_string() == "-2147483648");

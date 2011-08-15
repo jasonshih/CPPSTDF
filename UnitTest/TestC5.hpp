@@ -42,7 +42,7 @@ class TestC5 : public CxxTest::TestSuite
       TS_ASSERT_SAME_DATA(stdfStr.mData, "A    ", 5);
       TS_ASSERT_SAME_DATA(stdfStr.to_string().data(), "A    ", 5);
       TS_ASSERT_EQUALS(stdfStr.to_string(), "A    ");
-      TS_ASSERT_EQUALS(stdfStr.size(), 5);
+      TS_ASSERT_EQUALS(stdfStr.size(), 5u);
     }
 
     void testWriteRead1()
@@ -61,9 +61,9 @@ class TestC5 : public CxxTest::TestSuite
 
       TS_ASSERT_SAME_DATA(stdfStrIn.mData, stdfStrOut.mData, 5);
       TS_ASSERT_EQUALS(stdfStrIn.to_string(), "     ");
-      TS_ASSERT_EQUALS(stdfStrIn.size(), 5);
+      TS_ASSERT_EQUALS(stdfStrIn.size(), 5u);
       TS_ASSERT_EQUALS(stdfStrOut.to_string(), "     ");
-      TS_ASSERT_EQUALS(stdfStrOut.size(), 5);
+      TS_ASSERT_EQUALS(stdfStrOut.size(), 5u);
     }
 
     void testWriteRead2()
@@ -82,9 +82,9 @@ class TestC5 : public CxxTest::TestSuite
 
       TS_ASSERT_SAME_DATA(stdfStrIn.mData, stdfStrOut.mData, 5);
       TS_ASSERT_EQUALS(stdfStrIn.to_string(), "AA   ");
-      TS_ASSERT_EQUALS(stdfStrIn.size(), 5);
+      TS_ASSERT_EQUALS(stdfStrIn.size(), 5u);
       TS_ASSERT_EQUALS(stdfStrOut.to_string(), "AA   ");
-      TS_ASSERT_EQUALS(stdfStrOut.size(), 5);
+      TS_ASSERT_EQUALS(stdfStrOut.size(), 5u);
     }
 
 };

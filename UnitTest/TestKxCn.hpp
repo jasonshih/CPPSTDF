@@ -14,9 +14,8 @@ class TestKxCn : public CxxTest::TestSuite
 
     void testConstructor0()
     {
-      const int size = 0;
+      const size_t size = 0;
       KxTYPE<Cn, size> stdfStr;
-      Cn data[size];
       TS_ASSERT_EQUALS(stdfStr.max_size(), size);
       TS_ASSERT_EQUALS(stdfStr.size(), size);
       TS_ASSERT_EQUALS(stdfStr.to_string(), "");
@@ -24,9 +23,8 @@ class TestKxCn : public CxxTest::TestSuite
 
     void testConstructor1()
     {
-      const int size = 10;
+      const size_t size = 10;
       KxTYPE<Cn, size> stdfStr;
-      Cn data[size];
       TS_ASSERT_EQUALS(stdfStr.max_size(), size);
       TS_ASSERT_EQUALS(stdfStr.size(), size);
       TS_ASSERT_EQUALS(stdfStr.to_string(), ",,,,,,,,,");
@@ -34,7 +32,7 @@ class TestKxCn : public CxxTest::TestSuite
 
     void testConstructor2()
     {
-      const int size = 100;
+      const size_t size = 100;
       KxTYPE<Cn, size> stdfStr;
       Cn data[size];
       for(size_t i = 0; i < size; i++)
@@ -59,8 +57,7 @@ class TestKxCn : public CxxTest::TestSuite
     {
       const char *filename = "TestKxCn.testWriteRead1.txt";
 
-      const int size = 1;
-      Cn data[size];
+      const size_t size = 1;
 
       KxTYPE<Cn, size> stdfStrIn;
       ofstream outfile(filename, ofstream::binary);
@@ -72,10 +69,10 @@ class TestKxCn : public CxxTest::TestSuite
       stdfStrOut.read(infile);
       outfile.close();
 
-      TS_ASSERT_EQUALS(stdfStrIn.max_size(), 1);
-      TS_ASSERT_EQUALS(stdfStrOut.max_size(), 1);
-      TS_ASSERT_EQUALS(stdfStrIn.size(), 1);
-      TS_ASSERT_EQUALS(stdfStrOut.size(), 1);
+      TS_ASSERT_EQUALS(stdfStrIn.max_size(), 1u);
+      TS_ASSERT_EQUALS(stdfStrOut.max_size(), 1u);
+      TS_ASSERT_EQUALS(stdfStrIn.size(), 1u);
+      TS_ASSERT_EQUALS(stdfStrOut.size(), 1u);
       TS_ASSERT_EQUALS(stdfStrIn.to_string(), stdfStrOut.to_string())
     }
 
@@ -83,8 +80,7 @@ class TestKxCn : public CxxTest::TestSuite
     {
       const char *filename = "TestKxCn.testWriteRead2.txt";
 
-      const int size = 10;
-      Cn data[size];
+      const size_t size = 10;
 
       KxTYPE<Cn, size> stdfStrIn;
       ofstream outfile(filename, ofstream::binary);
@@ -96,10 +92,10 @@ class TestKxCn : public CxxTest::TestSuite
       stdfStrOut.read(infile);
       outfile.close();
 
-      TS_ASSERT_EQUALS(stdfStrIn.max_size(), 10);
-      TS_ASSERT_EQUALS(stdfStrOut.max_size(), 10);
-      TS_ASSERT_EQUALS(stdfStrIn.size(), 10);
-      TS_ASSERT_EQUALS(stdfStrOut.size(), 10);
+      TS_ASSERT_EQUALS(stdfStrIn.max_size(), 10u);
+      TS_ASSERT_EQUALS(stdfStrOut.max_size(), 10u);
+      TS_ASSERT_EQUALS(stdfStrIn.size(), 10u);
+      TS_ASSERT_EQUALS(stdfStrOut.size(), 10u);
       TS_ASSERT_EQUALS(stdfStrIn.to_string(), stdfStrOut.to_string())
     }
 
@@ -107,7 +103,7 @@ class TestKxCn : public CxxTest::TestSuite
     {
       const char *filename = "TestKxCn.testWriteRead3.txt";
 
-      const int size = 20;
+      const size_t size = 20;
       Cn data[size];
 
       KxTYPE<Cn, size> stdfStrIn;
@@ -124,10 +120,10 @@ class TestKxCn : public CxxTest::TestSuite
       stdfStrOut.read(infile);
       outfile.close();
 
-      TS_ASSERT_EQUALS(stdfStrIn.max_size(), 20);
-      TS_ASSERT_EQUALS(stdfStrOut.max_size(), 20);
-      TS_ASSERT_EQUALS(stdfStrIn.size(), 140);
-      TS_ASSERT_EQUALS(stdfStrOut.size(), 140);
+      TS_ASSERT_EQUALS(stdfStrIn.max_size(), 20u);
+      TS_ASSERT_EQUALS(stdfStrOut.max_size(), 20u);
+      TS_ASSERT_EQUALS(stdfStrIn.size(), 140u);
+      TS_ASSERT_EQUALS(stdfStrOut.size(), 140u);
       TS_ASSERT_EQUALS(stdfStrIn.to_string(), stdfStrOut.to_string());
       string str;
       for(size_t i = 0; i < size-1; i++) str.append("ABCDEF,"); str.append("ABCDEF");

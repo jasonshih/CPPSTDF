@@ -14,9 +14,8 @@ class TestKxSn : public CxxTest::TestSuite
 
     void testConstructor0()
     {
-      const int size = 0;
+      const size_t size = 0;
       KxTYPE<Sn, size> stdfStr;
-      Sn data[size];
       TS_ASSERT_EQUALS(stdfStr.max_size(), size);
       TS_ASSERT_EQUALS(stdfStr.size(), size);
       TS_ASSERT_EQUALS(stdfStr.to_string(), "");
@@ -24,9 +23,8 @@ class TestKxSn : public CxxTest::TestSuite
 
     void testConstructor1()
     {
-      const int size = 10;
+      const size_t size = 10;
       KxTYPE<Sn, size> stdfStr;
-      Sn data[size];
       TS_ASSERT_EQUALS(stdfStr.max_size(), size);
       TS_ASSERT_EQUALS(stdfStr.size(), 2*size);
       TS_ASSERT_EQUALS(stdfStr.to_string(), ",,,,,,,,,");
@@ -34,7 +32,7 @@ class TestKxSn : public CxxTest::TestSuite
 
     void testConstructor2()
     {
-      const int size = 30;
+      const size_t size = 30;
       KxTYPE<Sn, size> stdfStr;
       Sn data[size];
       for(size_t i = 0; i < size; i++)
@@ -57,7 +55,7 @@ class TestKxSn : public CxxTest::TestSuite
 
     void testConstructor3()
     {
-      const int size = 94;
+      const size_t size = 94;
       KxTYPE<Sn, size> stdfStr;
       Sn data[size];
       for(size_t i = 0; i < size; i++)
@@ -80,7 +78,7 @@ class TestKxSn : public CxxTest::TestSuite
 
     void testConstructor4()
     {
-      const int size = 394;
+      const size_t size = 394;
       KxTYPE<Sn, size> stdfStr;
       Sn data[size];
       for(size_t i = 0; i < size; i++)
@@ -105,8 +103,7 @@ class TestKxSn : public CxxTest::TestSuite
     {
       const char *filename = "TestKxSn.testWriteRead1.txt";
 
-      const int size = 1;
-      Sn data[size];
+      const size_t size = 1;
 
       KxTYPE<Sn, size> stdfStrIn;
       ofstream outfile(filename, ofstream::binary);
@@ -118,10 +115,10 @@ class TestKxSn : public CxxTest::TestSuite
       stdfStrOut.read(infile);
       outfile.close();
 
-      TS_ASSERT_EQUALS(stdfStrIn.max_size(), 1);
-      TS_ASSERT_EQUALS(stdfStrOut.max_size(), 1);
-      TS_ASSERT_EQUALS(stdfStrIn.size(), 2);
-      TS_ASSERT_EQUALS(stdfStrOut.size(), 2);
+      TS_ASSERT_EQUALS(stdfStrIn.max_size(), 1u);
+      TS_ASSERT_EQUALS(stdfStrOut.max_size(), 1u);
+      TS_ASSERT_EQUALS(stdfStrIn.size(), 2u);
+      TS_ASSERT_EQUALS(stdfStrOut.size(), 2u);
       TS_ASSERT_EQUALS(stdfStrIn.to_string(), stdfStrOut.to_string())
     }
 
@@ -129,8 +126,7 @@ class TestKxSn : public CxxTest::TestSuite
     {
       const char *filename = "TestKxSn.testWriteRead2.txt";
 
-      const int size = 10;
-      Sn data[size];
+      const size_t size = 10;
 
       KxTYPE<Sn, size> stdfStrIn;
       ofstream outfile(filename, ofstream::binary);
@@ -142,10 +138,10 @@ class TestKxSn : public CxxTest::TestSuite
       stdfStrOut.read(infile);
       outfile.close();
 
-      TS_ASSERT_EQUALS(stdfStrIn.max_size(), 10);
-      TS_ASSERT_EQUALS(stdfStrOut.max_size(), 10);
-      TS_ASSERT_EQUALS(stdfStrIn.size(), 20);
-      TS_ASSERT_EQUALS(stdfStrOut.size(), 20);
+      TS_ASSERT_EQUALS(stdfStrIn.max_size(), 10u);
+      TS_ASSERT_EQUALS(stdfStrOut.max_size(), 10u);
+      TS_ASSERT_EQUALS(stdfStrIn.size(), 20u);
+      TS_ASSERT_EQUALS(stdfStrOut.size(), 20u);
       TS_ASSERT_EQUALS(stdfStrIn.to_string(), stdfStrOut.to_string())
     }
 
@@ -153,7 +149,7 @@ class TestKxSn : public CxxTest::TestSuite
     {
       const char *filename = "TestKxSn.testWriteRead3.txt";
 
-      const int size = 20;
+      const size_t size = 20;
       Sn data[size];
 
       KxTYPE<Sn, size> stdfStrIn;
@@ -170,10 +166,10 @@ class TestKxSn : public CxxTest::TestSuite
       stdfStrOut.read(infile);
       outfile.close();
 
-      TS_ASSERT_EQUALS(stdfStrIn.max_size(), 20);
-      TS_ASSERT_EQUALS(stdfStrOut.max_size(), 20);
-      TS_ASSERT_EQUALS(stdfStrIn.size(), 160);
-      TS_ASSERT_EQUALS(stdfStrOut.size(), 160);
+      TS_ASSERT_EQUALS(stdfStrIn.max_size(), 20u);
+      TS_ASSERT_EQUALS(stdfStrOut.max_size(), 20u);
+      TS_ASSERT_EQUALS(stdfStrIn.size(), 160u);
+      TS_ASSERT_EQUALS(stdfStrOut.size(), 160u);
       TS_ASSERT_EQUALS(stdfStrIn.to_string(), stdfStrOut.to_string());
       string str;
       for(size_t i = 0; i < size-1; i++) str.append("ABCDEF,"); str.append("ABCDEF");

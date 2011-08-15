@@ -29,7 +29,7 @@ class TestI8 : public CxxTest::TestSuite
     {
       I8 stdfStr = -0x8000000000000000;
       //TS_ASSERT(stdfStr.mData == -9223372036854775808);
-      TS_ASSERT(stdfStr.mData == -0x8000000000000000);
+      TS_ASSERT(stdfStr.mData == (long long)-0x8000000000000000);
       stdfStr = 0xFFFFFFFFFFFFFFFF;
       TS_ASSERT(stdfStr.mData == -1);
       stdfStr = 0x7FFFFFFFFFFFFFFF;
@@ -127,10 +127,10 @@ class TestI8 : public CxxTest::TestSuite
       outfile.close();
 
       TS_ASSERT(stdfStrIn.mData == stdfStrOut.mData);
-      TS_ASSERT(stdfStrIn.mData == -0x8000000000000000);
-      TS_ASSERT(stdfStrOut.mData == -0x8000000000000000);
-      TS_ASSERT(stdfStrIn.getValue() == -0x8000000000000000);
-      TS_ASSERT(stdfStrOut.getValue() == -0x8000000000000000);
+      TS_ASSERT(stdfStrIn.mData == (long long)-0x8000000000000000);
+      TS_ASSERT(stdfStrOut.mData == (long long)-0x8000000000000000);
+      TS_ASSERT(stdfStrIn.getValue() == (long long)-0x8000000000000000);
+      TS_ASSERT(stdfStrOut.getValue() == (long long)-0x8000000000000000);
       TS_ASSERT(stdfStrIn.to_string() == "-9223372036854775808");
       TS_ASSERT(stdfStrOut.to_string() == "-9223372036854775808");
       TS_ASSERT(stdfStrIn.size() == 8);

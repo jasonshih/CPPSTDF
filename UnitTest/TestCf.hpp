@@ -16,17 +16,17 @@ class TestCf : public CxxTest::TestSuite
     {
       Cf stdfStr;
       TS_ASSERT(stdfStr.mData == "");
-      TS_ASSERT_EQUALS(stdfStr.size(), 0);
+      TS_ASSERT_EQUALS(stdfStr.size(), 0u);
     }
 
     void testConstructor2()
     {
       Cf stdfStr = "";
       TS_ASSERT(stdfStr.mData == "");
-      TS_ASSERT_EQUALS(stdfStr.size(), 0);
+      TS_ASSERT_EQUALS(stdfStr.size(), 0u);
       stdfStr += "";
       TS_ASSERT(stdfStr.mData == "");
-      TS_ASSERT_EQUALS(stdfStr.size(), 0);
+      TS_ASSERT_EQUALS(stdfStr.size(), 0u);
     }
 
     void testConstructor3()
@@ -34,22 +34,22 @@ class TestCf : public CxxTest::TestSuite
       Cf stdfStr = "AA";
       TS_ASSERT(stdfStr.mData == "AA");
       TS_ASSERT_EQUALS(stdfStr.to_string(), "AA");
-      TS_ASSERT_EQUALS(stdfStr.size(), 2);
+      TS_ASSERT_EQUALS(stdfStr.size(), 2u);
       stdfStr += "BB";
       TS_ASSERT(stdfStr.mData == "AABB");
       TS_ASSERT_EQUALS(stdfStr.to_string(), "AABB");
-      TS_ASSERT_EQUALS(stdfStr.size(), 4);
+      TS_ASSERT_EQUALS(stdfStr.size(), 4u);
       stdfStr = "CC";
       TS_ASSERT(stdfStr.mData == "CC");
       TS_ASSERT_EQUALS(stdfStr.to_string(), "CC");
-      TS_ASSERT_EQUALS(stdfStr.size(), 2);
+      TS_ASSERT_EQUALS(stdfStr.size(), 2u);
     }
 
     void testWriteRead1()
     {
       const char *filename = "TestCf.testWriteRead1.txt";
 
-     int size = 0;
+      size_t size = 0;
 
       Cf stdfStrIn;
       ofstream outfile(filename, ofstream::binary);
@@ -65,15 +65,15 @@ class TestCf : public CxxTest::TestSuite
       TS_ASSERT(stdfStrIn.mData == stdfStrOut.mData);
       TS_ASSERT_EQUALS(stdfStrIn.to_string(), "");
       TS_ASSERT_EQUALS(stdfStrOut.to_string(), "");
-      TS_ASSERT_EQUALS(stdfStrIn.size(), 0);
-      TS_ASSERT_EQUALS(stdfStrOut.size(), 0);
+      TS_ASSERT_EQUALS(stdfStrIn.size(), 0u);
+      TS_ASSERT_EQUALS(stdfStrOut.size(), 0u);
     }
 
     void testWriteRead2()
     {
       const char *filename = "TestCf.testWriteRead2.txt";
 
-     int size = 0;
+      size_t size = 0;
 
       Cf stdfStrIn = "123456789";
       ofstream outfile(filename, ofstream::binary);
@@ -89,8 +89,8 @@ class TestCf : public CxxTest::TestSuite
       TS_ASSERT(stdfStrIn.mData == stdfStrOut.mData);
       TS_ASSERT_EQUALS(stdfStrIn.to_string(), "123456789");
       TS_ASSERT_EQUALS(stdfStrOut.to_string(), "123456789");
-      TS_ASSERT_EQUALS(stdfStrIn.size(), 9);
-      TS_ASSERT_EQUALS(stdfStrOut.size(), 9);
+      TS_ASSERT_EQUALS(stdfStrIn.size(), 9u);
+      TS_ASSERT_EQUALS(stdfStrOut.size(), 9u);
     }
 
     void testWriteRead3()
@@ -113,8 +113,8 @@ class TestCf : public CxxTest::TestSuite
       TS_ASSERT(stdfStrIn.mData == stdfStrOut.mData);
       TS_ASSERT_EQUALS(stdfStrIn.to_string(), "123456789");
       TS_ASSERT_EQUALS(stdfStrOut.to_string(), "123456789");
-      TS_ASSERT_EQUALS(stdfStrIn.size(), 9);
-      TS_ASSERT_EQUALS(stdfStrOut.size(), 9);
+      TS_ASSERT_EQUALS(stdfStrIn.size(), 9u);
+      TS_ASSERT_EQUALS(stdfStrOut.size(), 9u);
     }
 
 };

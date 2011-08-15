@@ -14,9 +14,8 @@ class TestKxCf : public CxxTest::TestSuite
 
     void testConstructor0()
     {
-      const int size = 0;
+      const size_t size = 0;
       KxTYPE<Cf, size> stdfStr;
-      Cf data[size];
       TS_ASSERT_EQUALS(stdfStr.max_size(), size);
       TS_ASSERT_EQUALS(stdfStr.size(), size);
       TS_ASSERT_EQUALS(stdfStr.to_string(), "");
@@ -24,17 +23,16 @@ class TestKxCf : public CxxTest::TestSuite
 
     void testConstructor1()
     {
-      const int size = 10;
+      const size_t size = 10;
       KxTYPE<Cf, size> stdfStr;
-      Cf data[size];
       TS_ASSERT_EQUALS(stdfStr.max_size(), size);
-      TS_ASSERT_EQUALS(stdfStr.size(), 0);
+      TS_ASSERT_EQUALS(stdfStr.size(), 0u);
       TS_ASSERT_EQUALS(stdfStr.to_string(), ",,,,,,,,,");
     }
 
     void testConstructor2()
     {
-      const int size = 30;
+      const size_t size = 30;
       KxTYPE<Cf, size> stdfStr;
       Cf data[size];
       for(size_t i = 0; i < size; i++)
@@ -47,14 +45,17 @@ class TestKxCf : public CxxTest::TestSuite
       TS_ASSERT_EQUALS(data8.to_string(), data[8].to_string());
       Cf data9 = stdfStr[9];
       TS_ASSERT_EQUALS(data9.to_string(), data[9].to_string());
-      TS_ASSERT_EQUALS(stdfStr.to_string(), "ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD");
+      string str;
+      for(size_t i =  0; i < size-1; i++) str.append("ABCD,"); str.append("ABCD");
+      TS_ASSERT_EQUALS(stdfStr.to_string(), str);
       stdfStr.clear();
-      TS_ASSERT_EQUALS(stdfStr.to_string(), ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,");
+      str.clear(); str.assign(size-1, ',');
+      TS_ASSERT_EQUALS(stdfStr.to_string(), str);
     }
 
     void testConstructor3()
     {
-      const int size = 94;
+      const size_t size = 94;
       KxTYPE<Cf, size> stdfStr;
       Cf data[size];
       for(size_t i = 0; i < size; i++)
@@ -67,17 +68,19 @@ class TestKxCf : public CxxTest::TestSuite
       TS_ASSERT_EQUALS(data88.to_string(), data[88].to_string());
       Cf data93 = stdfStr[93];
       TS_ASSERT_EQUALS(data93.to_string(), data[93].to_string());
-      TS_ASSERT_EQUALS(stdfStr.to_string(), "ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD,ABCD");
+      string str;
+      for(size_t i =  0; i < size-1; i++) str.append("ABCD,"); str.append("ABCD");
+      TS_ASSERT_EQUALS(stdfStr.to_string(), str);
       stdfStr.clear();
-      TS_ASSERT_EQUALS(stdfStr.to_string(), ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,");
+      str.clear(); str.assign(size-1, ',');
+      TS_ASSERT_EQUALS(stdfStr.to_string(), str);
     }
 
     void testWriteRead1()
     {
       const char *filename = "TestKxCf.testWriteRead1.txt";
 
-      const int size = 1;
-      Cf data[size];
+      const size_t size = 1;
 
       KxTYPE<Cf, size> stdfStrIn;
       ofstream outfile(filename, ofstream::binary);
@@ -89,10 +92,10 @@ class TestKxCf : public CxxTest::TestSuite
       stdfStrOut.read(infile, 0);
       outfile.close();
 
-      TS_ASSERT_EQUALS(stdfStrIn.max_size(), 1);
-      TS_ASSERT_EQUALS(stdfStrOut.max_size(), 1);
-      TS_ASSERT_EQUALS(stdfStrIn.size(), 0);
-      TS_ASSERT_EQUALS(stdfStrOut.size(), 0);
+      TS_ASSERT_EQUALS(stdfStrIn.max_size(), 1u);
+      TS_ASSERT_EQUALS(stdfStrOut.max_size(), 1u);
+      TS_ASSERT_EQUALS(stdfStrIn.size(), 0u);
+      TS_ASSERT_EQUALS(stdfStrOut.size(), 0u);
       TS_ASSERT_EQUALS(stdfStrIn.to_string(), stdfStrOut.to_string())
     }
 
@@ -100,8 +103,7 @@ class TestKxCf : public CxxTest::TestSuite
     {
       const char *filename = "TestKxCf.testWriteRead2.txt";
 
-      const int size = 10;
-      Cf data[size];
+      const size_t size = 10;
 
       KxTYPE<Cf, size> stdfStrIn;
       ofstream outfile(filename, ofstream::binary);
@@ -113,10 +115,10 @@ class TestKxCf : public CxxTest::TestSuite
       stdfStrOut.read(infile, 0);
       outfile.close();
 
-      TS_ASSERT_EQUALS(stdfStrIn.max_size(), 10);
-      TS_ASSERT_EQUALS(stdfStrOut.max_size(), 10);
-      TS_ASSERT_EQUALS(stdfStrIn.size(), 0);
-      TS_ASSERT_EQUALS(stdfStrOut.size(), 0);
+      TS_ASSERT_EQUALS(stdfStrIn.max_size(), 10u);
+      TS_ASSERT_EQUALS(stdfStrOut.max_size(), 10u);
+      TS_ASSERT_EQUALS(stdfStrIn.size(), 0u);
+      TS_ASSERT_EQUALS(stdfStrOut.size(), 0u);
       TS_ASSERT_EQUALS(stdfStrIn.to_string(), stdfStrOut.to_string())
     }
 
@@ -124,7 +126,7 @@ class TestKxCf : public CxxTest::TestSuite
     {
       const char *filename = "TestKxCf.testWriteRead3.txt";
 
-      const int size = 20;
+      const size_t size = 20;
       Cf data[size];
 
       KxTYPE<Cf, size> stdfStrIn;
@@ -141,13 +143,15 @@ class TestKxCf : public CxxTest::TestSuite
       stdfStrOut.read(infile, 6);
       outfile.close();
 
-      TS_ASSERT_EQUALS(stdfStrIn.max_size(), 20);
-      TS_ASSERT_EQUALS(stdfStrOut.max_size(), 20);
-      TS_ASSERT_EQUALS(stdfStrIn.size(), 120);
-      TS_ASSERT_EQUALS(stdfStrOut.size(), 120);
+      TS_ASSERT_EQUALS(stdfStrIn.max_size(), 20u);
+      TS_ASSERT_EQUALS(stdfStrOut.max_size(), 20u);
+      TS_ASSERT_EQUALS(stdfStrIn.size(), 120u);
+      TS_ASSERT_EQUALS(stdfStrOut.size(), 120u);
       TS_ASSERT_EQUALS(stdfStrIn.to_string(), stdfStrOut.to_string());
-      TS_ASSERT_EQUALS(stdfStrIn.to_string(), "ABCDEF,ABCDEF,ABCDEF,ABCDEF,ABCDEF,ABCDEF,ABCDEF,ABCDEF,ABCDEF,ABCDEF,ABCDEF,ABCDEF,ABCDEF,ABCDEF,ABCDEF,ABCDEF,ABCDEF,ABCDEF,ABCDEF,ABCDEF");
-      TS_ASSERT_EQUALS(stdfStrOut.to_string(), "ABCDEF,ABCDEF,ABCDEF,ABCDEF,ABCDEF,ABCDEF,ABCDEF,ABCDEF,ABCDEF,ABCDEF,ABCDEF,ABCDEF,ABCDEF,ABCDEF,ABCDEF,ABCDEF,ABCDEF,ABCDEF,ABCDEF,ABCDEF");
+      string str;
+      for(size_t i =  0; i < size-1; i++) str.append("ABCD,"); str.append("ABCD");
+      TS_ASSERT_EQUALS(stdfStrIn.to_string(), str);
+      TS_ASSERT_EQUALS(stdfStrOut.to_string(), str);
     }
 
 };

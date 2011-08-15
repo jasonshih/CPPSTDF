@@ -19,8 +19,8 @@ class TestBn : public CxxTest::TestSuite
       char ch[SIZE] = {0};
       TS_ASSERT_SAME_DATA(stdfStr.mData, ch, SIZE);
       TS_ASSERT_EQUALS(stdfStr.to_string(), "");
-      TS_ASSERT_EQUALS(stdfStr.size(), 1);
-      TS_ASSERT_EQUALS(stdfStr.max_size(), 255);
+      TS_ASSERT_EQUALS(stdfStr.size(), 1u);
+      TS_ASSERT_EQUALS(stdfStr.max_size(), 255u);
     }
 
     void testConstructor2()
@@ -29,8 +29,8 @@ class TestBn : public CxxTest::TestSuite
       char ch[SIZE] = {0};
       TS_ASSERT_SAME_DATA(stdfStr.mData, ch, SIZE);
       TS_ASSERT_EQUALS(stdfStr.to_string(), "");
-      TS_ASSERT_EQUALS(stdfStr.size(), 1);
-      TS_ASSERT_EQUALS(stdfStr.max_size(), 255);
+      TS_ASSERT_EQUALS(stdfStr.size(), 1u);
+      TS_ASSERT_EQUALS(stdfStr.max_size(), 255u);
     }
 
     void testConstructor3()
@@ -43,7 +43,7 @@ class TestBn : public CxxTest::TestSuite
       ch[3] = 4;
       TS_ASSERT_SAME_DATA(stdfStr.mData, ch, SIZE);
       TS_ASSERT_EQUALS(stdfStr.to_string(), string("0000000100100000001"));
-      TS_ASSERT_EQUALS(stdfStr.size(), 4);
+      TS_ASSERT_EQUALS(stdfStr.size(), 4u);
       stdfStr = "1000000000000001";
       memset(ch, 0, SIZE);
       ch[0] = 16;
@@ -157,9 +157,9 @@ class TestBn : public CxxTest::TestSuite
       str.erase(255,1);
       TS_ASSERT_EQUALS(stdfStrIn.to_string(), str);
       TS_ASSERT_EQUALS(stdfStrOut.to_string(), str);
-      TS_ASSERT_EQUALS(stdfStrIn.size(), 33);
-      TS_ASSERT_EQUALS(stdfStrOut.size(), 33);
-      TS_ASSERT_EQUALS(stdfStrIn.max_size(), 255);
-      TS_ASSERT_EQUALS(stdfStrOut.max_size(), 255);
+      TS_ASSERT_EQUALS(stdfStrIn.size(), 33u);
+      TS_ASSERT_EQUALS(stdfStrOut.size(), 33u);
+      TS_ASSERT_EQUALS(stdfStrIn.max_size(), 255u);
+      TS_ASSERT_EQUALS(stdfStrOut.max_size(), 255u);
     }
 };

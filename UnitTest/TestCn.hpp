@@ -16,20 +16,20 @@ class TestCn : public CxxTest::TestSuite
     {
       Cn stdfStr;
       TS_ASSERT_SAME_DATA(stdfStr.mData, "", 1);
-      TS_ASSERT_EQUALS(stdfStr.size(), 1);
-      TS_ASSERT_EQUALS(stdfStr.max_size(), 255);
+      TS_ASSERT_EQUALS(stdfStr.size(), 1u);
+      TS_ASSERT_EQUALS(stdfStr.max_size(), 255u);
     }
 
     void testConstructor2()
     {
       Cn stdfStr;
       TS_ASSERT_SAME_DATA(stdfStr.mData, "", 1);
-      TS_ASSERT_EQUALS(stdfStr.size(), 1);
-      TS_ASSERT_EQUALS(stdfStr.max_size(), 255);
+      TS_ASSERT_EQUALS(stdfStr.size(), 1u);
+      TS_ASSERT_EQUALS(stdfStr.max_size(), 255u);
       stdfStr += "";
       TS_ASSERT_SAME_DATA(stdfStr.mData, "", 1);
-      TS_ASSERT_EQUALS(stdfStr.size(), 1);
-      TS_ASSERT_EQUALS(stdfStr.max_size(), 255);
+      TS_ASSERT_EQUALS(stdfStr.size(), 1u);
+      TS_ASSERT_EQUALS(stdfStr.max_size(), 255u);
     }
 
     void testMergedSize()
@@ -103,8 +103,8 @@ class TestCn : public CxxTest::TestSuite
       outfile.close();
 
       TS_ASSERT(stdfStr.to_string() == "");
-      TS_ASSERT_EQUALS(stdfStr.size(), 1);
-      TS_ASSERT_EQUALS(stdfStr.max_size(), 255);
+      TS_ASSERT_EQUALS(stdfStr.size(), 1u);
+      TS_ASSERT_EQUALS(stdfStr.max_size(), 255u);
     }
 
     void testWriteRead2()
@@ -122,8 +122,8 @@ class TestCn : public CxxTest::TestSuite
       outfile.close();
 
       TS_ASSERT(stdfStr.to_string() == "123456789");
-      TS_ASSERT_EQUALS(stdfStr.size(), 10);
-      TS_ASSERT_EQUALS(stdfStr.max_size(), 255);
+      TS_ASSERT_EQUALS(stdfStr.size(), 10u);
+      TS_ASSERT_EQUALS(stdfStr.max_size(), 255u);
     }
 
     void testWriteRead3()
@@ -144,7 +144,7 @@ class TestCn : public CxxTest::TestSuite
 
       str.assign(stdfStr.max_size(), 'A');
       TS_ASSERT(stdfStr.to_string() == str);
-      TS_ASSERT_EQUALS(stdfStr.size(), 256);
-      TS_ASSERT_EQUALS(stdfStr.max_size(), 255);
+      TS_ASSERT_EQUALS(stdfStr.size(), 256u);
+      TS_ASSERT_EQUALS(stdfStr.max_size(), 255u);
     }
 };

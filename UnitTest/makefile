@@ -1,4 +1,4 @@
-CC=g++ -g
+CC=g++ -g -Wall -O0
 
 all: runner
 

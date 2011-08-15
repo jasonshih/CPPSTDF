@@ -14,9 +14,8 @@ class TestKxTYPE : public CxxTest::TestSuite
 
     void testConstructor0()
     {
-      const int size = 0;
+      const size_t size = 0;
       KxTYPE<I4, size> stdfStr;
-      I4 data[size];
       TS_ASSERT_EQUALS(stdfStr.max_size(), size);
       TS_ASSERT_EQUALS(stdfStr.size(), size);
       TS_ASSERT_EQUALS(stdfStr.to_string(), "");
@@ -24,9 +23,8 @@ class TestKxTYPE : public CxxTest::TestSuite
 
     void testConstructor1()
     {
-      const int size = 10;
+      const size_t size = 10;
       KxTYPE<I4, size> stdfStr;
-      I4 data[size];
       TS_ASSERT_EQUALS(stdfStr.max_size(), size);
       TS_ASSERT_EQUALS(stdfStr.size(), 4*size);
       TS_ASSERT_EQUALS(stdfStr.to_string(), "0,0,0,0,0,0,0,0,0,0");
@@ -34,10 +32,10 @@ class TestKxTYPE : public CxxTest::TestSuite
 
     void testConstructor2()
     {
-      const int size = 100;
+      const size_t size = 100;
       KxTYPE<I4, size> stdfStr;
       I4 data[size];
-      for(int i = 0; i < size; i++)
+      for(size_t i = 0; i < size; i++)
       {
         stdfStr[i] = data[i] = -i;
       }
@@ -58,8 +56,7 @@ class TestKxTYPE : public CxxTest::TestSuite
     {
       const char *filename = "TestKxTYPE.testWriteRead1.txt";
 
-      const int size = 1;
-      I4 data[size];
+      const size_t size = 1;
 
       KxTYPE<I4, size> stdfStrIn;
       ofstream outfile(filename, ofstream::binary);
@@ -78,8 +75,7 @@ class TestKxTYPE : public CxxTest::TestSuite
     {
       const char *filename = "TestKxTYPE.testWriteRead2.txt";
 
-      const int size = 10;
-      I4 data[size];
+      const size_t size = 10;
 
       KxTYPE<I4, size> stdfStrIn;
       ofstream outfile(filename, ofstream::binary);
@@ -98,11 +94,11 @@ class TestKxTYPE : public CxxTest::TestSuite
     {
       const char *filename = "TestKxTYPE.testWriteRead3.txt";
 
-      const int size = 20;
+      const size_t size = 20;
       I4 data[size];
 
       KxTYPE<I4, size> stdfStrIn;
-      for(int i = 0; i < size; i++)
+      for(size_t i = 0; i < size; i++)
       {
         stdfStrIn[i] = data[i] = -i;
       }

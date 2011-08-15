@@ -14,9 +14,8 @@ class TestKxU2 : public CxxTest::TestSuite
 
     void testConstructor0()
     {
-      const int size = 0;
+      const size_t size = 0;
       KxTYPE<U2, size> stdfStr;
-      U2 data[size];
       TS_ASSERT_EQUALS(stdfStr.max_size(), size);
       TS_ASSERT_EQUALS(stdfStr.size(), size);
       TS_ASSERT_EQUALS(stdfStr.to_string(), "");
@@ -24,9 +23,8 @@ class TestKxU2 : public CxxTest::TestSuite
 
     void testConstructor1()
     {
-      const int size = 10;
+      const size_t size = 10;
       KxTYPE<U2, size> stdfStr;
-      U2 data[size];
       TS_ASSERT_EQUALS(stdfStr.max_size(), size);
       TS_ASSERT_EQUALS(stdfStr.size(), 2*size);
       TS_ASSERT_EQUALS(stdfStr.to_string(), "0,0,0,0,0,0,0,0,0,0");
@@ -34,7 +32,7 @@ class TestKxU2 : public CxxTest::TestSuite
 
     void testConstructor2()
     {
-      const int size = 100;
+      const size_t size = 100;
       KxTYPE<U2, size> stdfStr;
       U2 data[size];
       for(size_t i = 0; i < size; i++)
@@ -58,8 +56,7 @@ class TestKxU2 : public CxxTest::TestSuite
     {
       const char *filename = "TestKxU2.testWriteRead1.txt";
 
-      const int size = 1;
-      U2 data[size];
+      const size_t size = 1;
 
       KxTYPE<U2, size> stdfStrIn;
       ofstream outfile(filename, ofstream::binary);
@@ -78,8 +75,7 @@ class TestKxU2 : public CxxTest::TestSuite
     {
       const char *filename = "TestKxU2.testWriteRead2.txt";
 
-      const int size = 10;
-      U2 data[size];
+      const size_t size = 10;
 
       KxTYPE<U2, size> stdfStrIn;
       ofstream outfile(filename, ofstream::binary);
@@ -98,7 +94,7 @@ class TestKxU2 : public CxxTest::TestSuite
     {
       const char *filename = "TestKxU2.testWriteRead3.txt";
 
-      const int size = 20;
+      const size_t size = 20;
       U2 data[size];
 
       KxTYPE<U2, size> stdfStrIn;

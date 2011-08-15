@@ -34,8 +34,8 @@ class TestJxN1 : public CxxTest::TestSuite
       unsigned char ch[5] = {0};
       TS_ASSERT_SAME_DATA(stdfStr.mData, ch, 5);
       TS_ASSERT_EQUALS(stdfStr.to_string(), "000000000");
-      TS_ASSERT_EQUALS(stdfStr.max_size(), 9);
-      TS_ASSERT_EQUALS(stdfStr.size(), 5);
+      TS_ASSERT_EQUALS(stdfStr.max_size(), 9u);
+      TS_ASSERT_EQUALS(stdfStr.size(), 5u);
     }
 
     void testConstructor3()
@@ -44,8 +44,8 @@ class TestJxN1 : public CxxTest::TestSuite
       unsigned char ch[2] = {0xBA, 0x0C};
       TS_ASSERT_SAME_DATA(stdfStr.mData, ch, 2);
       TS_ASSERT_EQUALS(stdfStr.to_string(), "ABC");
-      TS_ASSERT_EQUALS(stdfStr.max_size(), 3);
-      TS_ASSERT_EQUALS(stdfStr.size(), 2);
+      TS_ASSERT_EQUALS(stdfStr.max_size(), 3u);
+      TS_ASSERT_EQUALS(stdfStr.size(), 2u);
     }
 
     void testConstructor4()
@@ -54,8 +54,8 @@ class TestJxN1 : public CxxTest::TestSuite
       unsigned char ch[8] = {0x10, 0x32, 0x54, 0x76, 0x98, 0xBA, 0xDC, 0xFE};
       TS_ASSERT_SAME_DATA(stdfStr.mData, ch, 8);
       TS_ASSERT_EQUALS(stdfStr.to_string(), "0123456789ABCDEF");
-      TS_ASSERT_EQUALS(stdfStr.max_size(), 16);
-      TS_ASSERT_EQUALS(stdfStr.size(), 8);
+      TS_ASSERT_EQUALS(stdfStr.max_size(), 16u);
+      TS_ASSERT_EQUALS(stdfStr.size(), 8u);
     }
 
     void testWriteRead1()
@@ -75,10 +75,10 @@ class TestJxN1 : public CxxTest::TestSuite
       TS_ASSERT_SAME_DATA(stdfStrIn.mData, stdfStrOut.mData, 11);
       TS_ASSERT_EQUALS(stdfStrIn.to_string(), "0000000000000000000000");
       TS_ASSERT_EQUALS(stdfStrOut.to_string(), "0000000000000000000000");
-      TS_ASSERT_EQUALS(stdfStrIn.max_size(), 22);
-      TS_ASSERT_EQUALS(stdfStrOut.max_size(), 22);
-      TS_ASSERT_EQUALS(stdfStrIn.size(), 11);
-      TS_ASSERT_EQUALS(stdfStrOut.size(), 11);
+      TS_ASSERT_EQUALS(stdfStrIn.max_size(), 22u);
+      TS_ASSERT_EQUALS(stdfStrOut.max_size(), 22u);
+      TS_ASSERT_EQUALS(stdfStrIn.size(), 11u);
+      TS_ASSERT_EQUALS(stdfStrOut.size(), 11u);
     }
 
     void testWriteRead2()
@@ -98,10 +98,10 @@ class TestJxN1 : public CxxTest::TestSuite
       TS_ASSERT_SAME_DATA(stdfStrIn.mData, stdfStrOut.mData, 11);
       TS_ASSERT_EQUALS(stdfStrIn.to_string(), "0123456789ABCDEFABCDEF");
       TS_ASSERT_EQUALS(stdfStrOut.to_string(), "0123456789ABCDEFABCDEF");
-      TS_ASSERT_EQUALS(stdfStrIn.max_size(), 22);
-      TS_ASSERT_EQUALS(stdfStrOut.max_size(), 22);
-      TS_ASSERT_EQUALS(stdfStrIn.size(), 11);
-      TS_ASSERT_EQUALS(stdfStrOut.size(), 11);
+      TS_ASSERT_EQUALS(stdfStrIn.max_size(), 22u);
+      TS_ASSERT_EQUALS(stdfStrOut.max_size(), 22u);
+      TS_ASSERT_EQUALS(stdfStrIn.size(), 11u);
+      TS_ASSERT_EQUALS(stdfStrOut.size(), 11u);
     }
 
     void testWriteRead3()
@@ -123,10 +123,10 @@ class TestJxN1 : public CxxTest::TestSuite
       TS_ASSERT_SAME_DATA(stdfStrIn.mData, stdfStrOut.mData, 11);
       TS_ASSERT_EQUALS(stdfStrIn.to_string(), "010000000000000000000F");
       TS_ASSERT_EQUALS(stdfStrOut.to_string(), "010000000000000000000F");
-      TS_ASSERT_EQUALS(stdfStrIn.max_size(), 22);
-      TS_ASSERT_EQUALS(stdfStrOut.max_size(), 22);
-      TS_ASSERT_EQUALS(stdfStrIn.size(), 11);
-      TS_ASSERT_EQUALS(stdfStrOut.size(), 11);
+      TS_ASSERT_EQUALS(stdfStrIn.max_size(), 22u);
+      TS_ASSERT_EQUALS(stdfStrOut.max_size(), 22u);
+      TS_ASSERT_EQUALS(stdfStrIn.size(), 11u);
+      TS_ASSERT_EQUALS(stdfStrOut.size(), 11u);
       TS_ASSERT_EQUALS(stdfStrIn[1], 1);
       TS_ASSERT_EQUALS(stdfStrOut[1], 1);
       TS_ASSERT_EQUALS(stdfStrIn[21], 0xf);
@@ -137,10 +137,10 @@ class TestJxN1 : public CxxTest::TestSuite
       TS_ASSERT_SAME_DATA(stdfStrIn.mData, stdfStrOut.mData, 11);
       TS_ASSERT_EQUALS(stdfStrIn.to_string(), "0000000000000000000000");
       TS_ASSERT_EQUALS(stdfStrOut.to_string(), "0000000000000000000000");
-      TS_ASSERT_EQUALS(stdfStrIn.max_size(), 22);
-      TS_ASSERT_EQUALS(stdfStrOut.max_size(), 22);
-      TS_ASSERT_EQUALS(stdfStrIn.size(), 11);
-      TS_ASSERT_EQUALS(stdfStrOut.size(), 11);
+      TS_ASSERT_EQUALS(stdfStrIn.max_size(), 22u);
+      TS_ASSERT_EQUALS(stdfStrOut.max_size(), 22u);
+      TS_ASSERT_EQUALS(stdfStrIn.size(), 11u);
+      TS_ASSERT_EQUALS(stdfStrOut.size(), 11u);
     }
 
 };
