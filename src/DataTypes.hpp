@@ -31,7 +31,7 @@ class DataType
     virtual ~DataType() {};
     virtual void write(ofstream& outfile) = 0;
     virtual void read(ifstream& infile) = 0;
-    virtual size_t size() const = 0;
+    virtual size_t storage() const = 0;
     virtual string to_string() const = 0;
 };
 ///////////////////////////////////////////////////////////////////////////////
@@ -51,7 +51,7 @@ class CharArray : public DataType
     void clear() {init();}
     void write(ofstream& outfile) {outfile.write(mData, SIZE);}
     void read(ifstream& infile) {infile.read(mData, SIZE);}
-    size_t size() const {return SIZE;}
+    size_t storage() const {return SIZE;}
     string to_string() const;
 
   private:
@@ -87,8 +87,8 @@ class VarCharArray : public DataType
 
   public:
     ~VarCharArray() {delete[] mData;}
-    VarCharArray(const string& str = "") {init(); fill(str);}
-    VarCharArray(const char* str) {assert(str != NULL); init(); fill(string(str));}
+    VarCharArray(const string& str = "") : mSize(0) {alloc(); fill(str);}
+    VarCharArray(const char* str) : mSize(0) {assert(str != NULL); alloc(); fill(string(str));}
     VarCharArray(const VarCharArray& rhs) : mSize(rhs.mSize) {mData = new char[capacity()]; memcpy(mData, rhs.mData, capacity());}
     VarCharArray& operator=(const VarCharArray& rhs);
     VarCharArray& operator+=(const string& str) {fill(str); return *this;}
@@ -96,12 +96,12 @@ class VarCharArray : public DataType
     void write(ofstream& outfile) {outfile.write(mData, sizeof(T)+mSize);}
     void read(ifstream& infile);
     size_t max_size() const {return ((1<<(8*sizeof(T)))-1);}
-    size_t size() const {return sizeof(T)+mSize;}
+    size_t storage() const {return sizeof(T)+mSize;}
     string to_string() const;
 
   private:
     inline size_t capacity() const {return sizeof(T)+((1<<(8*sizeof(T)))-1);}
-    inline void init() {mSize = 0; mData = new char[capacity()]; memset(mData, 0, capacity());}
+    inline void alloc() {mData = new char[capacity()]; memset(mData, 0, capacity());}
     inline size_t merged_size(const string& str) const
     {
       return (mSize+str.size() > max_size())? max_size()-mSize : str.size();
@@ -165,7 +165,7 @@ class StdfString
     void write(ofstream& outfile, size_t size) {outfile.write(mData.data(), std::min(mData.size(), size));}
     void write(ofstream& outfile) {outfile.write(mData.data(), mData.size());}
     void read(ifstream& infile, size_t size);
-    size_t size() const {return mData.size();}
+    size_t storage() const {return mData.size();}
     const string& to_string() const {return mData;} 
 
   private:
@@ -216,7 +216,7 @@ class VarUType
     void write(ofstream& outfile, Type type) {outfile.write(reinterpret_cast<char*>(&mData), type);}
     void read(ifstream& infile, Type type) {infile.read(reinterpret_cast<char*>(&mData), type);}
     unsigned long long getValue() const {return mData;}
-    size_t size(Type type) const {return type;}
+    size_t storage(Type type) const {return type;}
     string to_string() const {std::stringstream ss; ss << mData; return ss.str();}
 
   private:
@@ -255,7 +255,7 @@ class NumericalType : public DataType
     void write(ofstream& outfile) {outfile.write(reinterpret_cast<char*>(&mData), sizeof(mData));}
     void read(ifstream& infile) {infile.read(reinterpret_cast<char*>(&mData), sizeof(mData));}
     T getValue() const {return mData;}
-    size_t size() const {return sizeof(T);}
+    size_t storage() const {return sizeof(T);}
     string to_string() const;
 
   private:
@@ -328,7 +328,7 @@ class BitArray : public DataType
     void clear() {reset(false);}
     void write(ofstream& outfile) {outfile.write(mData, SIZE);}
     void read(ifstream& infile) {infile.read(mData, SIZE);}
-    size_t size() const {return SIZE;}
+    size_t storage() const {return SIZE;}
     string to_string() const;
 
   private:
@@ -449,7 +449,7 @@ class VarBitArray : public DataType
     void write(ofstream& outfile) {if( (mSize%8) == 0 ) outfile.write(mData, sizeof(T)+(mSize/8)); else outfile.write(mData, sizeof(T)+(mSize/8)+1);}
     void read(ifstream& infile);
     inline size_t max_size() const {return ((1<<(8*sizeof(T)))-1);}
-    size_t size() const {return ((mSize%8) == 0)?(sizeof(T)+(mSize/8)):(sizeof(T)+(mSize/8)+1);}
+    size_t storage() const {return ((mSize%8) == 0)?(sizeof(T)+(mSize/8)):(sizeof(T)+(mSize/8)+1);}
     string to_string() const;
 
   private:
@@ -577,7 +577,7 @@ class JxN1 : public DataType
     void write(ofstream& outfile) {outfile.write(mData, capacity());}
     void read(ifstream& infile) {infile.read(mData, (SIZE%2)?(SIZE/2+1):(SIZE/2));}
     inline size_t max_size() const {return SIZE;}
-    size_t size() const {return capacity();}
+    size_t storage() const {return capacity();}
     string to_string() const;
 
   private:
@@ -709,8 +709,8 @@ class KxTYPE
     void read(ifstream& infile, VarUType::Type type) {for(size_t i = 0; i < SIZE; i++) mData[i].read(infile, type);}
     void read(ifstream& infile, size_t size) {for(size_t i = 0; i < SIZE; i++) mData[i].read(infile, size);}
     inline size_t max_size() const {return SIZE;}
-    size_t size() const {size_t ret = 0; for(size_t i = 0; i < SIZE; i++) ret += mData[i].size(); return ret;}
-    size_t size(VarUType::Type type) const {size_t ret = 0; for(size_t i = 0; i < SIZE; i++) ret += mData[i].size(type); return ret;}
+    size_t storage() const {size_t ret = 0; for(size_t i = 0; i < SIZE; i++) ret += mData[i].storage(); return ret;}
+    size_t storage(VarUType::Type type) const {size_t ret = 0; for(size_t i = 0; i < SIZE; i++) ret += mData[i].storage(type); return ret;}
     string to_string() const;
 
   private:
@@ -778,7 +778,7 @@ class VarTypeArray
     void write(ofstream& outfile) {for(size_t i = 0; i < mData.size(); i++) mData[i]->write(outfile);}
     void read(ifstream& infile, size_t size);
     inline size_t max_size() const {return SIZE;}
-    size_t size() const {size_t ret = 0; for(size_t i = 0; i < mData.size(); i++) ret += mData[i]->size(); return ret;}
+    size_t storage() const {size_t ret = 0; for(size_t i = 0; i < mData.size(); i++) ret += mData[i]->storage(); return ret;}
     string to_string() const;
 
   private:
@@ -790,9 +790,9 @@ class VarTypeArray
         VnType(Type type) : mData(type) {}
         VnType(const VnType& rhs) : mData(rhs.mData) {}
         VnType& operator=(const VnType& rhs) {if(this == &rhs) return *this; mData = rhs.mData; return *this;}
-        void write(ofstream& outfile) {outfile.write(&mData, size());}
+        void write(ofstream& outfile) {outfile.write(&mData, storage());}
         void read(ifstream& infile) {}
-        size_t size() const {return sizeof(mData);}
+        size_t storage() const {return sizeof(mData);}
         string to_string() const
         {
           const string NAME[14] = {"B0", "U1", "U2", "U4", "I1", "I2", "I4", "R4", "R8", "", "Cn", "Bn", "Dn", "N1"};
@@ -826,7 +826,7 @@ class VarTypeArray
 template <size_t SIZE>
 void VarTypeArray<SIZE>::read(ifstream& infile, size_t size)
 {
-  while(this->size() < size)
+  while(this->storage() < size)
   {
     char type = 0;
     infile.read(&type, sizeof(type));
