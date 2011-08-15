@@ -16,17 +16,17 @@ class TestCf : public CxxTest::TestSuite
     {
       Cf stdfStr;
       TS_ASSERT(stdfStr.mData == "");
-      TS_ASSERT_EQUALS(stdfStr.size(), 0u);
+      TS_ASSERT_EQUALS(stdfStr.storage(), 0u);
     }
 
     void testConstructor2()
     {
       Cf stdfStr = "";
       TS_ASSERT(stdfStr.mData == "");
-      TS_ASSERT_EQUALS(stdfStr.size(), 0u);
+      TS_ASSERT_EQUALS(stdfStr.storage(), 0u);
       stdfStr += "";
       TS_ASSERT(stdfStr.mData == "");
-      TS_ASSERT_EQUALS(stdfStr.size(), 0u);
+      TS_ASSERT_EQUALS(stdfStr.storage(), 0u);
     }
 
     void testConstructor3()
@@ -34,15 +34,15 @@ class TestCf : public CxxTest::TestSuite
       Cf stdfStr = "AA";
       TS_ASSERT(stdfStr.mData == "AA");
       TS_ASSERT_EQUALS(stdfStr.to_string(), "AA");
-      TS_ASSERT_EQUALS(stdfStr.size(), 2u);
+      TS_ASSERT_EQUALS(stdfStr.storage(), 2u);
       stdfStr += "BB";
       TS_ASSERT(stdfStr.mData == "AABB");
       TS_ASSERT_EQUALS(stdfStr.to_string(), "AABB");
-      TS_ASSERT_EQUALS(stdfStr.size(), 4u);
+      TS_ASSERT_EQUALS(stdfStr.storage(), 4u);
       stdfStr = "CC";
       TS_ASSERT(stdfStr.mData == "CC");
       TS_ASSERT_EQUALS(stdfStr.to_string(), "CC");
-      TS_ASSERT_EQUALS(stdfStr.size(), 2u);
+      TS_ASSERT_EQUALS(stdfStr.storage(), 2u);
     }
 
     void testWriteRead1()
@@ -65,8 +65,8 @@ class TestCf : public CxxTest::TestSuite
       TS_ASSERT(stdfStrIn.mData == stdfStrOut.mData);
       TS_ASSERT_EQUALS(stdfStrIn.to_string(), "");
       TS_ASSERT_EQUALS(stdfStrOut.to_string(), "");
-      TS_ASSERT_EQUALS(stdfStrIn.size(), 0u);
-      TS_ASSERT_EQUALS(stdfStrOut.size(), 0u);
+      TS_ASSERT_EQUALS(stdfStrIn.storage(), 0u);
+      TS_ASSERT_EQUALS(stdfStrOut.storage(), 0u);
     }
 
     void testWriteRead2()
@@ -89,8 +89,8 @@ class TestCf : public CxxTest::TestSuite
       TS_ASSERT(stdfStrIn.mData == stdfStrOut.mData);
       TS_ASSERT_EQUALS(stdfStrIn.to_string(), "123456789");
       TS_ASSERT_EQUALS(stdfStrOut.to_string(), "123456789");
-      TS_ASSERT_EQUALS(stdfStrIn.size(), 9u);
-      TS_ASSERT_EQUALS(stdfStrOut.size(), 9u);
+      TS_ASSERT_EQUALS(stdfStrIn.storage(), 9u);
+      TS_ASSERT_EQUALS(stdfStrOut.storage(), 9u);
     }
 
     void testWriteRead3()
@@ -113,8 +113,8 @@ class TestCf : public CxxTest::TestSuite
       TS_ASSERT(stdfStrIn.mData == stdfStrOut.mData);
       TS_ASSERT_EQUALS(stdfStrIn.to_string(), "123456789");
       TS_ASSERT_EQUALS(stdfStrOut.to_string(), "123456789");
-      TS_ASSERT_EQUALS(stdfStrIn.size(), 9u);
-      TS_ASSERT_EQUALS(stdfStrOut.size(), 9u);
+      TS_ASSERT_EQUALS(stdfStrIn.storage(), 9u);
+      TS_ASSERT_EQUALS(stdfStrOut.storage(), 9u);
     }
 
 };

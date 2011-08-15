@@ -111,8 +111,8 @@ class TestUf : public CxxTest::TestSuite
       TS_ASSERT(stdfStrOut.getValue() == 152);
       TS_ASSERT(stdfStrIn.to_string() == "152");
       TS_ASSERT(stdfStrOut.to_string() == "152");
-      TS_ASSERT(stdfStrIn.size(Uf::TYPE_1B) == 1);
-      TS_ASSERT(stdfStrOut.size(Uf::TYPE_1B) == 1);
+      TS_ASSERT(stdfStrIn.storage(Uf::TYPE_1B) == 1);
+      TS_ASSERT(stdfStrOut.storage(Uf::TYPE_1B) == 1);
     }
 
     void testWriteRead5()
@@ -137,8 +137,8 @@ class TestUf : public CxxTest::TestSuite
       TS_ASSERT(stdfStrOut.getValue() == 47768);
       TS_ASSERT(stdfStrIn.to_string() == "47768");
       TS_ASSERT(stdfStrOut.to_string() == "47768");
-      TS_ASSERT(stdfStrIn.size(Uf::TYPE_2B) == 2);
-      TS_ASSERT(stdfStrOut.size(Uf::TYPE_2B) == 2);
+      TS_ASSERT(stdfStrIn.storage(Uf::TYPE_2B) == 2);
+      TS_ASSERT(stdfStrOut.storage(Uf::TYPE_2B) == 2);
     }
 
     void testWriteRead6()
@@ -162,8 +162,8 @@ class TestUf : public CxxTest::TestSuite
       TS_ASSERT(stdfStrOut.getValue() == 4275878552);
       TS_ASSERT(stdfStrIn.to_string() == "4275878552");
       TS_ASSERT(stdfStrOut.to_string() == "4275878552");
-      TS_ASSERT(stdfStrIn.size(Uf::TYPE_4B) == 4);
-      TS_ASSERT(stdfStrOut.size(Uf::TYPE_4B) == 4);
+      TS_ASSERT(stdfStrIn.storage(Uf::TYPE_4B) == 4);
+      TS_ASSERT(stdfStrOut.storage(Uf::TYPE_4B) == 4);
     }
 
     void testWriteRead7()
@@ -187,7 +187,7 @@ class TestUf : public CxxTest::TestSuite
       TS_ASSERT(stdfStrOut.getValue() == 18364758544493064720ull);
       TS_ASSERT(stdfStrIn.to_string() == "18364758544493064720");
       TS_ASSERT(stdfStrOut.to_string() == "18364758544493064720");
-      TS_ASSERT(stdfStrIn.size(Uf::TYPE_8B) == 8);
-      TS_ASSERT(stdfStrOut.size(Uf::TYPE_8B) == 8);
+      TS_ASSERT(stdfStrIn.storage(Uf::TYPE_8B) == 8);
+      TS_ASSERT(stdfStrOut.storage(Uf::TYPE_8B) == 8);
     }
 };

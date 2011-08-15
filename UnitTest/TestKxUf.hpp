@@ -19,10 +19,10 @@ class TestKxUf : public CxxTest::TestSuite
       Uf data[size];
       TS_ASSERT_SAME_DATA(stdfStr.mData, data, size);
       TS_ASSERT_EQUALS(stdfStr.max_size(), size);
-      TS_ASSERT_EQUALS(stdfStr.size(Uf::TYPE_1B), size);
-      TS_ASSERT_EQUALS(stdfStr.size(Uf::TYPE_2B), size);
-      TS_ASSERT_EQUALS(stdfStr.size(Uf::TYPE_4B), size);
-      TS_ASSERT_EQUALS(stdfStr.size(Uf::TYPE_8B), size);
+      TS_ASSERT_EQUALS(stdfStr.storage(Uf::TYPE_1B), size);
+      TS_ASSERT_EQUALS(stdfStr.storage(Uf::TYPE_2B), size);
+      TS_ASSERT_EQUALS(stdfStr.storage(Uf::TYPE_4B), size);
+      TS_ASSERT_EQUALS(stdfStr.storage(Uf::TYPE_8B), size);
       TS_ASSERT_EQUALS(stdfStr.to_string(), "");
     }
 
@@ -33,10 +33,10 @@ class TestKxUf : public CxxTest::TestSuite
       Uf data[size];
       TS_ASSERT_SAME_DATA(stdfStr.mData, data, size);
       TS_ASSERT_EQUALS(stdfStr.max_size(), size);
-      TS_ASSERT_EQUALS(stdfStr.size(Uf::TYPE_1B), size);
-      TS_ASSERT_EQUALS(stdfStr.size(Uf::TYPE_2B), 2*size);
-      TS_ASSERT_EQUALS(stdfStr.size(Uf::TYPE_4B), 4*size);
-      TS_ASSERT_EQUALS(stdfStr.size(Uf::TYPE_8B), 8*size);
+      TS_ASSERT_EQUALS(stdfStr.storage(Uf::TYPE_1B), size);
+      TS_ASSERT_EQUALS(stdfStr.storage(Uf::TYPE_2B), 2*size);
+      TS_ASSERT_EQUALS(stdfStr.storage(Uf::TYPE_4B), 4*size);
+      TS_ASSERT_EQUALS(stdfStr.storage(Uf::TYPE_8B), 8*size);
       TS_ASSERT_EQUALS(stdfStr.to_string(), "0,0,0,0,0,0,0,0,0,0");
     }
 
@@ -51,10 +51,10 @@ class TestKxUf : public CxxTest::TestSuite
       }
       TS_ASSERT_SAME_DATA(stdfStr.mData, data, size);
       TS_ASSERT_EQUALS(stdfStr.max_size(), size);
-      TS_ASSERT_EQUALS(stdfStr.size(Uf::TYPE_1B), size);
-      TS_ASSERT_EQUALS(stdfStr.size(Uf::TYPE_2B), 2*size);
-      TS_ASSERT_EQUALS(stdfStr.size(Uf::TYPE_4B), 4*size);
-      TS_ASSERT_EQUALS(stdfStr.size(Uf::TYPE_8B), 8*size);
+      TS_ASSERT_EQUALS(stdfStr.storage(Uf::TYPE_1B), size);
+      TS_ASSERT_EQUALS(stdfStr.storage(Uf::TYPE_2B), 2*size);
+      TS_ASSERT_EQUALS(stdfStr.storage(Uf::TYPE_4B), 4*size);
+      TS_ASSERT_EQUALS(stdfStr.storage(Uf::TYPE_8B), 8*size);
       Uf data88 = stdfStr[88];
       TS_ASSERT_EQUALS(data88.getValue(), 88u);
       TS_ASSERT_EQUALS(data88.to_string(), data[88].to_string());

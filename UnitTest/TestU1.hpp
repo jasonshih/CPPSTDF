@@ -57,8 +57,8 @@ class TestU1 : public CxxTest::TestSuite
       TS_ASSERT(stdfStrOut.mData == 0);
       TS_ASSERT(stdfStrIn.getValue() == 0);
       TS_ASSERT(stdfStrOut.getValue() == 0);
-      TS_ASSERT(stdfStrIn.size() == 1);
-      TS_ASSERT(stdfStrOut.size() == 1);
+      TS_ASSERT(stdfStrIn.storage() == 1);
+      TS_ASSERT(stdfStrOut.storage() == 1);
     }
 
     void testWriteRead2()
@@ -82,8 +82,8 @@ class TestU1 : public CxxTest::TestSuite
       TS_ASSERT(stdfStrOut.getValue() == 100);
       TS_ASSERT(stdfStrIn.to_string() == "100");
       TS_ASSERT(stdfStrOut.to_string() == "100");
-      TS_ASSERT(stdfStrIn.size() == 1);
-      TS_ASSERT(stdfStrOut.size() == 1);
+      TS_ASSERT(stdfStrIn.storage() == 1);
+      TS_ASSERT(stdfStrOut.storage() == 1);
     }
 
     void testWriteRead3()
@@ -107,8 +107,8 @@ class TestU1 : public CxxTest::TestSuite
       TS_ASSERT(stdfStrOut.getValue() == 255);
       TS_ASSERT(stdfStrIn.to_string() == "255");
       TS_ASSERT(stdfStrOut.to_string() == "255");
-      TS_ASSERT(stdfStrIn.size() == 1);
-      TS_ASSERT(stdfStrOut.size() == 1);
+      TS_ASSERT(stdfStrIn.storage() == 1);
+      TS_ASSERT(stdfStrOut.storage() == 1);
     }
 
     void testWriteRead4()
@@ -132,8 +132,8 @@ class TestU1 : public CxxTest::TestSuite
       TS_ASSERT(stdfStrOut.getValue() == 254);
       TS_ASSERT(stdfStrIn.to_string() == "254");
       TS_ASSERT(stdfStrOut.to_string() == "254");
-      TS_ASSERT(stdfStrIn.size() == 1);
-      TS_ASSERT(stdfStrOut.size() == 1);
+      TS_ASSERT(stdfStrIn.storage() == 1);
+      TS_ASSERT(stdfStrOut.storage() == 1);
     }
 
 

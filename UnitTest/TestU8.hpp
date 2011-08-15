@@ -82,8 +82,8 @@ class TestU8 : public CxxTest::TestSuite
       TS_ASSERT(stdfStrOut.getValue() == 100000);
       TS_ASSERT(stdfStrIn.to_string() == "100000");
       TS_ASSERT(stdfStrOut.to_string() == "100000");
-      TS_ASSERT(stdfStrIn.size() == 8);
-      TS_ASSERT(stdfStrOut.size() == 8);
+      TS_ASSERT(stdfStrIn.storage() == 8);
+      TS_ASSERT(stdfStrOut.storage() == 8);
     }
 
     void testWriteRead3()
@@ -107,8 +107,8 @@ class TestU8 : public CxxTest::TestSuite
       TS_ASSERT(stdfStrOut.getValue() == 18446744073709551615ULL);
       TS_ASSERT(stdfStrIn.to_string() == "18446744073709551615");
       TS_ASSERT(stdfStrOut.to_string() == "18446744073709551615");
-      TS_ASSERT(stdfStrIn.size() == 8);
-      TS_ASSERT(stdfStrOut.size() == 8);
+      TS_ASSERT(stdfStrIn.storage() == 8);
+      TS_ASSERT(stdfStrOut.storage() == 8);
     }
 
     void testWriteRead4()
@@ -132,8 +132,8 @@ class TestU8 : public CxxTest::TestSuite
       TS_ASSERT(stdfStrOut.getValue() == 18364758544493064720ULL);
       TS_ASSERT(stdfStrIn.to_string() == "18364758544493064720");
       TS_ASSERT(stdfStrOut.to_string() == "18364758544493064720");
-      TS_ASSERT(stdfStrIn.size() == 8);
-      TS_ASSERT(stdfStrOut.size() == 8);
+      TS_ASSERT(stdfStrIn.storage() == 8);
+      TS_ASSERT(stdfStrOut.storage() == 8);
     }
 
 

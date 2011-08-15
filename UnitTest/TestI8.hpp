@@ -57,8 +57,8 @@ class TestI8 : public CxxTest::TestSuite
       TS_ASSERT(stdfStrOut.getValue() == 0);
       TS_ASSERT(stdfStrIn.to_string() == "0");
       TS_ASSERT(stdfStrOut.to_string() == "0");
-      TS_ASSERT(stdfStrIn.size() == 8);
-      TS_ASSERT(stdfStrOut.size() == 8);
+      TS_ASSERT(stdfStrIn.storage() == 8);
+      TS_ASSERT(stdfStrOut.storage() == 8);
     }
 
     void testWriteRead2()
@@ -82,8 +82,8 @@ class TestI8 : public CxxTest::TestSuite
       TS_ASSERT(stdfStrOut.getValue() == -1);
       TS_ASSERT(stdfStrIn.to_string() == "-1");
       TS_ASSERT(stdfStrOut.to_string() == "-1");
-      TS_ASSERT(stdfStrIn.size() == 8);
-      TS_ASSERT(stdfStrOut.size() == 8);
+      TS_ASSERT(stdfStrIn.storage() == 8);
+      TS_ASSERT(stdfStrOut.storage() == 8);
     }
 
     void testWriteRead3()
@@ -107,8 +107,8 @@ class TestI8 : public CxxTest::TestSuite
       TS_ASSERT(stdfStrOut.getValue() == 9223372036854775807);
       TS_ASSERT(stdfStrIn.to_string() == "9223372036854775807");
       TS_ASSERT(stdfStrOut.to_string() == "9223372036854775807");
-      TS_ASSERT(stdfStrIn.size() == 8);
-      TS_ASSERT(stdfStrOut.size() == 8);
+      TS_ASSERT(stdfStrIn.storage() == 8);
+      TS_ASSERT(stdfStrOut.storage() == 8);
     }
 
     void testWriteRead4()
@@ -133,8 +133,8 @@ class TestI8 : public CxxTest::TestSuite
       TS_ASSERT(stdfStrOut.getValue() == (long long)-0x8000000000000000);
       TS_ASSERT(stdfStrIn.to_string() == "-9223372036854775808");
       TS_ASSERT(stdfStrOut.to_string() == "-9223372036854775808");
-      TS_ASSERT(stdfStrIn.size() == 8);
-      TS_ASSERT(stdfStrOut.size() == 8);
+      TS_ASSERT(stdfStrIn.storage() == 8);
+      TS_ASSERT(stdfStrOut.storage() == 8);
     }
 
 

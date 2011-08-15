@@ -16,7 +16,7 @@ class TestSn : public CxxTest::TestSuite
     {
       Sn stdfStr;
       TS_ASSERT_SAME_DATA(stdfStr.mData, "", 1);
-      TS_ASSERT_EQUALS(stdfStr.size(), 2u);
+      TS_ASSERT_EQUALS(stdfStr.storage(), 2u);
       TS_ASSERT_EQUALS(stdfStr.max_size(), 65535u);
     }
 
@@ -24,11 +24,11 @@ class TestSn : public CxxTest::TestSuite
     {
       Sn stdfStr;
       TS_ASSERT_SAME_DATA(stdfStr.mData, "", 1);
-      TS_ASSERT_EQUALS(stdfStr.size(), 2u);
+      TS_ASSERT_EQUALS(stdfStr.storage(), 2u);
       TS_ASSERT_EQUALS(stdfStr.max_size(), 65535u);
       stdfStr += "";
       TS_ASSERT_SAME_DATA(stdfStr.mData, "", 1);
-      TS_ASSERT_EQUALS(stdfStr.size(), 2u);
+      TS_ASSERT_EQUALS(stdfStr.storage(), 2u);
       TS_ASSERT_EQUALS(stdfStr.max_size(), 65535u);
     }
 
@@ -106,7 +106,7 @@ class TestSn : public CxxTest::TestSuite
       outfile.close();
 
       TS_ASSERT(stdfStr.to_string() == "");
-      TS_ASSERT_EQUALS(stdfStr.size(), 2u);
+      TS_ASSERT_EQUALS(stdfStr.storage(), 2u);
       TS_ASSERT_EQUALS(stdfStr.max_size(), 65535u);
     }
 
@@ -125,7 +125,7 @@ class TestSn : public CxxTest::TestSuite
       outfile.close();
 
       TS_ASSERT(stdfStr.to_string() == "123456789");
-      TS_ASSERT_EQUALS(stdfStr.size(), 11u);
+      TS_ASSERT_EQUALS(stdfStr.storage(), 11u);
       TS_ASSERT_EQUALS(stdfStr.max_size(), 65535u);
     }
 
@@ -148,13 +148,13 @@ class TestSn : public CxxTest::TestSuite
       str.assign(stdfStrIn.max_size(), 'A');
       TS_ASSERT(stdfStrIn.to_string() == str);
       TS_ASSERT(stdfStrOut.to_string() == str);
-      TS_ASSERT_EQUALS(stdfStrIn.size(), 65537u);
-      TS_ASSERT_EQUALS(stdfStrOut.size(), 65537u);
+      TS_ASSERT_EQUALS(stdfStrIn.storage(), 65537u);
+      TS_ASSERT_EQUALS(stdfStrOut.storage(), 65537u);
       TS_ASSERT_EQUALS(stdfStrIn.max_size(), 65535u);
       TS_ASSERT_EQUALS(stdfStrOut.max_size(), 65535u);
 
       stdfStrIn.clear();
-      TS_ASSERT_EQUALS(stdfStrIn.size(), 2u);
+      TS_ASSERT_EQUALS(stdfStrIn.storage(), 2u);
       TS_ASSERT_EQUALS(stdfStrIn.max_size(), 65535u);
     }
 };

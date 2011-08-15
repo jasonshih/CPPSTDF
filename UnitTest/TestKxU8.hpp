@@ -19,7 +19,7 @@ class TestKxU8 : public CxxTest::TestSuite
       U8 data[size];
       TS_ASSERT_SAME_DATA(stdfStr.mData, data, size);
       TS_ASSERT_EQUALS(stdfStr.max_size(), size);
-      TS_ASSERT_EQUALS(stdfStr.size(), size);
+      TS_ASSERT_EQUALS(stdfStr.storage(), size);
       TS_ASSERT_EQUALS(stdfStr.to_string(), "");
     }
 
@@ -30,7 +30,7 @@ class TestKxU8 : public CxxTest::TestSuite
       U8 data[size];
       TS_ASSERT_SAME_DATA(stdfStr.mData, data, size);
       TS_ASSERT_EQUALS(stdfStr.max_size(), size);
-      TS_ASSERT_EQUALS(stdfStr.size(), 8*size);
+      TS_ASSERT_EQUALS(stdfStr.storage(), 8*size);
       TS_ASSERT_EQUALS(stdfStr.to_string(), "0,0,0,0,0,0,0,0,0,0");
     }
 
@@ -45,7 +45,7 @@ class TestKxU8 : public CxxTest::TestSuite
       }
       TS_ASSERT_SAME_DATA(stdfStr.mData, data, size);
       TS_ASSERT_EQUALS(stdfStr.max_size(), size);
-      TS_ASSERT_EQUALS(stdfStr.size(), 8*size);
+      TS_ASSERT_EQUALS(stdfStr.storage(), 8*size);
       U8 data88 = stdfStr[88];
       TS_ASSERT_EQUALS(data88.getValue(), 88u);
       TS_ASSERT_EQUALS(data88.to_string(), data[88].to_string());

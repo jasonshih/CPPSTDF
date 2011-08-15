@@ -1,4 +1,6 @@
 CC=g++ -g -Wall -O0
+# for profiling
+# CC=g++ -g -Wall -O0 -pg
 
 all: runner
 

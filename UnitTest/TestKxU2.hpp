@@ -17,7 +17,7 @@ class TestKxU2 : public CxxTest::TestSuite
       const size_t size = 0;
       KxTYPE<U2, size> stdfStr;
       TS_ASSERT_EQUALS(stdfStr.max_size(), size);
-      TS_ASSERT_EQUALS(stdfStr.size(), size);
+      TS_ASSERT_EQUALS(stdfStr.storage(), size);
       TS_ASSERT_EQUALS(stdfStr.to_string(), "");
     }
 
@@ -26,7 +26,7 @@ class TestKxU2 : public CxxTest::TestSuite
       const size_t size = 10;
       KxTYPE<U2, size> stdfStr;
       TS_ASSERT_EQUALS(stdfStr.max_size(), size);
-      TS_ASSERT_EQUALS(stdfStr.size(), 2*size);
+      TS_ASSERT_EQUALS(stdfStr.storage(), 2*size);
       TS_ASSERT_EQUALS(stdfStr.to_string(), "0,0,0,0,0,0,0,0,0,0");
     }
 
@@ -40,7 +40,7 @@ class TestKxU2 : public CxxTest::TestSuite
         stdfStr[i] = data[i] = i;
       }
       TS_ASSERT_EQUALS(stdfStr.max_size(), size);
-      TS_ASSERT_EQUALS(stdfStr.size(), 2*size);
+      TS_ASSERT_EQUALS(stdfStr.storage(), 2*size);
       U2 data88 = stdfStr[88];
       TS_ASSERT_EQUALS(data88.getValue(), 88);
       TS_ASSERT_EQUALS(data88.to_string(), data[88].to_string());

@@ -17,7 +17,7 @@ class TestKxSn : public CxxTest::TestSuite
       const size_t size = 0;
       KxTYPE<Sn, size> stdfStr;
       TS_ASSERT_EQUALS(stdfStr.max_size(), size);
-      TS_ASSERT_EQUALS(stdfStr.size(), size);
+      TS_ASSERT_EQUALS(stdfStr.storage(), size);
       TS_ASSERT_EQUALS(stdfStr.to_string(), "");
     }
 
@@ -26,7 +26,7 @@ class TestKxSn : public CxxTest::TestSuite
       const size_t size = 10;
       KxTYPE<Sn, size> stdfStr;
       TS_ASSERT_EQUALS(stdfStr.max_size(), size);
-      TS_ASSERT_EQUALS(stdfStr.size(), 2*size);
+      TS_ASSERT_EQUALS(stdfStr.storage(), 2*size);
       TS_ASSERT_EQUALS(stdfStr.to_string(), ",,,,,,,,,");
     }
 
@@ -40,7 +40,7 @@ class TestKxSn : public CxxTest::TestSuite
         stdfStr[i] = data[i] = "ABCD";
       }
       TS_ASSERT_EQUALS(stdfStr.max_size(), size);
-      TS_ASSERT_EQUALS(stdfStr.size(), 6*size);
+      TS_ASSERT_EQUALS(stdfStr.storage(), 6*size);
       Sn data8 = stdfStr[8];
       TS_ASSERT_EQUALS(data8.to_string(), data[8].to_string());
       Sn data9 = stdfStr[9];
@@ -63,7 +63,7 @@ class TestKxSn : public CxxTest::TestSuite
         stdfStr[i] = data[i] = "ABCD";
       }
       TS_ASSERT_EQUALS(stdfStr.max_size(), size);
-      TS_ASSERT_EQUALS(stdfStr.size(), 6*size);
+      TS_ASSERT_EQUALS(stdfStr.storage(), 6*size);
       Sn data88 = stdfStr[88];
       TS_ASSERT_EQUALS(data88.to_string(), data[88].to_string());
       Sn data93 = stdfStr[93];
@@ -86,7 +86,7 @@ class TestKxSn : public CxxTest::TestSuite
         stdfStr[i] = data[i] = "ABCD";
       }
       TS_ASSERT_EQUALS(stdfStr.max_size(), size);
-      TS_ASSERT_EQUALS(stdfStr.size(), 6*size);
+      TS_ASSERT_EQUALS(stdfStr.storage(), 6*size);
       Sn data88 = stdfStr[88];
       TS_ASSERT_EQUALS(data88.to_string(), data[88].to_string());
       Sn data93 = stdfStr[93];
@@ -117,8 +117,8 @@ class TestKxSn : public CxxTest::TestSuite
 
       TS_ASSERT_EQUALS(stdfStrIn.max_size(), 1u);
       TS_ASSERT_EQUALS(stdfStrOut.max_size(), 1u);
-      TS_ASSERT_EQUALS(stdfStrIn.size(), 2u);
-      TS_ASSERT_EQUALS(stdfStrOut.size(), 2u);
+      TS_ASSERT_EQUALS(stdfStrIn.storage(), 2u);
+      TS_ASSERT_EQUALS(stdfStrOut.storage(), 2u);
       TS_ASSERT_EQUALS(stdfStrIn.to_string(), stdfStrOut.to_string())
     }
 
@@ -140,8 +140,8 @@ class TestKxSn : public CxxTest::TestSuite
 
       TS_ASSERT_EQUALS(stdfStrIn.max_size(), 10u);
       TS_ASSERT_EQUALS(stdfStrOut.max_size(), 10u);
-      TS_ASSERT_EQUALS(stdfStrIn.size(), 20u);
-      TS_ASSERT_EQUALS(stdfStrOut.size(), 20u);
+      TS_ASSERT_EQUALS(stdfStrIn.storage(), 20u);
+      TS_ASSERT_EQUALS(stdfStrOut.storage(), 20u);
       TS_ASSERT_EQUALS(stdfStrIn.to_string(), stdfStrOut.to_string())
     }
 
@@ -168,8 +168,8 @@ class TestKxSn : public CxxTest::TestSuite
 
       TS_ASSERT_EQUALS(stdfStrIn.max_size(), 20u);
       TS_ASSERT_EQUALS(stdfStrOut.max_size(), 20u);
-      TS_ASSERT_EQUALS(stdfStrIn.size(), 160u);
-      TS_ASSERT_EQUALS(stdfStrOut.size(), 160u);
+      TS_ASSERT_EQUALS(stdfStrIn.storage(), 160u);
+      TS_ASSERT_EQUALS(stdfStrOut.storage(), 160u);
       TS_ASSERT_EQUALS(stdfStrIn.to_string(), stdfStrOut.to_string());
       string str;
       for(size_t i = 0; i < size-1; i++) str.append("ABCDEF,"); str.append("ABCDEF");

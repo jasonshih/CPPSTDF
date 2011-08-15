@@ -82,8 +82,8 @@ class TestU4 : public CxxTest::TestSuite
       TS_ASSERT(stdfStrOut.getValue() == 1000);
       TS_ASSERT(stdfStrIn.to_string() == "1000");
       TS_ASSERT(stdfStrOut.to_string() == "1000");
-      TS_ASSERT(stdfStrIn.size() == 4);
-      TS_ASSERT(stdfStrOut.size() == 4);
+      TS_ASSERT(stdfStrIn.storage() == 4);
+      TS_ASSERT(stdfStrOut.storage() == 4);
     }
 
     void testWriteRead3()
@@ -107,8 +107,8 @@ class TestU4 : public CxxTest::TestSuite
       TS_ASSERT(stdfStrOut.getValue() == 4294967295);
       TS_ASSERT(stdfStrIn.to_string() == "4294967295");
       TS_ASSERT(stdfStrOut.to_string() == "4294967295");
-      TS_ASSERT(stdfStrIn.size() == 4);
-      TS_ASSERT(stdfStrOut.size() == 4);
+      TS_ASSERT(stdfStrIn.storage() == 4);
+      TS_ASSERT(stdfStrOut.storage() == 4);
     }
 
     void testWriteRead4()
@@ -132,8 +132,8 @@ class TestU4 : public CxxTest::TestSuite
       TS_ASSERT(stdfStrOut.getValue() == 4275878552);
       TS_ASSERT(stdfStrIn.to_string() == "4275878552");
       TS_ASSERT(stdfStrOut.to_string() == "4275878552");
-      TS_ASSERT(stdfStrIn.size() == 4);
-      TS_ASSERT(stdfStrOut.size() == 4);
+      TS_ASSERT(stdfStrIn.storage() == 4);
+      TS_ASSERT(stdfStrOut.storage() == 4);
     }
 
 

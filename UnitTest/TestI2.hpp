@@ -16,12 +16,14 @@ class TestI2 : public CxxTest::TestSuite
     {
       I2 stdfStr;
       TS_ASSERT(stdfStr.mData == 0);
+      TS_ASSERT(stdfStr.storage() == 2);
     }
 
     void testConstructor2()
     {
       I2 stdfStr = 0;
       TS_ASSERT(stdfStr.mData == 0);
+      TS_ASSERT(stdfStr.storage() == 2);
     }
 
 
@@ -33,6 +35,7 @@ class TestI2 : public CxxTest::TestSuite
       TS_ASSERT(stdfStr.mData == -1);
       stdfStr = 0x7FFF;
       TS_ASSERT(stdfStr.mData == 32767);
+      TS_ASSERT(stdfStr.storage() == 2);
     }
 
     void testWriteRead1()
