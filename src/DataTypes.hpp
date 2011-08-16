@@ -151,88 +151,60 @@ string VarCharArray<T>::to_string() const
 
 
 ///////////////////////////////////////////////////////////////////////////////
-template <size_t SIZ1, size_t SIZ2>
-class KxCf : public DataType
+template <size_t SIZE>
+class Cf : public DataType
 {
-  friend class TestKxCf;
+  friend class TestCf;
 
   public:
 
-    ~KxCf() {delete[] mData;}
-    KxCf() {mData = new string[SIZ1];}
-    const string& operator[] (size_t pos) const {assert(pos < SIZ1); return mData[pos];}
-    string& operator[] (size_t pos) {assert(pos < SIZ1); return mData[pos];}
-    void clear() {for(size_t i = 0; i < SIZ1; i++) mData[i].clear();}
-    void write(ofstream& outfile);
+    ~Cf() {}
+    Cf(const string& str = "") : mData(str) {}
+    Cf(const char* str) {assert(str != NULL); mData = str;}
+    Cf(const Cf& rhs) : mData(rhs.mData) {}
+    Cf& operator=(const Cf& rhs) {if(this == &rhs) return *this; mData = rhs.mData; return *this;}
+    Cf& operator+=(const string& str) {mData += str; return *this;}
+    bool operator==(const Cf& rhs) {return to_string()==rhs.to_string();}
+    inline size_t max_size() const {return SIZE;}
+    void clear() {mData.clear();}
+    void write(ofstream& outfile) {string data = to_string(); outfile.write(data.data(), data.size());}
     void read(ifstream& infile);
-    inline size_t max_size() const {return SIZ1;}
-    size_t storage() const {return SIZ1*SIZ2;}
+    size_t storage() const {return SIZE;}
     string to_string() const;
-
-  private:
-    KxCf(const KxCf& rhs);
-    KxCf& operator=(const KxCf& rhs);
-    string to_string(size_t pos) const;
 
   private:
     static const char PAD = ' ';
 
-    string*         mData;
+    string          mData;
 };
 
-template <size_t SIZ1, size_t SIZ2>
-void KxCf<SIZ1, SIZ2>::write(ofstream& outfile)
+template <size_t SIZE>
+void Cf<SIZE>::read(ifstream& infile)
 {
-  for(size_t i = 0; i < SIZ1; i++)
+  if(SIZE==0) mData = "";
+  else
   {
-    string data = to_string(i);
-    outfile.write(data.data(), data.size());
+    char buffer[SIZE+1];
+    memset(buffer, 0, SIZE+1);
+    infile.read(buffer, SIZE);
+    for(char* p=buffer+SIZE-1; (p != buffer)&&(*p == PAD); --p) {*p = 0;}
+    mData = buffer;
   }
 }
 
-template <size_t SIZ1, size_t SIZ2>
-void KxCf<SIZ1, SIZ2>::read(ifstream& infile)
+template <size_t SIZE>
+string Cf<SIZE>::to_string() const
 {
-  for(size_t i = 0; i < SIZ1; i++)
+  if(SIZE <= mData.size())
   {
-    if(SIZ2==0) mData[i] = "";
-    else
-    {
-      char buffer[SIZ2+1];
-      memset(buffer, 0, SIZ2+1);
-      infile.read(buffer, SIZ2);
-      for(char* p=buffer+SIZ2-1; (p != buffer)&&(*p == PAD); --p) {*p = 0;}
-      mData[i] = buffer;
-    }
-  }
-}
-
-template <size_t SIZ1, size_t SIZ2>
-string KxCf<SIZ1, SIZ2>::to_string(size_t pos) const
-{
-  if(SIZ2 <= mData[pos].size())
-  {
-    return mData[pos].substr(0, SIZ2);
+    return mData.substr(0, SIZE);
   }
   else
   {
-    string data = mData[pos];
-    data.append(SIZ2-mData[pos].size(), PAD);
+    string data = mData;
+    data.append(SIZE-mData.size(), PAD);
     return data;
   }
-}
-
-template <size_t SIZ1, size_t SIZ2>
-string KxCf<SIZ1, SIZ2>::to_string() const
-{
-  std::stringstream ss;
-  for(size_t i = 0; i < SIZ1; i++)
-  {
-    ss << mData[i] << ",";
-  }
-  string ret = ss.str();
-  if(!ret.empty()) ret = ret.substr(0, ret.size()-1);
-  return ret;
 }
 
 
@@ -726,6 +698,7 @@ class KxTYPE
   friend class TestKxR4;
   friend class TestKxCn;
   friend class TestKxSn;
+  friend class TestKxCf;
 
   public:
     ~KxTYPE() {delete[] mData;}

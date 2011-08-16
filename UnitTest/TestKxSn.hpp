@@ -41,10 +41,8 @@ class TestKxSn : public CxxTest::TestSuite
       }
       TS_ASSERT_EQUALS(stdfStr.max_size(), size);
       TS_ASSERT_EQUALS(stdfStr.storage(), 6*size);
-      Sn data8 = stdfStr[8];
-      TS_ASSERT_EQUALS(data8.to_string(), data[8].to_string());
-      Sn data9 = stdfStr[9];
-      TS_ASSERT_EQUALS(data9.to_string(), data[9].to_string());
+      TS_ASSERT_EQUALS(stdfStr[8].to_string(), data[8].to_string());
+      TS_ASSERT_EQUALS(stdfStr[9].to_string(), data[9].to_string());
       string str;
       for(size_t i = 0; i < size-1; i++) str.append("ABCD,"); str.append("ABCD");
       TS_ASSERT_EQUALS(stdfStr.to_string(), str);
@@ -64,10 +62,8 @@ class TestKxSn : public CxxTest::TestSuite
       }
       TS_ASSERT_EQUALS(stdfStr.max_size(), size);
       TS_ASSERT_EQUALS(stdfStr.storage(), 6*size);
-      Sn data88 = stdfStr[88];
-      TS_ASSERT_EQUALS(data88.to_string(), data[88].to_string());
-      Sn data93 = stdfStr[93];
-      TS_ASSERT_EQUALS(data93.to_string(), data[93].to_string());
+      TS_ASSERT_EQUALS(stdfStr[88].to_string(), data[88].to_string());
+      TS_ASSERT_EQUALS(stdfStr[93].to_string(), data[93].to_string());
       string str;
       for(size_t i = 0; i < size-1; i++) str.append("ABCD,"); str.append("ABCD");
       TS_ASSERT_EQUALS(stdfStr.to_string(), str);
@@ -87,10 +83,8 @@ class TestKxSn : public CxxTest::TestSuite
       }
       TS_ASSERT_EQUALS(stdfStr.max_size(), size);
       TS_ASSERT_EQUALS(stdfStr.storage(), 6*size);
-      Sn data88 = stdfStr[88];
-      TS_ASSERT_EQUALS(data88.to_string(), data[88].to_string());
-      Sn data93 = stdfStr[93];
-      TS_ASSERT_EQUALS(data93.to_string(), data[93].to_string());
+      TS_ASSERT_EQUALS(stdfStr[88].to_string(), data[88].to_string());
+      TS_ASSERT_EQUALS(stdfStr[93].to_string(), data[93].to_string());
       string str;
       for(size_t i = 0; i < size-1; i++) str.append("ABCD,"); str.append("ABCD");
       TS_ASSERT_EQUALS(stdfStr.to_string(), str);

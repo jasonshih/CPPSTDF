@@ -41,10 +41,8 @@ class TestKxCn : public CxxTest::TestSuite
       }
       TS_ASSERT_EQUALS(stdfStr.max_size(), size);
       TS_ASSERT_EQUALS(stdfStr.storage(), 5*size);
-      Cn data88 = stdfStr[88];
-      TS_ASSERT_EQUALS(data88.to_string(), data[88].to_string());
-      Cn data99 = stdfStr[99];
-      TS_ASSERT_EQUALS(data99.to_string(), data[99].to_string());
+      TS_ASSERT_EQUALS(stdfStr[88].to_string(), data[88].to_string());
+      TS_ASSERT_EQUALS(stdfStr[99].to_string(), data[99].to_string());
       string str;
       for(size_t i = 0; i < size-1; i++) str.append("ABCD,"); str.append("ABCD");
       TS_ASSERT_EQUALS(stdfStr.to_string(), str);
