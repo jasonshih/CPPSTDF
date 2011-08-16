@@ -737,7 +737,7 @@ class KxTYPE
 
     ~KxTYPE() {delete[] mData;}
     KxTYPE() {mData = new T[SIZE];}
-    T operator[] (size_t pos) const {assert(pos < SIZE); return mData[pos];}
+    const T& operator[] (size_t pos) const {assert(pos < SIZE); return mData[pos];}
     Reference operator[] (size_t pos) {assert(pos < SIZE); return Reference(mData, pos);}
     void clear() {for(size_t i = 0; i < SIZE; i++) mData[i].clear();}
     void write(ofstream& outfile) {for(size_t i = 0; i < SIZE; i++) mData[i].write(outfile);}
