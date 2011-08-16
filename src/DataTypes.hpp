@@ -29,6 +29,7 @@ class DataType
 {
   public:
     virtual ~DataType() {};
+    virtual void clear() = 0;
     virtual void write(ofstream& outfile) = 0;
     virtual void read(ifstream& infile) = 0;
     virtual size_t storage() const = 0;
@@ -150,50 +151,88 @@ string VarCharArray<T>::to_string() const
 
 
 ///////////////////////////////////////////////////////////////////////////////
-class StdfString
+template <size_t SIZ1, size_t SIZ2>
+class KxCf : public DataType
 {
-  friend class TestCf;
+  friend class TestKxCf;
 
   public:
-    ~StdfString() {}
-    StdfString(const string& str = "") : mData(str) {}
-    StdfString(const char* str) {assert(str != NULL); mData = str;}
-    StdfString(const StdfString& rhs) {mData = rhs.mData;}
-    StdfString& operator=(const StdfString& rhs);
-    StdfString& operator+=(const string& str) {mData += str; return *this;}
-    void clear() {mData.clear();}
-    void write(ofstream& outfile, size_t size) {outfile.write(mData.data(), std::min(mData.size(), size));}
-    void write(ofstream& outfile) {outfile.write(mData.data(), mData.size());}
-    void read(ifstream& infile, size_t size);
-    size_t storage() const {return mData.size();}
-    const string& to_string() const {return mData;} 
+
+    ~KxCf() {delete[] mData;}
+    KxCf() {mData = new string[SIZ1];}
+    const string& operator[] (size_t pos) const {assert(pos < SIZ1); return mData[pos];}
+    string& operator[] (size_t pos) {assert(pos < SIZ1); return mData[pos];}
+    void clear() {for(size_t i = 0; i < SIZ1; i++) mData[i].clear();}
+    void write(ofstream& outfile);
+    void read(ifstream& infile);
+    inline size_t max_size() const {return SIZ1;}
+    size_t storage() const {return SIZ1*SIZ2;}
+    string to_string() const;
 
   private:
-    string          mData;
+    KxCf(const KxCf& rhs);
+    KxCf& operator=(const KxCf& rhs);
+    string to_string(size_t pos) const;
+
+  private:
+    static const char PAD = ' ';
+
+    string*         mData;
 };
 
-StdfString& StdfString::operator=(const StdfString& rhs)
+template <size_t SIZ1, size_t SIZ2>
+void KxCf<SIZ1, SIZ2>::write(ofstream& outfile)
 {
-  if(this == &rhs) return *this;
-  mData = rhs.mData;
-  return *this;
+  for(size_t i = 0; i < SIZ1; i++)
+  {
+    string data = to_string(i);
+    outfile.write(data.data(), data.size());
+  }
 }
 
-void StdfString::read(ifstream& infile, size_t size)
+template <size_t SIZ1, size_t SIZ2>
+void KxCf<SIZ1, SIZ2>::read(ifstream& infile)
 {
-  assert(size >= 0);
-
-  if(0 != size)
+  for(size_t i = 0; i < SIZ1; i++)
   {
-    char buffer[size+1];
-    memset(buffer, '\0', size+1);
-    infile.read(buffer, size);
-    mData = buffer;
+    if(SIZ2==0) mData[i] = "";
+    else
+    {
+      char buffer[SIZ2+1];
+      memset(buffer, 0, SIZ2+1);
+      infile.read(buffer, SIZ2);
+      for(char* p=buffer+SIZ2-1; (p != buffer)&&(*p == PAD); --p) {*p = 0;}
+      mData[i] = buffer;
+    }
+  }
+}
+
+template <size_t SIZ1, size_t SIZ2>
+string KxCf<SIZ1, SIZ2>::to_string(size_t pos) const
+{
+  if(SIZ2 <= mData[pos].size())
+  {
+    return mData[pos].substr(0, SIZ2);
   }
   else
   {
-    mData = "";
+    string data = mData[pos];
+    data.append(SIZ2-mData[pos].size(), PAD);
+    return data;
   }
+}
+
+template <size_t SIZ1, size_t SIZ2>
+string KxCf<SIZ1, SIZ2>::to_string() const
+{
+  std::stringstream ss;
+  for(size_t i = 0; i < SIZ1; i++)
+  {
+    ss << mData[i] << ",";
+  }
+  string ret = ss.str();
+  if(!ret.empty()) ret = ret.substr(0, ret.size()-1);
+  return ret;
 }
 
 
@@ -664,7 +703,6 @@ class KxTYPE
   friend class TestKxU4;
   friend class TestKxU8;
   friend class TestKxUf;
-  friend class TestKxCf;
   friend class TestKxR4;
   friend class TestKxCn;
   friend class TestKxSn;
@@ -704,10 +742,8 @@ class KxTYPE
     void clear() {for(size_t i = 0; i < SIZE; i++) mData[i].clear();}
     void write(ofstream& outfile) {for(size_t i = 0; i < SIZE; i++) mData[i].write(outfile);}
     void write(ofstream& outfile, VarUType::Type type) {for(size_t i = 0; i < SIZE; i++) mData[i].write(outfile, type);}
-    void write(ofstream& outfile, size_t size) {for(size_t i = 0; i < SIZE; i++) mData[i].write(outfile, size);}
     void read(ifstream& infile) {for(size_t i = 0; i < SIZE; i++) mData[i].read(infile);}
     void read(ifstream& infile, VarUType::Type type) {for(size_t i = 0; i < SIZE; i++) mData[i].read(infile, type);}
-    void read(ifstream& infile, size_t size) {for(size_t i = 0; i < SIZE; i++) mData[i].read(infile, size);}
     inline size_t max_size() const {return SIZE;}
     size_t storage() const {size_t ret = 0; for(size_t i = 0; i < SIZE; i++) ret += mData[i].storage(); return ret;}
     size_t storage(VarUType::Type type) const {size_t ret = 0; for(size_t i = 0; i < SIZE; i++) ret += mData[i].storage(type); return ret;}
@@ -737,7 +773,6 @@ string KxTYPE<T, SIZE>::to_string() const
 typedef CharArray<1>                          C1;
 typedef VarCharArray<unsigned char>           Cn;
 typedef VarCharArray<unsigned short>          Sn;
-typedef StdfString                            Cf;
 typedef VarUType                              Uf;
 typedef NumericalType<unsigned char>          U1;
 typedef NumericalType<unsigned short>         U2;
@@ -790,6 +825,7 @@ class VarTypeArray
         VnType(Type type) : mData(type) {}
         VnType(const VnType& rhs) : mData(rhs.mData) {}
         VnType& operator=(const VnType& rhs) {if(this == &rhs) return *this; mData = rhs.mData; return *this;}
+        void clear() {mData = 0;}
         void write(ofstream& outfile) {outfile.write(&mData, storage());}
         void read(ifstream& infile) {}
         size_t storage() const {return sizeof(mData);}
