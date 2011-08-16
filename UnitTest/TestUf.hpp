@@ -4,6 +4,12 @@
 
 class TestUf : public CxxTest::TestSuite 
 {
+  private:
+    typedef Uf<1> Uf1;
+    typedef Uf<2> Uf2;
+    typedef Uf<4> Uf4;
+    typedef Uf<8> Uf8;
+
   public:
     void setUp()
     {
@@ -12,182 +18,245 @@ class TestUf : public CxxTest::TestSuite
     {
     }
 
-    void testConstructor1()
+    void testConstructor11()
     {
-      Uf stdfStr;
-      TS_ASSERT(stdfStr.mData == 0);
+      Uf1 stdfStr;
+      TS_ASSERT(stdfStr.getValue() == 0);
+      stdfStr = 123;
+      TS_ASSERT(stdfStr.getValue() == 123);
+      stdfStr.clear();
+      TS_ASSERT(stdfStr.getValue() == 0);
     }
 
-    void testConstructor2()
+    void testConstructor12()
     {
-      Uf stdfStr = 0;
-      TS_ASSERT(stdfStr.mData == 0);
+      Uf1 stdfStr = 123;
+      TS_ASSERT(stdfStr.getValue() == 123);
+      stdfStr.clear();
+      TS_ASSERT(stdfStr.getValue() == 0);
     }
 
-    void testConstructor3()
+    void testConstructor21()
     {
-      Uf stdfStr;
-      TS_ASSERT(stdfStr.mData == 0);
+      Uf2 stdfStr = 0;
+      TS_ASSERT(stdfStr.getValue() == 0);
+      stdfStr = 12345;
+      TS_ASSERT(stdfStr.getValue() == 12345);
+      stdfStr.clear();
+      TS_ASSERT(stdfStr.getValue() == 0);
+    }
+
+    void testConstructor22()
+    {
+      Uf2 stdfStr = 12345;
+      TS_ASSERT(stdfStr.getValue() == 12345);
+      stdfStr.clear();
+      TS_ASSERT(stdfStr.getValue() == 0);
+    }
+
+    void testConstructor41()
+    {
+      Uf4 stdfStr = 0;
+      TS_ASSERT(stdfStr.getValue() == 0);
       stdfStr = 123456789;
-      TS_ASSERT(stdfStr.mData == 123456789);
+      TS_ASSERT(stdfStr.getValue() == 123456789);
+      stdfStr.clear();
+      TS_ASSERT(stdfStr.getValue() == 0);
     }
 
-    void testConstructor4()
+    void testConstructor42()
     {
-      Uf stdfStr = 123456789;
-      TS_ASSERT(stdfStr.mData == 123456789);
+      Uf4 stdfStr = 123456789;
+      TS_ASSERT(stdfStr.getValue() == 123456789);
+      stdfStr.clear();
+      TS_ASSERT(stdfStr.getValue() == 0);
     }
 
-    void testWriteRead1()
+    void testConstructor81()
     {
-      const char *filename = "TestUf.testWriteRead1.txt";
+      Uf8 stdfStr = 0;
+      TS_ASSERT(stdfStr.getValue() == 0);
+      stdfStr = 123456789;
+      TS_ASSERT(stdfStr.getValue() == 123456789);
+      stdfStr.clear();
+      TS_ASSERT(stdfStr.getValue() == 0);
+    }
 
-      Uf stdfStrIn;
+    void testConstructor82()
+    {
+      Uf8 stdfStr = 123456789;
+      TS_ASSERT(stdfStr.getValue() == 123456789);
+      stdfStr.clear();
+      TS_ASSERT(stdfStr.getValue() == 0);
+    }
+
+    void testWriteRead11()
+    {
+      const char *filename = "TestUf.testWriteRead11.txt";
+
+      Uf1 stdfStrIn;
       ofstream outfile(filename, ofstream::binary);
-      stdfStrIn.write(outfile, Uf::TYPE_1B);
+      stdfStrIn.write(outfile);
       outfile.close();
 
-      Uf stdfStrOut;
+      Uf1 stdfStrOut;
       ifstream infile(filename, ifstream::binary);
-      stdfStrOut.read(infile, Uf::TYPE_1B);
+      stdfStrOut.read(infile);
       outfile.close();
 
-      TS_ASSERT(stdfStrIn.mData == stdfStrOut.mData);
+      TS_ASSERT(stdfStrIn.getValue() == stdfStrOut.getValue());
     }
 
-    void testWriteRead2()
+    void testWriteRead21()
     {
-      const char *filename = "TestUf.testWriteRead2.txt";
+      const char *filename = "TestUf.testWriteRead21.txt";
 
-      Uf stdfStrIn;
+      Uf2 stdfStrIn;
       ofstream outfile(filename, ofstream::binary);
-      stdfStrIn.write(outfile, Uf::TYPE_2B);
+      stdfStrIn.write(outfile);
       outfile.close();
 
-      Uf stdfStrOut;
+      Uf2 stdfStrOut;
       ifstream infile(filename, ifstream::binary);
-      stdfStrOut.read(infile, Uf::TYPE_2B);
+      stdfStrOut.read(infile);
       outfile.close();
 
-      TS_ASSERT(stdfStrIn.mData == stdfStrOut.mData);
+      TS_ASSERT(stdfStrIn.getValue() == stdfStrOut.getValue());
     }
 
-    void testWriteRead3()
+    void testWriteRead41()
     {
-      const char *filename = "TestUf.testWriteRead3.txt";
+      const char *filename = "TestUf.testWriteRead41.txt";
 
-      Uf stdfStrIn;
+      Uf4 stdfStrIn;
       ofstream outfile(filename, ofstream::binary);
-      stdfStrIn.write(outfile, Uf::TYPE_4B);
+      stdfStrIn.write(outfile);
       outfile.close();
 
-      Uf stdfStrOut;
+      Uf4 stdfStrOut;
       ifstream infile(filename, ifstream::binary);
-      stdfStrOut.read(infile, Uf::TYPE_4B);
+      stdfStrOut.read(infile);
       outfile.close();
 
-      TS_ASSERT(stdfStrIn.mData == stdfStrOut.mData);
+      TS_ASSERT(stdfStrIn.getValue() == stdfStrOut.getValue());
     }
 
-    void testWriteRead4()
+    void testWriteRead81()
     {
-      const char *filename = "TestUf.testWriteRead4.txt";
+      const char *filename = "TestUf.testWriteRead81.txt";
 
-      Uf stdfStrIn = 0xFEDCBA98;
+      Uf8 stdfStrIn;
       ofstream outfile(filename, ofstream::binary);
-      stdfStrIn.write(outfile, Uf::TYPE_1B);
+      stdfStrIn.write(outfile);
+      outfile.close();
+
+      Uf8 stdfStrOut;
+      ifstream infile(filename, ifstream::binary);
+      stdfStrOut.read(infile);
+      outfile.close();
+
+      TS_ASSERT(stdfStrIn.getValue() == stdfStrOut.getValue());
+    }
+
+    void testWriteRead12()
+    {
+      const char *filename = "TestUf.testWriteRead12.txt";
+
+      Uf1 stdfStrIn = 0xFEDCBA98;
+      ofstream outfile(filename, ofstream::binary);
+      stdfStrIn.write(outfile);
       outfile.close();
       stdfStrIn = 0x98;
 
-      Uf stdfStrOut;
+      Uf1 stdfStrOut;
       ifstream infile(filename, ifstream::binary);
-      stdfStrOut.read(infile, Uf::TYPE_1B);
+      stdfStrOut.read(infile);
       outfile.close();
 
-      TS_ASSERT(stdfStrIn.mData == stdfStrOut.mData);
-      TS_ASSERT(stdfStrIn.mData == 152);
-      TS_ASSERT(stdfStrOut.mData == 152);
+      TS_ASSERT(stdfStrIn.getValue() == stdfStrOut.getValue());
+      TS_ASSERT(stdfStrIn.getValue() == 152);
+      TS_ASSERT(stdfStrOut.getValue() == 152);
       TS_ASSERT(stdfStrIn.getValue() == 152);
       TS_ASSERT(stdfStrOut.getValue() == 152);
       TS_ASSERT(stdfStrIn.to_string() == "152");
       TS_ASSERT(stdfStrOut.to_string() == "152");
-      TS_ASSERT(stdfStrIn.storage(Uf::TYPE_1B) == 1);
-      TS_ASSERT(stdfStrOut.storage(Uf::TYPE_1B) == 1);
+      TS_ASSERT(stdfStrIn.storage() == 1);
+      TS_ASSERT(stdfStrOut.storage() == 1);
     }
 
-    void testWriteRead5()
+    void testWriteRead22()
     {
-      const char *filename = "TestUf.testWriteRead5.txt";
+      const char *filename = "TestUf.testWriteRead22.txt";
 
-      Uf stdfStrIn = 0xFEDCBA98;
+      Uf2 stdfStrIn = 0xFEDCBA98;
       ofstream outfile(filename, ofstream::binary);
-      stdfStrIn.write(outfile, Uf::TYPE_2B);
+      stdfStrIn.write(outfile);
       outfile.close();
       stdfStrIn = 0xBA98;
 
-      Uf stdfStrOut;
+      Uf2 stdfStrOut;
       ifstream infile(filename, ifstream::binary);
-      stdfStrOut.read(infile, Uf::TYPE_2B);
+      stdfStrOut.read(infile);
       outfile.close();
 
-      TS_ASSERT(stdfStrIn.mData == stdfStrOut.mData);
-      TS_ASSERT(stdfStrIn.mData == 47768);
-      TS_ASSERT(stdfStrOut.mData == 47768);
+      TS_ASSERT(stdfStrIn.getValue() == stdfStrOut.getValue());
+      TS_ASSERT(stdfStrIn.getValue() == 47768);
+      TS_ASSERT(stdfStrOut.getValue() == 47768);
       TS_ASSERT(stdfStrIn.getValue() == 47768);
       TS_ASSERT(stdfStrOut.getValue() == 47768);
       TS_ASSERT(stdfStrIn.to_string() == "47768");
       TS_ASSERT(stdfStrOut.to_string() == "47768");
-      TS_ASSERT(stdfStrIn.storage(Uf::TYPE_2B) == 2);
-      TS_ASSERT(stdfStrOut.storage(Uf::TYPE_2B) == 2);
+      TS_ASSERT(stdfStrIn.storage() == 2);
+      TS_ASSERT(stdfStrOut.storage() == 2);
     }
 
-    void testWriteRead6()
+    void testWriteRead42()
     {
-      const char *filename = "TestUf.testWriteRead6.txt";
+      const char *filename = "TestUf.testWriteRead42.txt";
 
-      Uf stdfStrIn = 0xFEDCBA98;
+      Uf4 stdfStrIn = 0xFEDCBA98;
       ofstream outfile(filename, ofstream::binary);
-      stdfStrIn.write(outfile, Uf::TYPE_4B);
+      stdfStrIn.write(outfile);
       outfile.close();
 
-      Uf stdfStrOut;
+      Uf4 stdfStrOut;
       ifstream infile(filename, ifstream::binary);
-      stdfStrOut.read(infile, Uf::TYPE_4B);
+      stdfStrOut.read(infile);
       outfile.close();
 
-      TS_ASSERT(stdfStrIn.mData == stdfStrOut.mData);
-      TS_ASSERT(stdfStrIn.mData == 4275878552);
-      TS_ASSERT(stdfStrOut.mData == 4275878552);
+      TS_ASSERT(stdfStrIn.getValue() == stdfStrOut.getValue());
+      TS_ASSERT(stdfStrIn.getValue() == 4275878552);
+      TS_ASSERT(stdfStrOut.getValue() == 4275878552);
       TS_ASSERT(stdfStrIn.getValue() == 4275878552);
       TS_ASSERT(stdfStrOut.getValue() == 4275878552);
       TS_ASSERT(stdfStrIn.to_string() == "4275878552");
       TS_ASSERT(stdfStrOut.to_string() == "4275878552");
-      TS_ASSERT(stdfStrIn.storage(Uf::TYPE_4B) == 4);
-      TS_ASSERT(stdfStrOut.storage(Uf::TYPE_4B) == 4);
+      TS_ASSERT(stdfStrIn.storage() == 4);
+      TS_ASSERT(stdfStrOut.storage() == 4);
     }
 
-    void testWriteRead7()
+    void testWriteRead82()
     {
-      const char *filename = "TestUf.testWriteRead7.txt";
+      const char *filename = "TestUf.testWriteRead82.txt";
 
-      Uf stdfStrIn = 0xFEDCBA9876543210;
+      Uf8 stdfStrIn = 0xFEDCBA9876543210;
       ofstream outfile(filename, ofstream::binary);
-      stdfStrIn.write(outfile, Uf::TYPE_8B);
+      stdfStrIn.write(outfile);
       outfile.close();
 
-      Uf stdfStrOut;
+      Uf8 stdfStrOut;
       ifstream infile(filename, ifstream::binary);
-      stdfStrOut.read(infile, Uf::TYPE_8B);
+      stdfStrOut.read(infile);
       outfile.close();
 
-      TS_ASSERT(stdfStrIn.mData == stdfStrOut.mData);
-      TS_ASSERT(stdfStrIn.mData == 0xFEDCBA9876543210);
-      TS_ASSERT(stdfStrOut.mData == 0xFEDCBA9876543210);
+      TS_ASSERT(stdfStrIn.getValue() == stdfStrOut.getValue());
+      TS_ASSERT(stdfStrIn.getValue() == 0xFEDCBA9876543210);
+      TS_ASSERT(stdfStrOut.getValue() == 0xFEDCBA9876543210);
       TS_ASSERT(stdfStrIn.getValue() == 18364758544493064720ull);
       TS_ASSERT(stdfStrOut.getValue() == 18364758544493064720ull);
       TS_ASSERT(stdfStrIn.to_string() == "18364758544493064720");
       TS_ASSERT(stdfStrOut.to_string() == "18364758544493064720");
-      TS_ASSERT(stdfStrIn.storage(Uf::TYPE_8B) == 8);
-      TS_ASSERT(stdfStrOut.storage(Uf::TYPE_8B) == 8);
+      TS_ASSERT(stdfStrIn.storage() == 8);
+      TS_ASSERT(stdfStrOut.storage() == 8);
     }
 };

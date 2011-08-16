@@ -4,6 +4,12 @@
 
 class TestKxUf : public CxxTest::TestSuite 
 {
+  private:
+    typedef Uf<1> Uf1;
+    typedef Uf<2> Uf2;
+    typedef Uf<4> Uf4;
+    typedef Uf<8> Uf8;
+
   public:
     void setUp()
     {
@@ -15,55 +21,44 @@ class TestKxUf : public CxxTest::TestSuite
     void testConstructor0()
     {
       const size_t size = 0;
-      KxTYPE<Uf, size> stdfStr;
-      Uf data[size];
-      TS_ASSERT_SAME_DATA(stdfStr.mData, data, size);
+      KxTYPE<Uf1, size> stdfStr;
       TS_ASSERT_EQUALS(stdfStr.max_size(), size);
-      TS_ASSERT_EQUALS(stdfStr.storage(Uf::TYPE_1B), size);
-      TS_ASSERT_EQUALS(stdfStr.storage(Uf::TYPE_2B), size);
-      TS_ASSERT_EQUALS(stdfStr.storage(Uf::TYPE_4B), size);
-      TS_ASSERT_EQUALS(stdfStr.storage(Uf::TYPE_8B), size);
+      TS_ASSERT_EQUALS(stdfStr.storage(), size);
       TS_ASSERT_EQUALS(stdfStr.to_string(), "");
     }
 
     void testConstructor1()
     {
       const size_t size = 10;
-      KxTYPE<Uf, size> stdfStr;
-      Uf data[size];
-      TS_ASSERT_SAME_DATA(stdfStr.mData, data, size);
+      KxTYPE<Uf1, size> stdfStr;
       TS_ASSERT_EQUALS(stdfStr.max_size(), size);
-      TS_ASSERT_EQUALS(stdfStr.storage(Uf::TYPE_1B), size);
-      TS_ASSERT_EQUALS(stdfStr.storage(Uf::TYPE_2B), 2*size);
-      TS_ASSERT_EQUALS(stdfStr.storage(Uf::TYPE_4B), 4*size);
-      TS_ASSERT_EQUALS(stdfStr.storage(Uf::TYPE_8B), 8*size);
-      TS_ASSERT_EQUALS(stdfStr.to_string(), "0,0,0,0,0,0,0,0,0,0");
+      TS_ASSERT_EQUALS(stdfStr.storage(), size);
+      std::stringstream ss; for(size_t i = 0; i < size-1; i++) ss << "0,"; ss << "0";
+      TS_ASSERT_EQUALS(stdfStr.to_string(), ss.str());
     }
 
     void testConstructor2()
     {
       const size_t size = 100;
-      KxTYPE<Uf, size> stdfStr;
-      Uf data[size];
+      KxTYPE<Uf1, size> stdfStr;
+      Uf1 data[size];
       for(size_t i = 0; i < size; i++)
       {
         stdfStr[i] = data[i] = i;
       }
-      TS_ASSERT_SAME_DATA(stdfStr.mData, data, size);
+
       TS_ASSERT_EQUALS(stdfStr.max_size(), size);
-      TS_ASSERT_EQUALS(stdfStr.storage(Uf::TYPE_1B), size);
-      TS_ASSERT_EQUALS(stdfStr.storage(Uf::TYPE_2B), 2*size);
-      TS_ASSERT_EQUALS(stdfStr.storage(Uf::TYPE_4B), 4*size);
-      TS_ASSERT_EQUALS(stdfStr.storage(Uf::TYPE_8B), 8*size);
-      Uf data88 = stdfStr[88];
-      TS_ASSERT_EQUALS(data88.getValue(), 88u);
-      TS_ASSERT_EQUALS(data88.to_string(), data[88].to_string());
-      Uf data99 = stdfStr[99];
-      TS_ASSERT_EQUALS(data99.getValue(), 99u);
-      TS_ASSERT_EQUALS(data99.to_string(), data[99].to_string());
-      TS_ASSERT_EQUALS(stdfStr.to_string(), "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99");
+      TS_ASSERT_EQUALS(stdfStr.storage(), size);
+      for(size_t i = 0; i < size; i++)
+      {
+        TS_ASSERT_EQUALS((stdfStr[i]).getValue(), data[i].getValue());
+        TS_ASSERT_EQUALS(stdfStr[i].to_string(), data[i].to_string());
+      }
+      std::stringstream ss; for(size_t i = 0; i < size-1; i++) ss << i << ','; ss << size-1;
+      TS_ASSERT_EQUALS(stdfStr.to_string(), ss.str());
       stdfStr.clear();
-      TS_ASSERT_EQUALS(stdfStr.to_string(), "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0");
+      ss.str(""); for(size_t i = 0; i < size-1; i++) ss << "0,"; ss << "0";
+      TS_ASSERT_EQUALS(stdfStr.to_string(), ss.str());
     }
 
     void testWriteRead11()
@@ -71,21 +66,25 @@ class TestKxUf : public CxxTest::TestSuite
       const char *filename = "TestKxUf.testWriteRead11.txt";
 
       const size_t size = 1;
-      Uf data[size];
 
-      KxTYPE<Uf, size> stdfStrIn;
+      KxTYPE<Uf1, size> stdfStrIn;
       ofstream outfile(filename, ofstream::binary);
-      stdfStrIn.write(outfile, Uf::TYPE_1B);
+      stdfStrIn.write(outfile);
       outfile.close();
 
-      KxTYPE<Uf, size> stdfStrOut;
+      KxTYPE<Uf1, size> stdfStrOut;
       ifstream infile(filename, ifstream::binary);
-      stdfStrOut.read(infile, Uf::TYPE_1B);
+      stdfStrOut.read(infile);
       outfile.close();
 
-      TS_ASSERT_SAME_DATA(stdfStrIn.mData, data, size);
-      TS_ASSERT_SAME_DATA(stdfStrOut.mData, data, size);
-      TS_ASSERT_SAME_DATA(stdfStrIn.mData, stdfStrOut.mData, size);
+      for(size_t i = 0; i < size; i++)
+      {
+        TS_ASSERT_EQUALS(stdfStrIn[i].getValue(), stdfStrOut[i].getValue());
+        TS_ASSERT_EQUALS(stdfStrIn[i].to_string(), stdfStrOut[i].to_string());
+        TS_ASSERT_EQUALS(stdfStrIn[i].storage(), stdfStrOut[i].storage());
+      }
+      TS_ASSERT_EQUALS(stdfStrIn.max_size(), stdfStrOut.max_size());
+      TS_ASSERT_EQUALS(stdfStrIn.storage(), stdfStrOut.storage());
       TS_ASSERT_EQUALS(stdfStrIn.to_string(), stdfStrOut.to_string())
     }
 
@@ -94,21 +93,25 @@ class TestKxUf : public CxxTest::TestSuite
       const char *filename = "TestKxUf.testWriteRead21.txt";
 
       const size_t size = 1;
-      Uf data[size];
 
-      KxTYPE<Uf, size> stdfStrIn;
+      KxTYPE<Uf2, size> stdfStrIn;
       ofstream outfile(filename, ofstream::binary);
-      stdfStrIn.write(outfile, Uf::TYPE_2B);
+      stdfStrIn.write(outfile);
       outfile.close();
 
-      KxTYPE<Uf, size> stdfStrOut;
+      KxTYPE<Uf2, size> stdfStrOut;
       ifstream infile(filename, ifstream::binary);
-      stdfStrOut.read(infile, Uf::TYPE_2B);
+      stdfStrOut.read(infile);
       outfile.close();
 
-      TS_ASSERT_SAME_DATA(stdfStrIn.mData, data, size);
-      TS_ASSERT_SAME_DATA(stdfStrOut.mData, data, size);
-      TS_ASSERT_SAME_DATA(stdfStrIn.mData, stdfStrOut.mData, size);
+      for(size_t i = 0; i < size; i++)
+      {
+        TS_ASSERT_EQUALS(stdfStrIn[i].getValue(), stdfStrOut[i].getValue());
+        TS_ASSERT_EQUALS(stdfStrIn[i].to_string(), stdfStrOut[i].to_string());
+        TS_ASSERT_EQUALS(stdfStrIn[i].storage(), stdfStrOut[i].storage());
+      }
+      TS_ASSERT_EQUALS(stdfStrIn.max_size(), stdfStrOut.max_size());
+      TS_ASSERT_EQUALS(stdfStrOut.storage(), stdfStrOut.storage());
       TS_ASSERT_EQUALS(stdfStrIn.to_string(), stdfStrOut.to_string())
     }
 
@@ -117,21 +120,25 @@ class TestKxUf : public CxxTest::TestSuite
       const char *filename = "TestKxUf.testWriteRead41.txt";
 
       const size_t size = 1;
-      Uf data[size];
 
-      KxTYPE<Uf, size> stdfStrIn;
+      KxTYPE<Uf4, size> stdfStrIn;
       ofstream outfile(filename, ofstream::binary);
-      stdfStrIn.write(outfile, Uf::TYPE_4B);
+      stdfStrIn.write(outfile);
       outfile.close();
 
-      KxTYPE<Uf, size> stdfStrOut;
+      KxTYPE<Uf4, size> stdfStrOut;
       ifstream infile(filename, ifstream::binary);
-      stdfStrOut.read(infile, Uf::TYPE_4B);
+      stdfStrOut.read(infile);
       outfile.close();
 
-      TS_ASSERT_SAME_DATA(stdfStrIn.mData, data, size);
-      TS_ASSERT_SAME_DATA(stdfStrOut.mData, data, size);
-      TS_ASSERT_SAME_DATA(stdfStrIn.mData, stdfStrOut.mData, size);
+      for(size_t i = 0; i < size; i++)
+      {
+        TS_ASSERT_EQUALS(stdfStrIn[i].getValue(), stdfStrOut[i].getValue());
+        TS_ASSERT_EQUALS(stdfStrIn[i].to_string(), stdfStrOut[i].to_string());
+        TS_ASSERT_EQUALS(stdfStrIn[i].storage(), stdfStrOut[i].storage());
+      }
+      TS_ASSERT_EQUALS(stdfStrIn.max_size(), stdfStrOut.max_size());
+      TS_ASSERT_EQUALS(stdfStrOut.storage(), stdfStrOut.storage());
       TS_ASSERT_EQUALS(stdfStrIn.to_string(), stdfStrOut.to_string())
     }
 
@@ -140,21 +147,25 @@ class TestKxUf : public CxxTest::TestSuite
       const char *filename = "TestKxUf.testWriteRead81.txt";
 
       const size_t size = 1;
-      Uf data[size];
 
-      KxTYPE<Uf, size> stdfStrIn;
+      KxTYPE<Uf8, size> stdfStrIn;
       ofstream outfile(filename, ofstream::binary);
-      stdfStrIn.write(outfile, Uf::TYPE_8B);
+      stdfStrIn.write(outfile);
       outfile.close();
 
-      KxTYPE<Uf, size> stdfStrOut;
+      KxTYPE<Uf8, size> stdfStrOut;
       ifstream infile(filename, ifstream::binary);
-      stdfStrOut.read(infile, Uf::TYPE_8B);
+      stdfStrOut.read(infile);
       outfile.close();
 
-      TS_ASSERT_SAME_DATA(stdfStrIn.mData, data, size);
-      TS_ASSERT_SAME_DATA(stdfStrOut.mData, data, size);
-      TS_ASSERT_SAME_DATA(stdfStrIn.mData, stdfStrOut.mData, size);
+      for(size_t i = 0; i < size; i++)
+      {
+        TS_ASSERT_EQUALS(stdfStrIn[i].getValue(), stdfStrOut[i].getValue());
+        TS_ASSERT_EQUALS(stdfStrIn[i].to_string(), stdfStrOut[i].to_string());
+        TS_ASSERT_EQUALS(stdfStrIn[i].storage(), stdfStrOut[i].storage());
+      }
+      TS_ASSERT_EQUALS(stdfStrIn.max_size(), stdfStrOut.max_size());
+      TS_ASSERT_EQUALS(stdfStrOut.storage(), stdfStrOut.storage());
       TS_ASSERT_EQUALS(stdfStrIn.to_string(), stdfStrOut.to_string())
     }
 
@@ -163,21 +174,25 @@ class TestKxUf : public CxxTest::TestSuite
       const char *filename = "TestKxUf.testWriteRead12.txt";
 
       const size_t size = 10;
-      Uf data[size];
 
-      KxTYPE<Uf, size> stdfStrIn;
+      KxTYPE<Uf1, size> stdfStrIn;
       ofstream outfile(filename, ofstream::binary);
-      stdfStrIn.write(outfile, Uf::TYPE_1B);
+      stdfStrIn.write(outfile);
       outfile.close();
 
-      KxTYPE<Uf, size> stdfStrOut;
+      KxTYPE<Uf1, size> stdfStrOut;
       ifstream infile(filename, ifstream::binary);
-      stdfStrOut.read(infile, Uf::TYPE_1B);
+      stdfStrOut.read(infile);
       outfile.close();
 
-      TS_ASSERT_SAME_DATA(stdfStrIn.mData, data, size);
-      TS_ASSERT_SAME_DATA(stdfStrOut.mData, data, size);
-      TS_ASSERT_SAME_DATA(stdfStrIn.mData, stdfStrOut.mData, size);
+      for(size_t i = 0; i < size; i++)
+      {
+        TS_ASSERT_EQUALS(stdfStrIn[i].getValue(), stdfStrOut[i].getValue());
+        TS_ASSERT_EQUALS(stdfStrIn[i].to_string(), stdfStrOut[i].to_string());
+        TS_ASSERT_EQUALS(stdfStrIn[i].storage(), stdfStrOut[i].storage());
+      }
+      TS_ASSERT_EQUALS(stdfStrIn.max_size(), stdfStrOut.max_size());
+      TS_ASSERT_EQUALS(stdfStrOut.storage(), stdfStrOut.storage());
       TS_ASSERT_EQUALS(stdfStrIn.to_string(), stdfStrOut.to_string())
     }
 
@@ -186,21 +201,25 @@ class TestKxUf : public CxxTest::TestSuite
       const char *filename = "TestKxUf.testWriteRead22.txt";
 
       const size_t size = 10;
-      Uf data[size];
 
-      KxTYPE<Uf, size> stdfStrIn;
+      KxTYPE<Uf2, size> stdfStrIn;
       ofstream outfile(filename, ofstream::binary);
-      stdfStrIn.write(outfile, Uf::TYPE_2B);
+      stdfStrIn.write(outfile);
       outfile.close();
 
-      KxTYPE<Uf, size> stdfStrOut;
+      KxTYPE<Uf2, size> stdfStrOut;
       ifstream infile(filename, ifstream::binary);
-      stdfStrOut.read(infile, Uf::TYPE_2B);
+      stdfStrOut.read(infile);
       outfile.close();
 
-      TS_ASSERT_SAME_DATA(stdfStrIn.mData, data, size);
-      TS_ASSERT_SAME_DATA(stdfStrOut.mData, data, size);
-      TS_ASSERT_SAME_DATA(stdfStrIn.mData, stdfStrOut.mData, size);
+      for(size_t i = 0; i < size; i++)
+      {
+        TS_ASSERT_EQUALS(stdfStrIn[i].getValue(), stdfStrOut[i].getValue());
+        TS_ASSERT_EQUALS(stdfStrIn[i].to_string(), stdfStrOut[i].to_string());
+        TS_ASSERT_EQUALS(stdfStrIn[i].storage(), stdfStrOut[i].storage());
+      }
+      TS_ASSERT_EQUALS(stdfStrIn.max_size(), stdfStrOut.max_size());
+      TS_ASSERT_EQUALS(stdfStrOut.storage(), stdfStrOut.storage());
       TS_ASSERT_EQUALS(stdfStrIn.to_string(), stdfStrOut.to_string())
     }
 
@@ -209,21 +228,25 @@ class TestKxUf : public CxxTest::TestSuite
       const char *filename = "TestKxUf.testWriteRead42.txt";
 
       const size_t size = 10;
-      Uf data[size];
 
-      KxTYPE<Uf, size> stdfStrIn;
+      KxTYPE<Uf4, size> stdfStrIn;
       ofstream outfile(filename, ofstream::binary);
-      stdfStrIn.write(outfile, Uf::TYPE_4B);
+      stdfStrIn.write(outfile);
       outfile.close();
 
-      KxTYPE<Uf, size> stdfStrOut;
+      KxTYPE<Uf4, size> stdfStrOut;
       ifstream infile(filename, ifstream::binary);
-      stdfStrOut.read(infile, Uf::TYPE_4B);
+      stdfStrOut.read(infile);
       outfile.close();
 
-      TS_ASSERT_SAME_DATA(stdfStrIn.mData, data, size);
-      TS_ASSERT_SAME_DATA(stdfStrOut.mData, data, size);
-      TS_ASSERT_SAME_DATA(stdfStrIn.mData, stdfStrOut.mData, size);
+      for(size_t i = 0; i < size; i++)
+      {
+        TS_ASSERT_EQUALS(stdfStrIn[i].getValue(), stdfStrOut[i].getValue());
+        TS_ASSERT_EQUALS(stdfStrIn[i].to_string(), stdfStrOut[i].to_string());
+        TS_ASSERT_EQUALS(stdfStrIn[i].storage(), stdfStrOut[i].storage());
+      }
+      TS_ASSERT_EQUALS(stdfStrIn.max_size(), stdfStrOut.max_size());
+      TS_ASSERT_EQUALS(stdfStrOut.storage(), stdfStrOut.storage());
       TS_ASSERT_EQUALS(stdfStrIn.to_string(), stdfStrOut.to_string())
     }
 
@@ -232,21 +255,25 @@ class TestKxUf : public CxxTest::TestSuite
       const char *filename = "TestKxUf.testWriteRead82.txt";
 
       const size_t size = 10;
-      Uf data[size];
 
-      KxTYPE<Uf, size> stdfStrIn;
+      KxTYPE<Uf8, size> stdfStrIn;
       ofstream outfile(filename, ofstream::binary);
-      stdfStrIn.write(outfile, Uf::TYPE_8B);
+      stdfStrIn.write(outfile);
       outfile.close();
 
-      KxTYPE<Uf, size> stdfStrOut;
+      KxTYPE<Uf8, size> stdfStrOut;
       ifstream infile(filename, ifstream::binary);
-      stdfStrOut.read(infile, Uf::TYPE_8B);
+      stdfStrOut.read(infile);
       outfile.close();
 
-      TS_ASSERT_SAME_DATA(stdfStrIn.mData, data, size);
-      TS_ASSERT_SAME_DATA(stdfStrOut.mData, data, size);
-      TS_ASSERT_SAME_DATA(stdfStrIn.mData, stdfStrOut.mData, size);
+      for(size_t i = 0; i < size; i++)
+      {
+        TS_ASSERT_EQUALS(stdfStrIn[i].getValue(), stdfStrOut[i].getValue());
+        TS_ASSERT_EQUALS(stdfStrIn[i].to_string(), stdfStrOut[i].to_string());
+        TS_ASSERT_EQUALS(stdfStrIn[i].storage(), stdfStrOut[i].storage());
+      }
+      TS_ASSERT_EQUALS(stdfStrIn.max_size(), stdfStrOut.max_size());
+      TS_ASSERT_EQUALS(stdfStrOut.storage(), stdfStrOut.storage());
       TS_ASSERT_EQUALS(stdfStrIn.to_string(), stdfStrOut.to_string())
     }
 
@@ -255,28 +282,38 @@ class TestKxUf : public CxxTest::TestSuite
       const char *filename = "TestKxUf.testWriteRead13.txt";
 
       const size_t size = 20;
-      Uf data[size];
+      Uf1 data[size];
 
-      KxTYPE<Uf, size> stdfStrIn;
+      KxTYPE<Uf1, size> stdfStrIn;
       for(size_t i = 0; i < size; i++)
       {
         stdfStrIn[i] = data[i] = i;
       }
       ofstream outfile(filename, ofstream::binary);
-      stdfStrIn.write(outfile, Uf::TYPE_1B);
+      stdfStrIn.write(outfile);
       outfile.close();
 
-      KxTYPE<Uf, size> stdfStrOut;
+      KxTYPE<Uf1, size> stdfStrOut;
       ifstream infile(filename, ifstream::binary);
-      stdfStrOut.read(infile, Uf::TYPE_1B);
+      stdfStrOut.read(infile);
       outfile.close();
 
-      TS_ASSERT_SAME_DATA(stdfStrIn.mData, data, size);
-      TS_ASSERT_SAME_DATA(stdfStrOut.mData, data, size);
-      TS_ASSERT_SAME_DATA(stdfStrIn.mData, stdfStrOut.mData, size);
+      for(size_t i = 0; i < size; i++)
+      {
+        TS_ASSERT_EQUALS(stdfStrIn[i].getValue(), data[i].getValue());
+        TS_ASSERT_EQUALS(stdfStrIn[i].to_string(), data[i].to_string());
+        TS_ASSERT_EQUALS(stdfStrIn[i].storage(), data[i].storage());
+        TS_ASSERT_EQUALS(stdfStrIn[i].getValue(), stdfStrOut[i].getValue());
+        TS_ASSERT_EQUALS(stdfStrIn[i].to_string(), stdfStrOut[i].to_string());
+        TS_ASSERT_EQUALS(stdfStrIn[i].storage(), stdfStrOut[i].storage());
+      }
+      TS_ASSERT_EQUALS(stdfStrOut.storage(), stdfStrOut.storage());
+      TS_ASSERT_EQUALS(stdfStrIn.storage(), size);
+      TS_ASSERT_EQUALS(stdfStrOut.storage(), size);
       TS_ASSERT_EQUALS(stdfStrIn.to_string(), stdfStrOut.to_string())
-      TS_ASSERT_EQUALS(stdfStrIn.to_string(), "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19");
-      TS_ASSERT_EQUALS(stdfStrOut.to_string(), "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19");
+      std::stringstream ss; for(size_t i = 0; i < size-1; i++) ss << i << ','; ss << size-1;
+      TS_ASSERT_EQUALS(stdfStrIn.to_string(), ss.str());
+      TS_ASSERT_EQUALS(stdfStrOut.to_string(), ss.str());
     }
 
     void testWriteRead23()
@@ -284,28 +321,38 @@ class TestKxUf : public CxxTest::TestSuite
       const char *filename = "TestKxUf.testWriteRead23.txt";
 
       const size_t size = 20;
-      Uf data[size];
+      Uf2 data[size];
 
-      KxTYPE<Uf, size> stdfStrIn;
+      KxTYPE<Uf2, size> stdfStrIn;
       for(size_t i = 0; i < size; i++)
       {
         stdfStrIn[i] = data[i] = i;
       }
       ofstream outfile(filename, ofstream::binary);
-      stdfStrIn.write(outfile, Uf::TYPE_2B);
+      stdfStrIn.write(outfile);
       outfile.close();
 
-      KxTYPE<Uf, size> stdfStrOut;
+      KxTYPE<Uf2, size> stdfStrOut;
       ifstream infile(filename, ifstream::binary);
-      stdfStrOut.read(infile, Uf::TYPE_2B);
+      stdfStrOut.read(infile);
       outfile.close();
 
-      TS_ASSERT_SAME_DATA(stdfStrIn.mData, data, size);
-      TS_ASSERT_SAME_DATA(stdfStrOut.mData, data, size);
-      TS_ASSERT_SAME_DATA(stdfStrIn.mData, stdfStrOut.mData, size);
+      for(size_t i = 0; i < size; i++)
+      {
+        TS_ASSERT_EQUALS(stdfStrIn[i].getValue(), data[i].getValue());
+        TS_ASSERT_EQUALS(stdfStrIn[i].to_string(), data[i].to_string());
+        TS_ASSERT_EQUALS(stdfStrIn[i].storage(), data[i].storage());
+        TS_ASSERT_EQUALS(stdfStrIn[i].getValue(), stdfStrOut[i].getValue());
+        TS_ASSERT_EQUALS(stdfStrIn[i].to_string(), stdfStrOut[i].to_string());
+        TS_ASSERT_EQUALS(stdfStrIn[i].storage(), stdfStrOut[i].storage());
+      }
+      TS_ASSERT_EQUALS(stdfStrOut.storage(), stdfStrOut.storage());
+      TS_ASSERT_EQUALS(stdfStrIn.storage(), 2*size);
+      TS_ASSERT_EQUALS(stdfStrOut.storage(), 2*size);
       TS_ASSERT_EQUALS(stdfStrIn.to_string(), stdfStrOut.to_string())
-      TS_ASSERT_EQUALS(stdfStrIn.to_string(), "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19");
-      TS_ASSERT_EQUALS(stdfStrOut.to_string(), "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19");
+      std::stringstream ss; for(size_t i = 0; i < size-1; i++) ss << i << ','; ss << size-1;
+      TS_ASSERT_EQUALS(stdfStrIn.to_string(), ss.str());
+      TS_ASSERT_EQUALS(stdfStrOut.to_string(), ss.str());
     }
 
     void testWriteRead43()
@@ -313,28 +360,38 @@ class TestKxUf : public CxxTest::TestSuite
       const char *filename = "TestKxUf.testWriteRead43.txt";
 
       const size_t size = 20;
-      Uf data[size];
+      Uf4 data[size];
 
-      KxTYPE<Uf, size> stdfStrIn;
+      KxTYPE<Uf4, size> stdfStrIn;
       for(size_t i = 0; i < size; i++)
       {
         stdfStrIn[i] = data[i] = i;
       }
       ofstream outfile(filename, ofstream::binary);
-      stdfStrIn.write(outfile, Uf::TYPE_4B);
+      stdfStrIn.write(outfile);
       outfile.close();
 
-      KxTYPE<Uf, size> stdfStrOut;
+      KxTYPE<Uf4, size> stdfStrOut;
       ifstream infile(filename, ifstream::binary);
-      stdfStrOut.read(infile, Uf::TYPE_4B);
+      stdfStrOut.read(infile);
       outfile.close();
 
-      TS_ASSERT_SAME_DATA(stdfStrIn.mData, data, size);
-      TS_ASSERT_SAME_DATA(stdfStrOut.mData, data, size);
-      TS_ASSERT_SAME_DATA(stdfStrIn.mData, stdfStrOut.mData, size);
+      for(size_t i = 0; i < size; i++)
+      {
+        TS_ASSERT_EQUALS(stdfStrIn[i].getValue(), data[i].getValue());
+        TS_ASSERT_EQUALS(stdfStrIn[i].to_string(), data[i].to_string());
+        TS_ASSERT_EQUALS(stdfStrIn[i].storage(), data[i].storage());
+        TS_ASSERT_EQUALS(stdfStrIn[i].getValue(), stdfStrOut[i].getValue());
+        TS_ASSERT_EQUALS(stdfStrIn[i].to_string(), stdfStrOut[i].to_string());
+        TS_ASSERT_EQUALS(stdfStrIn[i].storage(), stdfStrOut[i].storage());
+      }
+      TS_ASSERT_EQUALS(stdfStrOut.storage(), stdfStrOut.storage());
+      TS_ASSERT_EQUALS(stdfStrIn.storage(), 4*size);
+      TS_ASSERT_EQUALS(stdfStrOut.storage(), 4*size);
       TS_ASSERT_EQUALS(stdfStrIn.to_string(), stdfStrOut.to_string())
-      TS_ASSERT_EQUALS(stdfStrIn.to_string(), "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19");
-      TS_ASSERT_EQUALS(stdfStrOut.to_string(), "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19");
+      std::stringstream ss; for(size_t i = 0; i < size-1; i++) ss << i << ','; ss << size-1;
+      TS_ASSERT_EQUALS(stdfStrIn.to_string(), ss.str());
+      TS_ASSERT_EQUALS(stdfStrOut.to_string(), ss.str());
     }
 
     void testWriteRead83()
@@ -342,28 +399,38 @@ class TestKxUf : public CxxTest::TestSuite
       const char *filename = "TestKxUf.testWriteRead83.txt";
 
       const size_t size = 20;
-      Uf data[size];
+      Uf8 data[size];
 
-      KxTYPE<Uf, size> stdfStrIn;
+      KxTYPE<Uf8, size> stdfStrIn;
       for(size_t i = 0; i < size; i++)
       {
         stdfStrIn[i] = data[i] = i;
       }
       ofstream outfile(filename, ofstream::binary);
-      stdfStrIn.write(outfile, Uf::TYPE_8B);
+      stdfStrIn.write(outfile);
       outfile.close();
 
-      KxTYPE<Uf, size> stdfStrOut;
+      KxTYPE<Uf8, size> stdfStrOut;
       ifstream infile(filename, ifstream::binary);
-      stdfStrOut.read(infile, Uf::TYPE_8B);
+      stdfStrOut.read(infile);
       outfile.close();
 
-      TS_ASSERT_SAME_DATA(stdfStrIn.mData, data, size);
-      TS_ASSERT_SAME_DATA(stdfStrOut.mData, data, size);
-      TS_ASSERT_SAME_DATA(stdfStrIn.mData, stdfStrOut.mData, size);
+      for(size_t i = 0; i < size; i++)
+      {
+        TS_ASSERT_EQUALS(stdfStrIn[i].getValue(), data[i].getValue());
+        TS_ASSERT_EQUALS(stdfStrIn[i].to_string(), data[i].to_string());
+        TS_ASSERT_EQUALS(stdfStrIn[i].storage(), data[i].storage());
+        TS_ASSERT_EQUALS(stdfStrIn[i].getValue(), stdfStrOut[i].getValue());
+        TS_ASSERT_EQUALS(stdfStrIn[i].to_string(), stdfStrOut[i].to_string());
+        TS_ASSERT_EQUALS(stdfStrIn[i].storage(), stdfStrOut[i].storage());
+      }
+      TS_ASSERT_EQUALS(stdfStrOut.storage(), stdfStrOut.storage());
+      TS_ASSERT_EQUALS(stdfStrIn.storage(), 8*size);
+      TS_ASSERT_EQUALS(stdfStrOut.storage(), 8*size);
       TS_ASSERT_EQUALS(stdfStrIn.to_string(), stdfStrOut.to_string())
-      TS_ASSERT_EQUALS(stdfStrIn.to_string(), "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19");
-      TS_ASSERT_EQUALS(stdfStrOut.to_string(), "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19");
+      std::stringstream ss; for(size_t i = 0; i < size-1; i++) ss << i << ','; ss << size-1;
+      TS_ASSERT_EQUALS(stdfStrIn.to_string(), ss.str());
+      TS_ASSERT_EQUALS(stdfStrOut.to_string(), ss.str());
     }
 
     void testWriteReadxx()
@@ -371,30 +438,35 @@ class TestKxUf : public CxxTest::TestSuite
       const char *filename = "TestKxUf.testWriteReadxx.txt";
 
       const size_t size = 20;
-      Uf data[size];
+      Uf4 data[size];
 
-      KxTYPE<Uf, size> stdfStrIn;
+      KxTYPE<Uf4, size> stdfStrIn;
       for(size_t i = 0; i < size; i++)
       {
         stdfStrIn[i] = data[i] = i+0xFFFF;
       }
       ofstream outfile(filename, ofstream::binary);
-      //stdfStrIn.write(outfile, Uf::TYPE_2B);
-      stdfStrIn.write(outfile, Uf::TYPE_4B);
+      stdfStrIn.write(outfile);
       outfile.close();
 
-      KxTYPE<Uf, size> stdfStrOut;
+      KxTYPE<Uf4, size> stdfStrOut;
       ifstream infile(filename, ifstream::binary);
-      //stdfStrOut.read(infile, Uf::TYPE_2B);
-      stdfStrOut.read(infile, Uf::TYPE_4B);
+      stdfStrOut.read(infile);
       outfile.close();
 
-      TS_ASSERT_SAME_DATA(stdfStrIn.mData, data, size);
-      TS_ASSERT_SAME_DATA(stdfStrOut.mData, data, size);
-      TS_ASSERT_SAME_DATA(stdfStrIn.mData, stdfStrOut.mData, size);
+      for(size_t i = 0; i < size; i++)
+      {
+        TS_ASSERT_EQUALS(stdfStrIn[i].getValue(), data[i].getValue());
+        TS_ASSERT_EQUALS(stdfStrIn[i].to_string(), data[i].to_string());
+        TS_ASSERT_EQUALS(stdfStrIn[i].storage(), data[i].storage());
+        TS_ASSERT_EQUALS(stdfStrIn[i].getValue(), stdfStrOut[i].getValue());
+        TS_ASSERT_EQUALS(stdfStrIn[i].to_string(), stdfStrOut[i].to_string());
+        TS_ASSERT_EQUALS(stdfStrIn[i].storage(), stdfStrOut[i].storage());
+      }
       TS_ASSERT_EQUALS(stdfStrIn.to_string(), stdfStrOut.to_string())
-      TS_ASSERT_EQUALS(stdfStrIn.to_string(), "65535,65536,65537,65538,65539,65540,65541,65542,65543,65544,65545,65546,65547,65548,65549,65550,65551,65552,65553,65554");
-      TS_ASSERT_EQUALS(stdfStrOut.to_string(), "65535,65536,65537,65538,65539,65540,65541,65542,65543,65544,65545,65546,65547,65548,65549,65550,65551,65552,65553,65554");
+      std::stringstream ss; for(size_t i = 0; i < size-1; i++) ss << i+0xFFFF << ','; ss << size-1+0xFFFF;
+      TS_ASSERT_EQUALS(stdfStrIn.to_string(), ss.str());
+      TS_ASSERT_EQUALS(stdfStrOut.to_string(), ss.str());
     }
 
 };

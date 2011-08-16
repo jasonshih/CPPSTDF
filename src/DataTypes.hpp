@@ -237,36 +237,56 @@ string KxCf<SIZ1, SIZ2>::to_string() const
 
 
 ///////////////////////////////////////////////////////////////////////////////
-class VarUType
+template <size_t SIZE>
+class Uf : public DataType
 {
   friend class TestUf;
 
   public:
-    enum Type
-    {
-      TYPE_1B = 1u, TYPE_2B = 2u, TYPE_4B = 4u, TYPE_8B = 8u
-    };
-
-    ~VarUType() {}
-    VarUType(unsigned long long value = 0) : mData(value) {}
-    VarUType(const VarUType& rhs) : mData(rhs.mData) {}
-    VarUType& operator=(const VarUType& rhs);
-    void clear() {mData = 0;}
-    void write(ofstream& outfile, Type type) {outfile.write(reinterpret_cast<char*>(&mData), type);}
-    void read(ifstream& infile, Type type) {infile.read(reinterpret_cast<char*>(&mData), type);}
-    unsigned long long getValue() const {return mData;}
-    size_t storage(Type type) const {return type;}
-    string to_string() const {std::stringstream ss; ss << mData; return ss.str();}
+    ~Uf() {}
+    Uf(unsigned long long value = 0u);
+    Uf(const Uf& rhs) {memcpy(mData, rhs.mData, SIZE);}
+    Uf& operator=(const Uf& rhs) {if(this == &rhs) return *this; memcpy(mData, rhs.mData, SIZE); return *this;}
+    unsigned long long getValue() const;
+    void clear() {memset(mData, 0, SIZE);}
+    void write(ofstream& outfile) {outfile.write(mData, SIZE);}
+    void read(ifstream& infile) {infile.read(mData, SIZE);}
+    size_t storage() const {return SIZE;}
+    string to_string() const {std::stringstream ss; ss << getValue(); return ss.str();}
 
   private:
-    unsigned long long mData;
+    char            mData[SIZE];
 };
 
-VarUType& VarUType::operator=(const VarUType& rhs)
+template <size_t SIZE>
+Uf<SIZE>::Uf(unsigned long long value)
 {
-  if(this == &rhs) return *this;
-  mData = rhs.mData;
-  return *this;
+  memset(mData, 0, SIZE);
+  switch(SIZE)
+  {
+    case 1:  {unsigned char      data = value; memcpy(mData, &data, sizeof(data));}
+      break;
+    case 2:  {unsigned short     data = value; memcpy(mData, &data, sizeof(data));}
+      break;
+    case 4:  {unsigned int       data = value; memcpy(mData, &data, sizeof(data));}
+      break;
+    case 8:
+    default: {unsigned long long data = value; memcpy(mData, &data, sizeof(data));}
+      break;
+  }
+}
+
+template <size_t SIZE>
+unsigned long long Uf<SIZE>::getValue() const
+{
+  switch(SIZE)
+  {
+    case 1:  {unsigned char      data = 0u; memcpy(&data, mData, sizeof(data)); return data;}
+    case 2:  {unsigned short     data = 0u; memcpy(&data, mData, sizeof(data)); return data;}
+    case 4:  {unsigned int       data = 0u; memcpy(&data, mData, sizeof(data)); return data;}
+    case 8:
+    default: {unsigned long long data = 0u; memcpy(&data, mData, sizeof(data)); return data;}
+  }
 }
 
 
@@ -708,45 +728,15 @@ class KxTYPE
   friend class TestKxSn;
 
   public:
-    class Reference
-    {
-      public:
-        Reference (T* pt, size_t p) : pType(pt), pos(p) {}
-        Reference(const Reference& rhs) : pType(rhs.pType), pos(rhs.pos) {}
-        Reference& operator=(const Reference& rhs)
-        {
-          if(this == &rhs) return *this;
-          pType = rhs.pType;
-          pos = rhs.pos;
-          return *this;
-        }
-        Reference& operator=(const T& x)
-        {
-          pType[pos] = x;
-          return *this;
-        }
-        operator T() const {return pType[pos];}
-
-      private:
-        Reference();
-
-      private:
-        T*     pType;
-        size_t pos;
-    };
-
     ~KxTYPE() {delete[] mData;}
     KxTYPE() {mData = new T[SIZE];}
     const T& operator[] (size_t pos) const {assert(pos < SIZE); return mData[pos];}
-    Reference operator[] (size_t pos) {assert(pos < SIZE); return Reference(mData, pos);}
+    T& operator[] (size_t pos) {assert(pos < SIZE); return mData[pos];}
+    inline size_t max_size() const {return SIZE;}
     void clear() {for(size_t i = 0; i < SIZE; i++) mData[i].clear();}
     void write(ofstream& outfile) {for(size_t i = 0; i < SIZE; i++) mData[i].write(outfile);}
-    void write(ofstream& outfile, VarUType::Type type) {for(size_t i = 0; i < SIZE; i++) mData[i].write(outfile, type);}
     void read(ifstream& infile) {for(size_t i = 0; i < SIZE; i++) mData[i].read(infile);}
-    void read(ifstream& infile, VarUType::Type type) {for(size_t i = 0; i < SIZE; i++) mData[i].read(infile, type);}
-    inline size_t max_size() const {return SIZE;}
     size_t storage() const {size_t ret = 0; for(size_t i = 0; i < SIZE; i++) ret += mData[i].storage(); return ret;}
-    size_t storage(VarUType::Type type) const {size_t ret = 0; for(size_t i = 0; i < SIZE; i++) ret += mData[i].storage(type); return ret;}
     string to_string() const;
 
   private:
@@ -773,7 +763,6 @@ string KxTYPE<T, SIZE>::to_string() const
 typedef CharArray<1>                          C1;
 typedef VarCharArray<unsigned char>           Cn;
 typedef VarCharArray<unsigned short>          Sn;
-typedef VarUType                              Uf;
 typedef NumericalType<unsigned char>          U1;
 typedef NumericalType<unsigned short>         U2;
 typedef NumericalType<unsigned int>           U4;
