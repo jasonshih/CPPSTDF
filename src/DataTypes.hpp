@@ -9,6 +9,7 @@
 #include <cassert>
 
 using std::string;
+using std::vector;
 using std::ifstream;
 using std::ofstream;
 

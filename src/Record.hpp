@@ -1,81 +1,90 @@
 #ifndef _HEADER_HPP_
 #define _HEADER_HPP_
 
-#include "vector"
-
 #include "DataTypes.hpp"
 
-using std::vector;
+/********
+ * STDF Record Type and Sub-type Codes
+ ********/
+#define  STDF_FILE_DATA         ( 0)    // Information about the STDF File
+  #define  STDF_FAR_SUB         (10)    // File Attributes Record (FAR)
+  #define  STDF_ATR_SUB         (20)    // Audit Trail Record (ATR)
+  #define  STDF_VUR_SUB         (30)    // Version Update Record (VUR)
+
+#define  STDF_LOT_DATA          ( 1)    // Data collected on a per lot basis
+  #define  STDF_MIR_SUB         (10)    // Master Information Record (MIR)
+  #define  STDF_MRR_SUB         (20)    // Master Results Record (MRR)
+  #define  STDF_PCR_SUB         (30)    // PartCount Record (PCR)
+  #define  STDF_HBR_SUB         (40)    // Hardware Bin Record (HBR)
+  #define  STDF_SBR_SUB         (50)    // Software Bin Record (SBR)
+  #define  STDF_PMR_SUB         (60)    // Pin Map Record (PMR)
+  #define  STDF_PGR_SUB         (62)    // Pin Group Record (PGR)
+  #define  STDF_PLR_SUB         (63)    // Pin List Record (PLR)
+  #define  STDF_RDR_SUB         (70)    // Retest Data Record (RDR)
+  #define  STDF_SDR_SUB         (80)    // Site Description Record (SDR)
+  #define  STDF_PSR_SUB         (90)    // Pattern Sequence Record (PSR)
+  #define  STDF_NMR_SUB         (91)    // Name Map Record (NMR)
+  #define  STDF_CNR_SUB         (92)    // Cell Name Record (CNR)
+  #define  STDF_SSR_SUB         (93)    // Scan Structure Record (SSR)
+  #define  STDF_CDR_SUB         (94)    // Chain Description Record (CDR)
+
+#define  STDF_WAFER_DATA        ( 2)    // Data collected on a per wafer basis
+  #define  STDF_WIR_SUB         (10)    // Wafer Information Record (WIR)
+  #define  STDF_WRR_SUB         (20)    // Wafer Results Record (WRR)
+  #define  STDF_WCR_SUB         (30)    // Wafer Configuration Record (WCR)
+
+#define  STDF_PART_DATA         ( 5)    // Data collected on a per part basis
+  #define  STDF_PIR_SUB         (10)    // Part Information Record (PIR)
+  #define  STDF_PRR_SUB         (20)    // Part Results Record (PRR)
+
+#define  STDF_TEST_DATA         (10)    // Data collected per test in the test program
+   #define STDF_TSR_SUB         (30)    // Test Synopsis Record (TSR)
+
+#define  STDF_EXECUTION_DATA    (15)    // Data collected per test execution
+  #define  STDF_PTR_SUB         (10)    // Parametric Test Record (PTR)
+  #define  STDF_MPR_SUB         (15)    // Multiple-Result Parametric Record (MPR)
+  #define  STDF_FTR_SUB         (20)    // Functional Test Record (FTR)
+  #define  STDF_STR_SUB         (30)    // Scan Test Record (STR)
+
+#define  STDF_SEGMENT_DATA      (20)    // Data collected per program segment
+  #define  STDF_BPS_SUB         (10)    // Begin Program Segment Record (BPS)
+  #define  STDF_EPS_SUB         (20)    // END Program Segment Record (EPS)
+
+#define  STDF_GENERIC_DATA      (50)    // Generic Data
+  #define  STDF_GDR_SUB         (10)    // Generic Data Record (GDR)
+  #define  STDF_DTR_SUB         (30)    // Datalog Text Record (DTR)
 
 class Record
 {
   public:
-    enum Type
+    enum RecordType
     {
-      STDF_FILE_TYPE       =  0u,    // Information about the STDF File
-      STDF_LOT_TYPE        =  1u,    // Data collected on a per lot basis
-      STDF_WAFER_TYPE      =  2u,    // Data collected per wafer
-      STDF_PART_TYPE       =  5u,    // Data collected on a per part basis
-      STDF_TEST_TYPE       = 10u,    // Data collected per test in the test program
-      STDF_EXECUTION_TYPE  = 15u,    // Data collected per test execution
-      STDF_SEGMENT_TYPE    = 20u,    // Data collected per program segment
-      STDF_GENERIC_TYPE    = 50u,    // Generic Data
-      STDF_IMAGE_TYPE      = 180u,   // Reserved Types
-      STDF_IG900_TYPE      = 181u,   // Reserved Types
-    };
+      FAR_TYPE, ATR_TYPE, VUR_TYPE,
 
-    enum SubType
-    {
-      STDF_FAR_SUB_TYPE    = 10u,    // File Attributes Record (FAR)
-      STDF_ATR_SUB_TYPE    = 20u,    // Audit Trail Record (ATR)
-      STDF_VUR_SUB_TYPE    = 30u,    // Version Update Record (VUR)
+      MIR_TYPE, MRR_TYPE, PCR_TYPE, HBR_TYPE, SBR_TYPE, PMR_TYPE, PGR_TYPE, PLR_TYPE,
+      RDR_TYPE, SDR_TYPE, PSR_TYPE, NMR_TYPE, CNR_TYPE, SSR_TYPE, CDR_TYPE,
 
-      STDF_MIR_SUB_TYPE    = 10u,    // Master Information Record (MIR)
-      STDF_MRR_SUB_TYPE    = 20u,    // Master Results Record (MRR)
-      STDF_PCR_SUB_TYPE    = 30u,    // PartCount Record (PCR)
-      STDF_HBR_SUB_TYPE    = 40u,    // Hardware Bin Record (HBR)
-      STDF_SBR_SUB_TYPE    = 50u,    // Software Bin Record (SBR)
-      STDF_PMR_SUB_TYPE    = 60u,    // Pin Map Record (PMR)
-      STDF_PGR_SUB_TYPE    = 62u,    // Pin Group Record (PGR)
-      STDF_PLR_SUB_TYPE    = 63u,    // Pin List Record (PLR)
-      STDF_RDR_SUB_TYPE    = 70u,    // Retest Data Record (RDR)
-      STDF_SDR_SUB_TYPE    = 80u,    // Site Description Record (SDR)
-      STDF_PSR_SUB_TYPE    = 90u,    // Pattern Sequence Record (PSR)
-      STDF_NMR_SUB_TYPE    = 91u,    // Name Map Record (NMR)
-      STDF_CNR_SUB_TYPE    = 92u,    // Cell Name Record (CNR)
-      STDF_SSR_SUB_TYPE    = 93u,    // Scan Structure Record (SSR)
-      STDF_CDR_SUB_TYPE    = 94u,    // Chain Description Record (CDR)
+      WIR_TYPE, WRR_TYPE, WCR_TYPE,
 
-      STDF_WIR_SUB_TYPE    = 10u,    // Wafer Information Record (WIR)
-      STDF_WRR_SUB_TYPE    = 20u,    // Wafer Results Record (WRR)
-      STDF_WCR_SUB_TYPE    = 30u,    // Wafer Configuration Record (WCR)
+      PIR_TYPE, PRR_TYPE,
 
-      STDF_PIR_SUB_TYPE    = 10u,    // Part Information Record (PIR)
-      STDF_PRR_SUB_TYPE    = 20u,    // Part Results Record (PRR)
+      TSR_TYPE,
 
-      STDF_TSR_SUB_TYPE    = 30u,    // Test Synopsis Record (TSR)
+      PTR_TYPE, MPR_TYPE, FTR_TYPE, STR_TYPE,
 
-      STDF_PTR_SUB_TYPE    = 10u,    // Parametric Test Record (PTR)
-      STDF_MPR_SUB_TYPE    = 15u,    // Multiple-Result Parametric Record (MPR)
-      STDF_FTR_SUB_TYPE    = 20u,    // Functional Test Record (FTR)
-      STDF_STR_SUB_TYPE    = 30u,    // Scan Test Record (STR)
+      BPS_TYPE, EPS_TYPE,
 
-      STDF_BPS_SUB_TYPE    = 10u,    // Begin Program Segment Record (BPS)
-      STDF_EPS_SUB_TYPE    = 20u,    // END Program Segment Record (EPS)
-
-      STDF_GDR_SUB_TYPE    = 10u,    // Generic Data Record (GDR)
-      STDF_DTR_SUB_TYPE    = 30u,    // Datalog Text Record (DTR)
+      GDR_TYPE, DTR_TYPE
     };
 
   public:
     virtual ~Record() {}
-    Record() {}
+    Record(Record::RecordType type);
     virtual void clear() = 0;
     virtual void write(ofstream& outfile);
     virtual void read(ifstream& infile);
     virtual size_t storage();
     virtual void to_string(vector<string>& val) const;
-    void setRecordType(Record::SubType type);
 
   private:
     Record(const Record& rhs);
@@ -83,66 +92,55 @@ class Record
 
   protected:
     U2 REC_LEN;
+  private:
     U1 REC_TYP;
     U1 REC_SUB;
 
 };
 
-void Record::setRecordType(Record::SubType type)
+Record::Record(Record::RecordType type)
 {
-  REC_SUB = type;
   switch(type)
   {
-    case STDF_FAR_SUB_TYPE:
-    case STDF_ATR_SUB_TYPE:
-    case STDF_VUR_SUB_TYPE:
-      REC_TYP = STDF_FILE_TYPE;
-      break;
-/*
-    case STDF_MIR_SUB_TYPE:
-    case STDF_MRR_SUB_TYPE:
-    case STDF_PCR_SUB_TYPE:
-    case STDF_HBR_SUB_TYPE:
-    case STDF_SBR_SUB_TYPE:
-    case STDF_PMR_SUB_TYPE:
-    case STDF_PGR_SUB_TYPE:
-    case STDF_PLR_SUB_TYPE:
-    case STDF_RDR_SUB_TYPE:
-    case STDF_SDR_SUB_TYPE:
-    case STDF_PSR_SUB_TYPE:
-    case STDF_NMR_SUB_TYPE:
-    case STDF_CNR_SUB_TYPE:
-    case STDF_SSR_SUB_TYPE:
-    case STDF_CDR_SUB_TYPE:
-      REC_TYP = STDF_LOT_TYPE;
-      break;
-    case STDF_WIR_SUB_TYPE:
-    case STDF_WRR_SUB_TYPE:
-    case STDF_WCR_SUB_TYPE:
-      REC_TYP = STDF_WAFER_TYPE;
-      break;
-    case STDF_PIR_SUB_TYPE:
-    case STDF_PRR_SUB_TYPE:
-      REC_TYP = STDF_PART_TYPE;
-      break;
-    case STDF_TSR_SUB_TYPE:
-      REC_TYP = STDF_TEST_TYPE;
-      break;
-    case STDF_PTR_SUB_TYPE:
-    case STDF_MPR_SUB_TYPE:
-    case STDF_FTR_SUB_TYPE:
-    case STDF_STR_SUB_TYPE:
-      REC_TYP = STDF_EXECUTION_TYPE;
-      break;
-    case STDF_BPS_SUB_TYPE:
-    case STDF_EPS_SUB_TYPE:
-      REC_TYP = STDF_SEGMENT_TYPE;
-      break;
-    case STDF_GDR_SUB_TYPE:
-    case STDF_DTR_SUB_TYPE:
-      REC_TYP = STDF_GENERIC_TYPE;
-      break;
-*/
+    case FAR_TYPE:  REC_SUB = STDF_FAR_SUB; REC_TYP = STDF_FILE_DATA; break;
+    case ATR_TYPE:  REC_SUB = STDF_ATR_SUB; REC_TYP = STDF_FILE_DATA; break;
+    case VUR_TYPE:  REC_SUB = STDF_VUR_SUB; REC_TYP = STDF_FILE_DATA; break;
+
+    case MIR_TYPE:  REC_SUB = STDF_MIR_SUB; REC_TYP = STDF_LOT_DATA; break;
+    case MRR_TYPE:  REC_SUB = STDF_MRR_SUB; REC_TYP = STDF_LOT_DATA; break;
+    case PCR_TYPE:  REC_SUB = STDF_PCR_SUB; REC_TYP = STDF_LOT_DATA; break;
+    case HBR_TYPE:  REC_SUB = STDF_HBR_SUB; REC_TYP = STDF_LOT_DATA; break;
+    case SBR_TYPE:  REC_SUB = STDF_SBR_SUB; REC_TYP = STDF_LOT_DATA; break;
+    case PMR_TYPE:  REC_SUB = STDF_PMR_SUB; REC_TYP = STDF_LOT_DATA; break;
+    case PGR_TYPE:  REC_SUB = STDF_PGR_SUB; REC_TYP = STDF_LOT_DATA; break;
+    case PLR_TYPE:  REC_SUB = STDF_PLR_SUB; REC_TYP = STDF_LOT_DATA; break;
+    case RDR_TYPE:  REC_SUB = STDF_RDR_SUB; REC_TYP = STDF_LOT_DATA; break;
+    case SDR_TYPE:  REC_SUB = STDF_SDR_SUB; REC_TYP = STDF_LOT_DATA; break;
+    case PSR_TYPE:  REC_SUB = STDF_PSR_SUB; REC_TYP = STDF_LOT_DATA; break;
+    case NMR_TYPE:  REC_SUB = STDF_NMR_SUB; REC_TYP = STDF_LOT_DATA; break;
+    case CNR_TYPE:  REC_SUB = STDF_CNR_SUB; REC_TYP = STDF_LOT_DATA; break;
+    case SSR_TYPE:  REC_SUB = STDF_SSR_SUB; REC_TYP = STDF_LOT_DATA; break;
+    case CDR_TYPE:  REC_SUB = STDF_CDR_SUB; REC_TYP = STDF_LOT_DATA; break;
+
+    case WIR_TYPE:  REC_SUB = STDF_WIR_SUB; REC_TYP = STDF_WAFER_DATA; break;
+    case WRR_TYPE:  REC_SUB = STDF_WRR_SUB; REC_TYP = STDF_WAFER_DATA; break;
+    case WCR_TYPE:  REC_SUB = STDF_WCR_SUB; REC_TYP = STDF_WAFER_DATA; break;
+
+    case PIR_TYPE:  REC_SUB = STDF_PIR_SUB; REC_TYP = STDF_PART_DATA; break;
+    case PRR_TYPE:  REC_SUB = STDF_PRR_SUB; REC_TYP = STDF_PART_DATA; break;
+
+    case TSR_TYPE:  REC_SUB = STDF_TSR_SUB; REC_TYP = STDF_TEST_DATA; break;
+
+    case PTR_TYPE:  REC_SUB = STDF_PTR_SUB; REC_TYP = STDF_EXECUTION_DATA; break;
+    case MPR_TYPE:  REC_SUB = STDF_MPR_SUB; REC_TYP = STDF_EXECUTION_DATA; break;
+    case FTR_TYPE:  REC_SUB = STDF_FTR_SUB; REC_TYP = STDF_EXECUTION_DATA; break;
+    case STR_TYPE:  REC_SUB = STDF_STR_SUB; REC_TYP = STDF_EXECUTION_DATA; break;
+
+    case BPS_TYPE:  REC_SUB = STDF_BPS_SUB; REC_TYP = STDF_SEGMENT_DATA; break;
+    case EPS_TYPE:  REC_SUB = STDF_EPS_SUB; REC_TYP = STDF_SEGMENT_DATA; break;
+
+    case GDR_TYPE:  REC_SUB = STDF_GDR_SUB; REC_TYP = STDF_GENERIC_DATA; break;
+    case DTR_TYPE:  REC_SUB = STDF_DTR_SUB; REC_TYP = STDF_GENERIC_DATA; break;
   }
 }
 

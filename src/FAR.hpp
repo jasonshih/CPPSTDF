@@ -37,9 +37,8 @@ class FAR : public Record
     U1 STDF_VER;
 };
 
-FAR::FAR() : STDF_VER(4u)
+FAR::FAR() : Record(Record::FAR_TYPE), STDF_VER(4u)
 {
-  setRecordType(Record::STDF_FAR_SUB_TYPE);
   setCpuType();
   calculate();
 }
