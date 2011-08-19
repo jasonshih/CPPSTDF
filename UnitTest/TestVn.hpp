@@ -35,7 +35,7 @@ class TestVn : public CxxTest::TestSuite
       Cn cn;
       Bn bn;
       Dn dn;
-      JxN1<1> n1;
+      KxN1<1> n1;
       stdfStr.addU1(u1).addU2(u2).addU4(u4).addI1(i1).addI2(i2).addI4(i4).addR4(r4).addR8(r8).addCn(cn).addBn(bn).addDn(dn).addN1(n1);
       TS_ASSERT_EQUALS(stdfStr.max_size(), 255u);
       TS_ASSERT_EQUALS(stdfStr.storage(), 49u);
@@ -70,7 +70,7 @@ class TestVn : public CxxTest::TestSuite
       Cn cn;
       Bn bn;
       Dn dn;
-      JxN1<1> n1;
+      KxN1<1> n1;
 
       Vn stdfStrIn;
       stdfStrIn.addU1(u1).addU2(u2).addU4(u4).addI1(i1).addI2(i2).addI4(i4).addR4(r4).addR8(r8).addCn(cn).addBn(bn).addDn(dn).addN1(n1);
@@ -103,7 +103,7 @@ class TestVn : public CxxTest::TestSuite
       Cn cn = "ABC";
       Bn bn = "01001001";
       Dn dn = "01001000100001000001";
-      JxN1<1> n1 = "F";
+      KxN1<1> n1 = "F";
 
       Vn stdfStrIn;
       stdfStrIn.addU1(u1).addU2(u2).addU4(u4).addI1(i1).addI2(i2).addI4(i4).addR4(r4).addR8(r8).addCn(cn).addBn(bn).addDn(dn).addN1(n1);

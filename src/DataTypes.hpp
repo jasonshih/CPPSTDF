@@ -564,9 +564,9 @@ string VarBitArray<T>::to_string() const
 
 ///////////////////////////////////////////////////////////////////////////////
 template <size_t SIZE>
-class JxN1 : public DataType
+class KxN1 : public DataType
 {
-  friend class TestJxN1;
+  friend class TestKxN1;
 
   public:
     class Reference
@@ -598,11 +598,11 @@ class JxN1 : public DataType
         size_t          pos;
     };
 
-    ~JxN1() {delete[] mData;}
-    JxN1(const string& str = "");
-    JxN1(const char* str);
-    JxN1(const JxN1& rhs) {mData = new char[capacity()]; memcpy(mData, rhs.mData, capacity());}
-    JxN1& operator=(const JxN1& rhs);
+    ~KxN1() {delete[] mData;}
+    KxN1(const string& str = "");
+    KxN1(const char* str);
+    KxN1(const KxN1& rhs) {mData = new char[capacity()]; memcpy(mData, rhs.mData, capacity());}
+    KxN1& operator=(const KxN1& rhs);
     unsigned char operator[] (size_t pos) const {assert(pos < SIZE); return (((mData[pos/2] >> ((0==(pos%2))?0:4))) & 0xF);}
     Reference operator[] (size_t pos) {assert(pos < SIZE); return Reference(mData, pos);}
     void clear() {memset(mData, 0, capacity());}
@@ -634,7 +634,7 @@ class JxN1 : public DataType
 };
 
 template <size_t SIZE>
-JxN1<SIZE>::JxN1(const string& str)
+KxN1<SIZE>::KxN1(const string& str)
 {
   for(size_t i = 0; i < str.size(); i++)
   {
@@ -650,7 +650,7 @@ JxN1<SIZE>::JxN1(const string& str)
 }
 
 template <size_t SIZE>
-JxN1<SIZE>::JxN1(const char* str)
+KxN1<SIZE>::KxN1(const char* str)
 {
   assert(str != NULL);
   for(size_t i = 0; i < strlen(str); i++)
@@ -667,7 +667,7 @@ JxN1<SIZE>::JxN1(const char* str)
 }
 
 template <size_t SIZE>
-JxN1<SIZE>& JxN1<SIZE>::operator=(const JxN1<SIZE>& rhs)
+KxN1<SIZE>& KxN1<SIZE>::operator=(const KxN1<SIZE>& rhs)
 {
   if(this == &rhs) return *this;
   memcpy(mData, rhs.mData, capacity());
@@ -675,10 +675,131 @@ JxN1<SIZE>& JxN1<SIZE>::operator=(const JxN1<SIZE>& rhs)
 }
 
 template <size_t SIZE>
-string JxN1<SIZE>::to_string() const
+string KxN1<SIZE>::to_string() const
 {
   std::stringstream ss;
   for(size_t i = 0; i < SIZE; i++)
+  {
+    ss << std::uppercase << std::hex << static_cast<int>((*this)[i]);
+  }
+  return ss.str();
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+class JxN1 : public DataType
+{
+  friend class TestJxN1;
+
+  public:
+    class Reference
+    {
+      public:
+        Reference (vector<char>* pt, size_t p) : pType(pt), pos(p) {}
+        Reference(const Reference& rhs) : pType(rhs.pType), pos(rhs.pos) {}
+        Reference& operator=(const Reference& rhs)
+        {
+          if(this == &rhs) return *this;
+          pType = rhs.pType;
+          pos = rhs.pos;
+          return *this;
+        }
+        Reference& operator=(unsigned char x)
+        {
+          if(0==(pos%2)) (*pType)[pos/2] |= (x);       // low  4 bits
+          else           (*pType)[pos/2] |= (x << 4);  // high 4 bits
+          return *this;
+        }
+        operator unsigned char() const {return ((((*pType)[pos/2] >> ((0==(pos%2))?0:4))) & 0xF);}
+
+      private:
+        Reference();
+
+      private:
+        vector<char>*   pType;
+        size_t          pos;
+    };
+
+    ~JxN1() {}
+    JxN1(const string& str = "");
+    JxN1(const char* str);
+    JxN1(size_t size) {init(size);}
+    JxN1(const JxN1& rhs) : mSize(rhs.mSize), mData(rhs.mData) {}
+    JxN1& operator=(const JxN1& rhs);
+    unsigned char operator[] (size_t pos) const {assert(pos < mSize); return (((mData[pos/2] >> ((0==(pos%2))?0:4))) & 0xF);}
+    Reference operator[] (size_t pos) {assert(pos < mSize); return Reference(&mData, pos);}
+    void clear() {mSize = 0; mData.clear();}
+    void write(ofstream& outfile) {for(size_t i = 0; i < mData.size(); i++) outfile.write(&(mData[i]), sizeof(char));}
+    void read(ifstream& infile, size_t size) {init(size); for(size_t i = 0; i < mData.size(); i++) infile.read(&(mData[i]), sizeof(char));}
+    inline size_t size() const {return mSize;}
+    size_t storage() const {return mData.size();}
+    string to_string() const;
+
+  private:
+    inline void init(size_t size) {mSize = size; for(size_t i = 0; i < ((size%2)?(size/2+1):(size/2)); i++) mData.push_back(0);}
+    inline void fill(const string& str)
+    {
+      for(size_t i = 0; i < str.size(); i++)
+      {
+        if(0==(i%2)) mData[i/2] |= (c2d(str[i]));       // low  4 bits
+        else         mData[i/2] |= (c2d(str[i]) << 4);  // high 4 bits
+      }
+    }
+    inline char c2d(char x)
+    {
+      if     ((x >= '0') && (x <= '9')) return (x-'0');
+      else if((x >= 'A') && (x <= 'F')) return (x-'A'+10);
+      else if((x >= 'a') && (x <= 'f')) return (x-'a'+10);
+    }
+
+  private:
+    size_t          mSize;
+    vector<char>    mData;
+};
+
+JxN1::JxN1(const string& str)
+{
+  for(size_t i = 0; i < str.size(); i++)
+  {
+    assert( ((str[i] >= '0') && (str[i] <= '9')) ||
+        ((str[i] >= 'A') && (str[i] <= 'F')) ||
+        ((str[i] >= 'a') && (str[i] <= 'f'))
+        );
+  }
+
+  mSize = str.size();
+  init(mSize);
+  fill(str);
+}
+
+JxN1::JxN1(const char* str)
+{
+  assert(str != NULL);
+  for(size_t i = 0; i < strlen(str); i++)
+  {
+    assert( ((str[i] >= '0') && (str[i] <= '9')) ||
+        ((str[i] >= 'A') && (str[i] <= 'F')) ||
+        ((str[i] >= 'a') && (str[i] <= 'f'))
+        );
+  }
+
+  mSize = strlen(str);
+  init(mSize);
+  fill(str);
+}
+
+JxN1& JxN1::operator=(const JxN1& rhs)
+{
+  if(this == &rhs) return *this;
+  mSize = rhs.mSize;
+  mData = rhs.mData;
+  return *this;
+}
+
+string JxN1::to_string() const
+{
+  std::stringstream ss;
+  for(size_t i = 0; i < mSize; i++)
   {
     ss << std::uppercase << std::hex << static_cast<int>((*this)[i]);
   }
@@ -798,7 +919,7 @@ typedef NumericalType<double>                 R8;
 typedef BitArray<1>                           B1;
 typedef VarBitArray<unsigned char>            Bn;
 typedef VarBitArray<unsigned short>           Dn;
-typedef JxN1<1>                               N1;
+typedef KxN1<1>                               N1;
 ///////////////////////////////////////////////////////////////////////////////
 template <size_t SIZE>
 class VarTypeArray : public DataType

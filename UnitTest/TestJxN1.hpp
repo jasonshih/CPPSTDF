@@ -14,47 +14,52 @@ class TestJxN1 : public CxxTest::TestSuite
 
     void testConstructor0()
     {
-      JxN1<1> stdfStr;
-      unsigned char ch[1] = {0};
-      TS_ASSERT_SAME_DATA(stdfStr.mData, ch, 1);
-      TS_ASSERT_EQUALS(stdfStr.to_string(), "0");
+      JxN1 stdfStr;
+      TS_ASSERT_EQUALS(stdfStr.to_string(), "");
+      TS_ASSERT_EQUALS(stdfStr.size(), 0u);
+      TS_ASSERT_EQUALS(stdfStr.storage(), 0u);
     }
 
     void testConstructor1()
     {
-      JxN1<9> stdfStr;
-      unsigned char ch[5] = {0};
-      TS_ASSERT_SAME_DATA(stdfStr.mData, ch, 5);
-      TS_ASSERT_EQUALS(stdfStr.to_string(), "000000000");
+      JxN1 stdfStr("00000");
+      for(size_t i = 0; i < 5; i++)
+      {
+        TS_ASSERT_EQUALS(stdfStr[i], 0);
+      }
+      TS_ASSERT_EQUALS(stdfStr.to_string(), "00000");
+      TS_ASSERT_EQUALS(stdfStr.size(), 5u);
+      TS_ASSERT_EQUALS(stdfStr.storage(), 3u);
     }
 
     void testConstructor2()
     {
-      JxN1<9> stdfStr = "";
-      unsigned char ch[5] = {0};
-      TS_ASSERT_SAME_DATA(stdfStr.mData, ch, 5);
-      TS_ASSERT_EQUALS(stdfStr.to_string(), "000000000");
-      TS_ASSERT_EQUALS(stdfStr.max_size(), 9u);
-      TS_ASSERT_EQUALS(stdfStr.storage(), 5u);
+      JxN1 stdfStr = "00000";
+      for(size_t i = 0; i < 5; i++)
+      {
+        TS_ASSERT_EQUALS(stdfStr[i], 0);
+      }
+      TS_ASSERT_EQUALS(stdfStr.to_string(), "00000");
+      TS_ASSERT_EQUALS(stdfStr.size(), 5u);
+      TS_ASSERT_EQUALS(stdfStr.storage(), 3u);
     }
 
     void testConstructor3()
     {
-      JxN1<3> stdfStr("ABC");
-      unsigned char ch[2] = {0xBA, 0x0C};
-      TS_ASSERT_SAME_DATA(stdfStr.mData, ch, 2);
+      JxN1 stdfStr("ABC");
+      TS_ASSERT_EQUALS(stdfStr[0], 0xA);
+      TS_ASSERT_EQUALS(stdfStr[1], 0xB);
+      TS_ASSERT_EQUALS(stdfStr[2], 0xC);
       TS_ASSERT_EQUALS(stdfStr.to_string(), "ABC");
-      TS_ASSERT_EQUALS(stdfStr.max_size(), 3u);
+      TS_ASSERT_EQUALS(stdfStr.size(), 3u);
       TS_ASSERT_EQUALS(stdfStr.storage(), 2u);
     }
 
     void testConstructor4()
     {
-      JxN1<16> stdfStr = ("0123456789ABCDEF");
-      unsigned char ch[8] = {0x10, 0x32, 0x54, 0x76, 0x98, 0xBA, 0xDC, 0xFE};
-      TS_ASSERT_SAME_DATA(stdfStr.mData, ch, 8);
+      JxN1 stdfStr = ("0123456789ABCDEF");
       TS_ASSERT_EQUALS(stdfStr.to_string(), "0123456789ABCDEF");
-      TS_ASSERT_EQUALS(stdfStr.max_size(), 16u);
+      TS_ASSERT_EQUALS(stdfStr.size(), 16u);
       TS_ASSERT_EQUALS(stdfStr.storage(), 8u);
     }
 
@@ -62,44 +67,42 @@ class TestJxN1 : public CxxTest::TestSuite
     {
       const char *filename = "TestJxN1.testWriteRead1.txt";
 
-      JxN1<22> stdfStrIn = ("");
+      JxN1 stdfStrIn = ("");
       ofstream outfile(filename, ofstream::binary);
       stdfStrIn.write(outfile);
       outfile.close();
 
-      JxN1<22> stdfStrOut;
+      JxN1 stdfStrOut;
       ifstream infile(filename, ifstream::binary);
-      stdfStrOut.read(infile);
+      stdfStrOut.read(infile, 0);
       outfile.close();
 
-      TS_ASSERT_SAME_DATA(stdfStrIn.mData, stdfStrOut.mData, 11);
-      TS_ASSERT_EQUALS(stdfStrIn.to_string(), "0000000000000000000000");
-      TS_ASSERT_EQUALS(stdfStrOut.to_string(), "0000000000000000000000");
-      TS_ASSERT_EQUALS(stdfStrIn.max_size(), 22u);
-      TS_ASSERT_EQUALS(stdfStrOut.max_size(), 22u);
-      TS_ASSERT_EQUALS(stdfStrIn.storage(), 11u);
-      TS_ASSERT_EQUALS(stdfStrOut.storage(), 11u);
+      TS_ASSERT_EQUALS(stdfStrIn.to_string(), "");
+      TS_ASSERT_EQUALS(stdfStrOut.to_string(), "");
+      TS_ASSERT_EQUALS(stdfStrIn.size(), 0u);
+      TS_ASSERT_EQUALS(stdfStrOut.size(), 0u);
+      TS_ASSERT_EQUALS(stdfStrIn.storage(), 0u);
+      TS_ASSERT_EQUALS(stdfStrOut.storage(), 0u);
     }
 
     void testWriteRead2()
     {
       const char *filename = "TestJxN1.testWriteRead2.txt";
 
-      JxN1<22> stdfStrIn = ("0123456789ABCDEFabcdef");
+      JxN1 stdfStrIn = ("0123456789ABCDEFabcdef");
       ofstream outfile(filename, ofstream::binary);
       stdfStrIn.write(outfile);
       outfile.close();
 
-      JxN1<22> stdfStrOut;
+      JxN1 stdfStrOut;
       ifstream infile(filename, ifstream::binary);
-      stdfStrOut.read(infile);
+      stdfStrOut.read(infile, 22);
       outfile.close();
 
-      TS_ASSERT_SAME_DATA(stdfStrIn.mData, stdfStrOut.mData, 11);
       TS_ASSERT_EQUALS(stdfStrIn.to_string(), "0123456789ABCDEFABCDEF");
       TS_ASSERT_EQUALS(stdfStrOut.to_string(), "0123456789ABCDEFABCDEF");
-      TS_ASSERT_EQUALS(stdfStrIn.max_size(), 22u);
-      TS_ASSERT_EQUALS(stdfStrOut.max_size(), 22u);
+      TS_ASSERT_EQUALS(stdfStrIn.size(), 22u);
+      TS_ASSERT_EQUALS(stdfStrOut.size(), 22u);
       TS_ASSERT_EQUALS(stdfStrIn.storage(), 11u);
       TS_ASSERT_EQUALS(stdfStrOut.storage(), 11u);
     }
@@ -108,23 +111,22 @@ class TestJxN1 : public CxxTest::TestSuite
     {
       const char *filename = "TestJxN1.testWriteRead3.txt";
 
-      JxN1<22> stdfStrIn;
+      JxN1 stdfStrIn(22);
       stdfStrIn[1] = 1;
       stdfStrIn[21] = 0xf;
       ofstream outfile(filename, ofstream::binary);
       stdfStrIn.write(outfile);
       outfile.close();
 
-      JxN1<22> stdfStrOut;
+      JxN1 stdfStrOut;
       ifstream infile(filename, ifstream::binary);
-      stdfStrOut.read(infile);
+      stdfStrOut.read(infile, 22);
       outfile.close();
 
-      TS_ASSERT_SAME_DATA(stdfStrIn.mData, stdfStrOut.mData, 11);
       TS_ASSERT_EQUALS(stdfStrIn.to_string(), "010000000000000000000F");
       TS_ASSERT_EQUALS(stdfStrOut.to_string(), "010000000000000000000F");
-      TS_ASSERT_EQUALS(stdfStrIn.max_size(), 22u);
-      TS_ASSERT_EQUALS(stdfStrOut.max_size(), 22u);
+      TS_ASSERT_EQUALS(stdfStrIn.size(), 22u);
+      TS_ASSERT_EQUALS(stdfStrOut.size(), 22u);
       TS_ASSERT_EQUALS(stdfStrIn.storage(), 11u);
       TS_ASSERT_EQUALS(stdfStrOut.storage(), 11u);
       TS_ASSERT_EQUALS(stdfStrIn[1], 1);
@@ -134,13 +136,12 @@ class TestJxN1 : public CxxTest::TestSuite
 
       stdfStrIn.clear();
       stdfStrOut.clear();
-      TS_ASSERT_SAME_DATA(stdfStrIn.mData, stdfStrOut.mData, 11);
-      TS_ASSERT_EQUALS(stdfStrIn.to_string(), "0000000000000000000000");
-      TS_ASSERT_EQUALS(stdfStrOut.to_string(), "0000000000000000000000");
-      TS_ASSERT_EQUALS(stdfStrIn.max_size(), 22u);
-      TS_ASSERT_EQUALS(stdfStrOut.max_size(), 22u);
-      TS_ASSERT_EQUALS(stdfStrIn.storage(), 11u);
-      TS_ASSERT_EQUALS(stdfStrOut.storage(), 11u);
+      TS_ASSERT_EQUALS(stdfStrIn.to_string(), "");
+      TS_ASSERT_EQUALS(stdfStrOut.to_string(), "");
+      TS_ASSERT_EQUALS(stdfStrIn.size(), 0u);
+      TS_ASSERT_EQUALS(stdfStrOut.size(), 0u);
+      TS_ASSERT_EQUALS(stdfStrIn.storage(), 0u);
+      TS_ASSERT_EQUALS(stdfStrOut.storage(), 0u);
     }
 
 };
