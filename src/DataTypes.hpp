@@ -78,8 +78,6 @@ string CharArray<SIZE>::to_string() const
   memcpy(buffer, mData, SIZE);
   return buffer;
 }
-
-
 ///////////////////////////////////////////////////////////////////////////////
 template <typename T>
 class VarCharArray : public DataType
@@ -149,8 +147,6 @@ string VarCharArray<T>::to_string() const
   memcpy(buffer, mData+sizeof(T), mSize);
   return string(buffer);
 }
-
-
 ///////////////////////////////////////////////////////////////////////////////
 template <size_t SIZE>
 class Cf : public DataType
@@ -207,8 +203,6 @@ string Cf<SIZE>::to_string() const
     return data;
   }
 }
-
-
 ///////////////////////////////////////////////////////////////////////////////
 template <size_t SIZE>
 class Uf : public DataType
@@ -261,8 +255,6 @@ unsigned long long Uf<SIZE>::getValue() const
     default: {unsigned long long data = 0u; memcpy(&data, mData, sizeof(data)); return data;}
   }
 }
-
-
 ///////////////////////////////////////////////////////////////////////////////
 template <typename T>
 class NumericalType : public DataType
@@ -310,7 +302,6 @@ string NumericalType<T>::to_string() const
   else              ss << std::dec << static_cast<int>(mData);
   return ss.str();
 }
-
 ///////////////////////////////////////////////////////////////////////////////
 template <size_t SIZE>
 class BitArray : public DataType
@@ -420,8 +411,6 @@ string BitArray<SIZE>::to_string() const
   }
   return ss.str();
 }
-
-
 ///////////////////////////////////////////////////////////////////////////////
 template <typename T>
 class VarBitArray : public DataType
@@ -560,8 +549,6 @@ string VarBitArray<T>::to_string() const
   }
   return ss.str();
 }
-
-
 ///////////////////////////////////////////////////////////////////////////////
 template <size_t SIZE>
 class KxN1 : public DataType
@@ -805,8 +792,6 @@ string JxN1::to_string() const
   }
   return ss.str();
 }
-
-
 ///////////////////////////////////////////////////////////////////////////////
 template <typename T, size_t SIZE>
 class KxTYPE : public DataType
@@ -856,25 +841,25 @@ string KxTYPE<T, SIZE>::to_string() const
 }
 ///////////////////////////////////////////////////////////////////////////////
 template <typename T>
-class VxTYPE : public DataType
+class JxTYPE : public DataType
 {
-  friend class TestVxTYPE;
-  friend class TestVxU1;
-  friend class TestVxU2;
-  friend class TestVxU4;
-  friend class TestVxU8;
-  friend class TestVxUf;
-  friend class TestVxR4;
-  friend class TestVxCn;
-  friend class TestVxSn;
-  friend class TestVxCf;
+  friend class TestJxTYPE;
+  friend class TestJxU1;
+  friend class TestJxU2;
+  friend class TestJxU4;
+  friend class TestJxU8;
+  friend class TestJxUf;
+  friend class TestJxR4;
+  friend class TestJxCn;
+  friend class TestJxSn;
+  friend class TestJxCf;
 
   public:
-    ~VxTYPE() {}
-    VxTYPE(size_t size = 0) {for(size_t i = 0; i < size; i++) mData.push_back(T());}
+    ~JxTYPE() {}
+    JxTYPE(size_t size = 0) {for(size_t i = 0; i < size; i++) mData.push_back(T());}
     const T& operator[] (size_t pos) const {assert(pos < mData.size()); return mData[pos];}
     T& operator[] (size_t pos) {assert(pos < mData.size()); return mData[pos];}
-    VxTYPE& add(const T& t) {mData.push_back(t); return *this;}
+    JxTYPE& add(const T& t) {mData.push_back(t); return *this;}
     inline size_t size() const {return mData.size();}
     void clear() {mData.clear();}
     void write(ofstream& outfile) {for(size_t i = 0; i < mData.size(); i++) mData[i].write(outfile);}
@@ -883,15 +868,15 @@ class VxTYPE : public DataType
     string to_string() const;
 
   private:
-    VxTYPE(const VxTYPE& rhs);
-    VxTYPE& operator=(const VxTYPE& rhs);
+    JxTYPE(const JxTYPE& rhs);
+    JxTYPE& operator=(const JxTYPE& rhs);
 
   private:
     vector<T>       mData;
 };
 
 template <typename T>
-string VxTYPE<T>::to_string() const
+string JxTYPE<T>::to_string() const
 {
   std::stringstream ss;
   for(size_t i = 0; i < mData.size(); i++)
