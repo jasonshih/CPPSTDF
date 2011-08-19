@@ -275,6 +275,7 @@ class NumericalType : public DataType
     NumericalType(T value = 0) : mData(value) {}
     NumericalType(const NumericalType& rhs) : mData(rhs.mData) {}
     NumericalType& operator=(const NumericalType& rhs);
+    NumericalType& operator+=(T value) {mData += value; return *this;}
     void clear() {mData = 0;}
     void write(ofstream& outfile) {outfile.write(reinterpret_cast<char*>(&mData), sizeof(mData));}
     void read(ifstream& infile, size_t size = sizeof(T)) {infile.read(reinterpret_cast<char*>(&mData), sizeof(mData));}
