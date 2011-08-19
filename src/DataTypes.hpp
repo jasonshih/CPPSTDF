@@ -586,10 +586,10 @@ class KxN1 : public DataType
     };
 
     ~KxN1() {delete[] mData;}
-    KxN1(const string& str = "");
-    KxN1(const char* str);
+    KxN1(const string& str = "") {check(str); mData = new char[capacity()]; memset(mData, 0, capacity()); fill(str);}
+    KxN1(const char* str) {assert(str != NULL); check(str); mData = new char[capacity()]; memset(mData, 0, capacity()); fill(str);}
     KxN1(const KxN1& rhs) {mData = new char[capacity()]; memcpy(mData, rhs.mData, capacity());}
-    KxN1& operator=(const KxN1& rhs);
+    KxN1& operator=(const KxN1& rhs) {if(this == &rhs) return *this; memcpy(mData, rhs.mData, capacity()); return *this;}
     unsigned char operator[] (size_t pos) const {assert(pos < SIZE); return (((mData[pos/2] >> ((0==(pos%2))?0:4))) & 0xF);}
     Reference operator[] (size_t pos) {assert(pos < SIZE); return Reference(mData, pos);}
     void clear() {memset(mData, 0, capacity());}
@@ -615,51 +615,20 @@ class KxN1 : public DataType
       else if((x >= 'A') && (x <= 'F')) return (x-'A'+10);
       else if((x >= 'a') && (x <= 'f')) return (x-'a'+10);
     }
+    inline void check(const string& str)
+    {
+      for(size_t i = 0; i < str.size(); i++)
+      {
+        assert( ((str[i] >= '0') && (str[i] <= '9')) ||
+            ((str[i] >= 'A') && (str[i] <= 'F')) ||
+            ((str[i] >= 'a') && (str[i] <= 'f'))
+            );
+      }
+    }
 
   private:
     char*           mData;
 };
-
-template <size_t SIZE>
-KxN1<SIZE>::KxN1(const string& str)
-{
-  for(size_t i = 0; i < str.size(); i++)
-  {
-    assert( ((str[i] >= '0') && (str[i] <= '9')) ||
-        ((str[i] >= 'A') && (str[i] <= 'F')) ||
-        ((str[i] >= 'a') && (str[i] <= 'f'))
-        );
-  }
-
-  mData = new char[capacity()];
-  memset(mData, 0, capacity());
-  fill(str);
-}
-
-template <size_t SIZE>
-KxN1<SIZE>::KxN1(const char* str)
-{
-  assert(str != NULL);
-  for(size_t i = 0; i < strlen(str); i++)
-  {
-    assert( ((str[i] >= '0') && (str[i] <= '9')) ||
-        ((str[i] >= 'A') && (str[i] <= 'F')) ||
-        ((str[i] >= 'a') && (str[i] <= 'f'))
-        );
-  }
-
-  mData = new char[capacity()];
-  memset(mData, 0, capacity());
-  fill(str);
-}
-
-template <size_t SIZE>
-KxN1<SIZE>& KxN1<SIZE>::operator=(const KxN1<SIZE>& rhs)
-{
-  if(this == &rhs) return *this;
-  memcpy(mData, rhs.mData, capacity());
-  return *this;
-}
 
 template <size_t SIZE>
 string KxN1<SIZE>::to_string() const
@@ -671,8 +640,6 @@ string KxN1<SIZE>::to_string() const
   }
   return ss.str();
 }
-
-
 ///////////////////////////////////////////////////////////////////////////////
 class JxN1 : public DataType
 {
@@ -708,13 +675,13 @@ class JxN1 : public DataType
     };
 
     ~JxN1() {}
-    JxN1(const string& str = "");
-    JxN1(const char* str);
+    JxN1(const string& str = "") :mSize(0) {check(str); init(str.size()); fill(str);}
+    JxN1(const char* str) :mSize(0) {assert(str != NULL); check(str); init(strlen(str)); fill(str);}
     JxN1(size_t size) :mSize(size) {init(size);}
     unsigned char operator[] (size_t pos) const {assert(pos < mSize); return (((mData[pos/2] >> ((0==(pos%2))?0:4))) & 0xF);}
     Reference operator[] (size_t pos) {assert(pos < mSize); return Reference(&mData, pos);}
-    JxN1& add(const string& str);
-    JxN1& add(const char* str);
+    JxN1& add(const string& str) {check(str); init(mSize+str.size()); fill(str); return *this;}
+    JxN1& add(const char* str) {assert(str != NULL); check(str); init(mSize+strlen(str)); fill(str); return *this;}
     inline size_t size() const {return mSize;}
     void clear() {mSize = 0; mData.clear();}
     void write(ofstream& outfile) {for(size_t i = 0; i < mData.size(); i++) outfile.write(&(mData[i]), sizeof(char));}
@@ -742,71 +709,21 @@ class JxN1 : public DataType
       else if((x >= 'A') && (x <= 'F')) return (x-'A'+10);
       else if((x >= 'a') && (x <= 'f')) return (x-'a'+10);
     }
+    inline void check(const string& str)
+    {
+      for(size_t i = 0; i < str.size(); i++)
+      {
+        assert( ((str[i] >= '0') && (str[i] <= '9')) ||
+            ((str[i] >= 'A') && (str[i] <= 'F')) ||
+            ((str[i] >= 'a') && (str[i] <= 'f'))
+            );
+      }
+    }
 
   private:
     size_t          mSize;
     vector<char>    mData;
 };
-
-JxN1::JxN1(const string& str) : mSize(0)
-{
-  for(size_t i = 0; i < str.size(); i++)
-  {
-    assert( ((str[i] >= '0') && (str[i] <= '9')) ||
-        ((str[i] >= 'A') && (str[i] <= 'F')) ||
-        ((str[i] >= 'a') && (str[i] <= 'f'))
-        );
-  }
-
-  init(str.size());
-  fill(str);
-}
-
-JxN1::JxN1(const char* str) : mSize(0)
-{
-  assert(str != NULL);
-  for(size_t i = 0; i < strlen(str); i++)
-  {
-    assert( ((str[i] >= '0') && (str[i] <= '9')) ||
-        ((str[i] >= 'A') && (str[i] <= 'F')) ||
-        ((str[i] >= 'a') && (str[i] <= 'f'))
-        );
-  }
-
-  init(strlen(str));
-  fill(str);
-}
-
-JxN1& JxN1::add(const string& str)
-{
-  for(size_t i = 0; i < str.size(); i++)
-  {
-    assert( ((str[i] >= '0') && (str[i] <= '9')) ||
-        ((str[i] >= 'A') && (str[i] <= 'F')) ||
-        ((str[i] >= 'a') && (str[i] <= 'f'))
-        );
-  }
-
-  init(mSize+str.size());
-  fill(str);
-  return *this;
-}
-
-JxN1& JxN1::add(const char* str)
-{
-  assert(str != NULL);
-  for(size_t i = 0; i < strlen(str); i++)
-  {
-    assert( ((str[i] >= '0') && (str[i] <= '9')) ||
-        ((str[i] >= 'A') && (str[i] <= 'F')) ||
-        ((str[i] >= 'a') && (str[i] <= 'f'))
-        );
-  }
-
-  init(mSize+strlen(str));
-  fill(str);
-  return *this;
-}
 
 string JxN1::to_string() const
 {
