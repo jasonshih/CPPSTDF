@@ -32,7 +32,7 @@ class DataType
     virtual ~DataType() {};
     virtual void clear() = 0;
     virtual void write(ofstream& outfile) = 0;
-    virtual void read(ifstream& infile) = 0;
+    virtual void read(ifstream& infile, size_t size) = 0;
     virtual size_t storage() const = 0;
     virtual string to_string() const = 0;
 };
@@ -52,7 +52,7 @@ class CharArray : public DataType
     CharArray& operator=(const CharArray& rhs);
     void clear() {init();}
     void write(ofstream& outfile) {outfile.write(mData, SIZE);}
-    void read(ifstream& infile) {infile.read(mData, SIZE);}
+    void read(ifstream& infile, size_t size = SIZE) {infile.read(mData, SIZE);}
     size_t storage() const {return SIZE;}
     string to_string() const;
 
@@ -96,7 +96,7 @@ class VarCharArray : public DataType
     VarCharArray& operator+=(const string& str) {fill(str); return *this;}
     void clear() { mSize = 0; memset(mData, 0, capacity());}
     void write(ofstream& outfile) {outfile.write(mData, sizeof(T)+mSize);}
-    void read(ifstream& infile);
+    void read(ifstream& infile, size_t size = 0);
     size_t max_size() const {return ((1<<(8*sizeof(T)))-1);}
     size_t storage() const {return sizeof(T)+mSize;}
     string to_string() const;
@@ -131,7 +131,7 @@ VarCharArray<T>& VarCharArray<T>::operator=(const VarCharArray& rhs)
 }
 
 template <typename T>
-void VarCharArray<T>::read(ifstream& infile)
+void VarCharArray<T>::read(ifstream& infile, size_t size)
 {
   infile.read(reinterpret_cast<char*>(&mSize), sizeof(T));
 
@@ -169,7 +169,7 @@ class Cf : public DataType
     inline size_t max_size() const {return SIZE;}
     void clear() {mData.clear();}
     void write(ofstream& outfile) {string data = to_string(); outfile.write(data.data(), data.size());}
-    void read(ifstream& infile);
+    void read(ifstream& infile, size_t size = SIZE);
     size_t storage() const {return SIZE;}
     string to_string() const;
 
@@ -180,7 +180,7 @@ class Cf : public DataType
 };
 
 template <size_t SIZE>
-void Cf<SIZE>::read(ifstream& infile)
+void Cf<SIZE>::read(ifstream& infile, size_t size)
 {
   if(SIZE==0) mData = "";
   else
@@ -223,7 +223,7 @@ class Uf : public DataType
     unsigned long long getValue() const;
     void clear() {memset(mData, 0, SIZE);}
     void write(ofstream& outfile) {outfile.write(mData, SIZE);}
-    void read(ifstream& infile) {infile.read(mData, SIZE);}
+    void read(ifstream& infile, size_t size = SIZE) {infile.read(mData, SIZE);}
     size_t storage() const {return SIZE;}
     string to_string() const {std::stringstream ss; ss << getValue(); return ss.str();}
 
@@ -285,7 +285,7 @@ class NumericalType : public DataType
     NumericalType& operator=(const NumericalType& rhs);
     void clear() {mData = 0;}
     void write(ofstream& outfile) {outfile.write(reinterpret_cast<char*>(&mData), sizeof(mData));}
-    void read(ifstream& infile) {infile.read(reinterpret_cast<char*>(&mData), sizeof(mData));}
+    void read(ifstream& infile, size_t size = sizeof(T)) {infile.read(reinterpret_cast<char*>(&mData), sizeof(mData));}
     T getValue() const {return mData;}
     size_t storage() const {return sizeof(T);}
     string to_string() const;
@@ -359,7 +359,7 @@ class BitArray : public DataType
     BitArray& reset(bool x) {for(size_t i = 0; i < SIZE; ++i){if(x) mData[i] = 0xFF;else mData[i] = 0x00;} return *this;}
     void clear() {reset(false);}
     void write(ofstream& outfile) {outfile.write(mData, SIZE);}
-    void read(ifstream& infile) {infile.read(mData, SIZE);}
+    void read(ifstream& infile, size_t size = SIZE) {infile.read(mData, SIZE);}
     size_t storage() const {return SIZE;}
     string to_string() const;
 
@@ -479,7 +479,7 @@ class VarBitArray : public DataType
     BitReference operator[] (size_t pos) {assert(pos < mSize); return BitReference(mData, pos);}
     void clear() {mSize = 0; memset(mData, 0, capacity());}
     void write(ofstream& outfile) {if( (mSize%8) == 0 ) outfile.write(mData, sizeof(T)+(mSize/8)); else outfile.write(mData, sizeof(T)+(mSize/8)+1);}
-    void read(ifstream& infile);
+    void read(ifstream& infile, size_t size = 0);
     inline size_t max_size() const {return ((1<<(8*sizeof(T)))-1);}
     size_t storage() const {return ((mSize%8) == 0)?(sizeof(T)+(mSize/8)):(sizeof(T)+(mSize/8)+1);}
     string to_string() const;
@@ -538,7 +538,7 @@ VarBitArray<T>& VarBitArray<T>::operator=(const VarBitArray<T>& rhs)
 }
 
 template <typename T>
-void VarBitArray<T>::read(ifstream& infile)
+void VarBitArray<T>::read(ifstream& infile, size_t size)
 {
   infile.read(reinterpret_cast<char*>(&mSize), sizeof(T));
 
@@ -607,7 +607,7 @@ class JxN1 : public DataType
     Reference operator[] (size_t pos) {assert(pos < SIZE); return Reference(mData, pos);}
     void clear() {memset(mData, 0, capacity());}
     void write(ofstream& outfile) {outfile.write(mData, capacity());}
-    void read(ifstream& infile) {infile.read(mData, (SIZE%2)?(SIZE/2+1):(SIZE/2));}
+    void read(ifstream& infile, size_t size = (SIZE%2)?(SIZE/2+1):(SIZE/2)) {infile.read(mData, (SIZE%2)?(SIZE/2+1):(SIZE/2));}
     inline size_t max_size() const {return SIZE;}
     size_t storage() const {return capacity();}
     string to_string() const;
@@ -688,7 +688,7 @@ string JxN1<SIZE>::to_string() const
 
 ///////////////////////////////////////////////////////////////////////////////
 template <typename T, size_t SIZE>
-class KxTYPE
+class KxTYPE : public DataType
 {
   friend class TestKxTYPE;
   friend class TestKxU1;
@@ -709,7 +709,7 @@ class KxTYPE
     inline size_t max_size() const {return SIZE;}
     void clear() {for(size_t i = 0; i < SIZE; i++) mData[i].clear();}
     void write(ofstream& outfile) {for(size_t i = 0; i < SIZE; i++) mData[i].write(outfile);}
-    void read(ifstream& infile) {for(size_t i = 0; i < SIZE; i++) mData[i].read(infile);}
+    void read(ifstream& infile, size_t size = SIZE) {for(size_t i = 0; i < SIZE; i++) mData[i].read(infile);}
     size_t storage() const {size_t ret = 0; for(size_t i = 0; i < SIZE; i++) ret += mData[i].storage(); return ret;}
     string to_string() const;
 
@@ -726,6 +726,54 @@ string KxTYPE<T, SIZE>::to_string() const
 {
   std::stringstream ss;
   for(size_t i = 0; i < SIZE; i++)
+  {
+    ss << mData[i].to_string() << ",";
+  }
+  string ret = ss.str();
+  if(!ret.empty()) ret = ret.substr(0, ret.size()-1);
+  return ret;
+}
+///////////////////////////////////////////////////////////////////////////////
+template <typename T>
+class VxTYPE : public DataType
+{
+  friend class TestVxTYPE;
+  friend class TestVxU1;
+  friend class TestVxU2;
+  friend class TestVxU4;
+  friend class TestVxU8;
+  friend class TestVxUf;
+  friend class TestVxR4;
+  friend class TestVxCn;
+  friend class TestVxSn;
+  friend class TestVxCf;
+
+  public:
+    ~VxTYPE() {}
+    VxTYPE(size_t size = 0) {for(size_t i = 0; i < size; i++) mData.push_back(T());}
+    const T& operator[] (size_t pos) const {assert(pos < mData.size()); return mData[pos];}
+    T& operator[] (size_t pos) {assert(pos < mData.size()); return mData[pos];}
+    VxTYPE& add(const T& t) {mData.push_back(t); return *this;}
+    inline size_t size() const {return mData.size();}
+    void clear() {mData.clear();}
+    void write(ofstream& outfile) {for(size_t i = 0; i < mData.size(); i++) mData[i].write(outfile);}
+    void read(ifstream& infile, size_t size) {mData.clear(); for(size_t i = 0; i < size; i++) {mData.push_back(T()); mData[i].read(infile);}}
+    size_t storage() const {size_t ret = 0; for(size_t i = 0; i < mData.size(); i++) ret += mData[i].storage(); return ret;}
+    string to_string() const;
+
+  private:
+    VxTYPE(const VxTYPE& rhs);
+    VxTYPE& operator=(const VxTYPE& rhs);
+
+  private:
+    vector<T>       mData;
+};
+
+template <typename T>
+string VxTYPE<T>::to_string() const
+{
+  std::stringstream ss;
+  for(size_t i = 0; i < mData.size(); i++)
   {
     ss << mData[i].to_string() << ",";
   }
@@ -753,7 +801,7 @@ typedef VarBitArray<unsigned short>           Dn;
 typedef JxN1<1>                               N1;
 ///////////////////////////////////////////////////////////////////////////////
 template <size_t SIZE>
-class VarTypeArray
+class VarTypeArray : public DataType
 {
   friend class TestVn;
 
@@ -790,7 +838,7 @@ class VarTypeArray
         VnType& operator=(const VnType& rhs) {if(this == &rhs) return *this; mData = rhs.mData; return *this;}
         void clear() {mData = 0;}
         void write(ofstream& outfile) {outfile.write(&mData, storage());}
-        void read(ifstream& infile) {}
+        void read(ifstream& infile, size_t size = 0) {}
         size_t storage() const {return sizeof(mData);}
         string to_string() const
         {
