@@ -53,6 +53,14 @@ class TestJxN1 : public CxxTest::TestSuite
       TS_ASSERT_EQUALS(stdfStr.to_string(), "ABC");
       TS_ASSERT_EQUALS(stdfStr.size(), 3u);
       TS_ASSERT_EQUALS(stdfStr.storage(), 2u);
+      stdfStr.add("DDD").add("9");
+      TS_ASSERT_EQUALS(stdfStr[3], 0xD);
+      TS_ASSERT_EQUALS(stdfStr[4], 0xD);
+      TS_ASSERT_EQUALS(stdfStr[5], 0xD);
+      TS_ASSERT_EQUALS(stdfStr[6], 0x9);
+      TS_ASSERT_EQUALS(stdfStr.to_string(), "ABCDDD9");
+      TS_ASSERT_EQUALS(stdfStr.size(), 7u);
+      TS_ASSERT_EQUALS(stdfStr.storage(), 4u);
     }
 
     void testConstructor4()

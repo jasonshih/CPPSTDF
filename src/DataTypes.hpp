@@ -710,27 +710,31 @@ class JxN1 : public DataType
     ~JxN1() {}
     JxN1(const string& str = "");
     JxN1(const char* str);
-    JxN1(size_t size) {init(size);}
-    JxN1(const JxN1& rhs) : mSize(rhs.mSize), mData(rhs.mData) {}
-    JxN1& operator=(const JxN1& rhs);
+    JxN1(size_t size) :mSize(size) {init(size);}
     unsigned char operator[] (size_t pos) const {assert(pos < mSize); return (((mData[pos/2] >> ((0==(pos%2))?0:4))) & 0xF);}
     Reference operator[] (size_t pos) {assert(pos < mSize); return Reference(&mData, pos);}
+    JxN1& add(const string& str);
+    JxN1& add(const char* str);
+    inline size_t size() const {return mSize;}
     void clear() {mSize = 0; mData.clear();}
     void write(ofstream& outfile) {for(size_t i = 0; i < mData.size(); i++) outfile.write(&(mData[i]), sizeof(char));}
-    void read(ifstream& infile, size_t size) {init(size); for(size_t i = 0; i < mData.size(); i++) infile.read(&(mData[i]), sizeof(char));}
-    inline size_t size() const {return mSize;}
+    void read(ifstream& infile, size_t size) {mSize = size; init(size); for(size_t i = 0; i < mData.size(); i++) infile.read(&(mData[i]), sizeof(char));}
     size_t storage() const {return mData.size();}
     string to_string() const;
 
   private:
-    inline void init(size_t size) {mSize = size; for(size_t i = 0; i < ((size%2)?(size/2+1):(size/2)); i++) mData.push_back(0);}
+    JxN1(const JxN1& rhs);
+    JxN1& operator=(const JxN1& rhs);
+
+    inline void init(size_t size) {mData.resize((size%2)?(size/2+1):(size/2), 0);}
     inline void fill(const string& str)
     {
-      for(size_t i = 0; i < str.size(); i++)
+      for(size_t i = mSize; i < mSize+str.size(); i++)
       {
-        if(0==(i%2)) mData[i/2] |= (c2d(str[i]));       // low  4 bits
-        else         mData[i/2] |= (c2d(str[i]) << 4);  // high 4 bits
+        if(0==(i%2)) mData[i/2] |= (c2d(str[i-mSize]));       // low  4 bits
+        else         mData[i/2] |= (c2d(str[i-mSize]) << 4);  // high 4 bits
       }
+      mSize += str.size();
     }
     inline char c2d(char x)
     {
@@ -744,7 +748,7 @@ class JxN1 : public DataType
     vector<char>    mData;
 };
 
-JxN1::JxN1(const string& str)
+JxN1::JxN1(const string& str) : mSize(0)
 {
   for(size_t i = 0; i < str.size(); i++)
   {
@@ -754,12 +758,11 @@ JxN1::JxN1(const string& str)
         );
   }
 
-  mSize = str.size();
-  init(mSize);
+  init(str.size());
   fill(str);
 }
 
-JxN1::JxN1(const char* str)
+JxN1::JxN1(const char* str) : mSize(0)
 {
   assert(str != NULL);
   for(size_t i = 0; i < strlen(str); i++)
@@ -770,16 +773,38 @@ JxN1::JxN1(const char* str)
         );
   }
 
-  mSize = strlen(str);
-  init(mSize);
+  init(strlen(str));
   fill(str);
 }
 
-JxN1& JxN1::operator=(const JxN1& rhs)
+JxN1& JxN1::add(const string& str)
 {
-  if(this == &rhs) return *this;
-  mSize = rhs.mSize;
-  mData = rhs.mData;
+  for(size_t i = 0; i < str.size(); i++)
+  {
+    assert( ((str[i] >= '0') && (str[i] <= '9')) ||
+        ((str[i] >= 'A') && (str[i] <= 'F')) ||
+        ((str[i] >= 'a') && (str[i] <= 'f'))
+        );
+  }
+
+  init(mSize+str.size());
+  fill(str);
+  return *this;
+}
+
+JxN1& JxN1::add(const char* str)
+{
+  assert(str != NULL);
+  for(size_t i = 0; i < strlen(str); i++)
+  {
+    assert( ((str[i] >= '0') && (str[i] <= '9')) ||
+        ((str[i] >= 'A') && (str[i] <= 'F')) ||
+        ((str[i] >= 'a') && (str[i] <= 'f'))
+        );
+  }
+
+  init(mSize+strlen(str));
+  fill(str);
   return *this;
 }
 
