@@ -21,9 +21,9 @@ class ATR : public Record
 ATR::ATR() : Record(Record::ATR_TYPE)
 {
   MOD_TIM = new U4(0u);
-  mData.push_back(std::make_pair("MOD_TIM", MOD_TIM));
+  add("MOD_TIM", MOD_TIM);
   CMD_LINE = new Cn();
-  mData.push_back(std::make_pair("CMD_LINE", CMD_LINE));
+  add("CMD_LINE", CMD_LINE);
 
   calculate();
 }

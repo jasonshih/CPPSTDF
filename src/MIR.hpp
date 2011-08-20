@@ -19,44 +19,44 @@ class MIR : public Record
 
 MIR::MIR() : Record(Record::MIR_TYPE)
 {
-    mData.push_back(std::make_pair("SETUP_T", new U4()));    // Date and time of job setup
-    mData.push_back(std::make_pair("START_T", new U4()));    // Date and time first part tested
-    mData.push_back(std::make_pair("STAT_NUM", new U1()));   // Tester station number
-    mData.push_back(std::make_pair("MODE_COD", new C1()));   // Test mode code (e.g. prod, dev)
-    mData.push_back(std::make_pair("RTST_COD", new C1()));   // Lot retest code
-    mData.push_back(std::make_pair("PROT_COD", new C1()));   // Data protection code
-    mData.push_back(std::make_pair("BURN_TIM", new U2()));   // Burn-in time (in minutes)
-    mData.push_back(std::make_pair("CMOD_COD", new C1()));   // Command mode code
-    mData.push_back(std::make_pair("LOT_ID", new Cn()));     // Lot ID (customer specified)
-    mData.push_back(std::make_pair("PART_TYP", new Cn()));   // Part type (or Porduct ID)
-    mData.push_back(std::make_pair("NODE_NAM", new Cn()));   // Name of node which generated data
-    mData.push_back(std::make_pair("TSTR_TYP", new Cn()));   // Tester type
-    mData.push_back(std::make_pair("JOB_NAM", new Cn()));    // Job name (test program name)
-    mData.push_back(std::make_pair("JOB_REV", new Cn()));    // Job (test program) revision number
-    mData.push_back(std::make_pair("SBLOT_ID", new Cn()));   // Sublot ID
-    mData.push_back(std::make_pair("OPER_NAM", new Cn()));   // Operator name (at setup time)
-    mData.push_back(std::make_pair("EXEC_TYP", new Cn()));   // Tester exec software type
-    mData.push_back(std::make_pair("EXEC_VER", new Cn()));   // Tester exec software version number
-    mData.push_back(std::make_pair("TEST_COD", new Cn()));   // Test phase or step code
-    mData.push_back(std::make_pair("TST_TEMP", new Cn()));   // Test temperature
-    mData.push_back(std::make_pair("USER_TXT", new Cn()));   // Generic user text
-    mData.push_back(std::make_pair("AUX_FILE", new Cn()));   // Name of auxiliary data file
-    mData.push_back(std::make_pair("PKG_TYP", new Cn()));    // Package type
-    mData.push_back(std::make_pair("FAMLY_ID", new Cn()));   // Product family ID
-    mData.push_back(std::make_pair("DATE_COD", new Cn()));   // Date code
-    mData.push_back(std::make_pair("FACIL_ID", new Cn()));   // Test facility ID
-    mData.push_back(std::make_pair("FLOOR_ID", new Cn()));   // Test floor ID
-    mData.push_back(std::make_pair("PROC_ID", new Cn()));    // Fabrication Process ID
-    mData.push_back(std::make_pair("OPER_FRQ", new Cn()));   // Operation frequency or step
-    mData.push_back(std::make_pair("SPEC_NAM", new Cn()));   // Test specification name
-    mData.push_back(std::make_pair("SPEC_VER", new Cn()));   // Test specification version number
-    mData.push_back(std::make_pair("FLOW_ID", new Cn()));    // Test flow ID
-    mData.push_back(std::make_pair("SETUP_ID", new Cn()));   // Test setup ID
-    mData.push_back(std::make_pair("DSGN_REV", new Cn()));   // Device design revision
-    mData.push_back(std::make_pair("ENG_ID", new Cn()));     // Engineering lot ID
-    mData.push_back(std::make_pair("ROM_COD", new Cn()));    // ROM Code ID
-    mData.push_back(std::make_pair("SERL_NUM", new Cn()));   // Tester serial number
-    mData.push_back(std::make_pair("SUPR_NAM", new Cn()));   // Supervisor name or ID
+    add("SETUP_T", new U4());    // Date and time of job setup
+    add("START_T", new U4());    // Date and time first part tested
+    add("STAT_NUM", new U1());   // Tester station number
+    add("MODE_COD", new C1());   // Test mode code (e.g. prod, dev)
+    add("RTST_COD", new C1());   // Lot retest code
+    add("PROT_COD", new C1());   // Data protection code
+    add("BURN_TIM", new U2());   // Burn-in time (in minutes)
+    add("CMOD_COD", new C1());   // Command mode code
+    add("LOT_ID", new Cn());     // Lot ID (customer specified)
+    add("PART_TYP", new Cn());   // Part type (or Porduct ID)
+    add("NODE_NAM", new Cn());   // Name of node which generated data
+    add("TSTR_TYP", new Cn());   // Tester type
+    add("JOB_NAM", new Cn());    // Job name (test program name)
+    add("JOB_REV", new Cn());    // Job (test program) revision number
+    add("SBLOT_ID", new Cn());   // Sublot ID
+    add("OPER_NAM", new Cn());   // Operator name (at setup time)
+    add("EXEC_TYP", new Cn());   // Tester exec software type
+    add("EXEC_VER", new Cn());   // Tester exec software version number
+    add("TEST_COD", new Cn());   // Test phase or step code
+    add("TST_TEMP", new Cn());   // Test temperature
+    add("USER_TXT", new Cn());   // Generic user text
+    add("AUX_FILE", new Cn());   // Name of auxiliary data file
+    add("PKG_TYP", new Cn());    // Package type
+    add("FAMLY_ID", new Cn());   // Product family ID
+    add("DATE_COD", new Cn());   // Date code
+    add("FACIL_ID", new Cn());   // Test facility ID
+    add("FLOOR_ID", new Cn());   // Test floor ID
+    add("PROC_ID", new Cn());    // Fabrication Process ID
+    add("OPER_FRQ", new Cn());   // Operation frequency or step
+    add("SPEC_NAM", new Cn());   // Test specification name
+    add("SPEC_VER", new Cn());   // Test specification version number
+    add("FLOW_ID", new Cn());    // Test flow ID
+    add("SETUP_ID", new Cn());   // Test setup ID
+    add("DSGN_REV", new Cn());   // Device design revision
+    add("ENG_ID", new Cn());     // Engineering lot ID
+    add("ROM_COD", new Cn());    // ROM Code ID
+    add("SERL_NUM", new Cn());   // Tester serial number
+    add("SUPR_NAM", new Cn());   // Supervisor name or ID
 
     calculate();
 }

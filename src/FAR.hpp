@@ -32,9 +32,9 @@ class FAR : public Record
 FAR::FAR() : Record(Record::FAR_TYPE)
 {
   CPU_TYPE = new U1(0u);
-  mData.push_back(std::make_pair("CPU_TYPE", CPU_TYPE));
+  add("CPU_TYPE", CPU_TYPE);
   STDF_VER = new U1(4u);
-  mData.push_back(std::make_pair("STDF_VER", STDF_VER));
+  add("STDF_VER", STDF_VER);
 
   setCpuType();
   calculate();

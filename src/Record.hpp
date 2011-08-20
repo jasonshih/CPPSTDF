@@ -93,13 +93,19 @@ class Record
       for(Container::const_iterator it = mData.begin(); it != mData.end(); it++) *REC_LEN += (it->second)->storage();
     }
 
+    Record& add(const string& name, DataType* obj)
+    {
+      mData.push_back(std::make_pair(name, obj));
+      return *this;
+    }
+
   private:
     typedef vector< std::pair<string, DataType*> > Container;
 
     Record(const Record& rhs);
     Record& operator=(const Record& rhs);
 
-  protected:
+  private:
     Container       mData;
 
   private:
@@ -112,11 +118,11 @@ class Record
 Record::Record(Record::RecordType type)
 {
   REC_LEN = new U2(0);
-  mData.push_back(std::make_pair("REC_LEN", REC_LEN));
+  add("REC_LEN", REC_LEN);
   REC_TYP = new U1(0);
-  mData.push_back(std::make_pair("REC_TYP", REC_TYP));
+  add("REC_TYP", REC_TYP);
   REC_SUB = new U1(0);
-  mData.push_back(std::make_pair("REC_SUB", REC_SUB));
+  add("REC_SUB", REC_SUB);
 
   switch(type)
   {

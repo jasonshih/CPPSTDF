@@ -19,11 +19,11 @@ class VUR : public Record
 VUR::VUR() : Record(Record::VUR_TYPE)
 {
   UPT_CNT = new U1(2u);
-  mData.push_back(std::make_pair("UPT_CNT", UPT_CNT));
+  add("UPT_CNT", UPT_CNT);
   UPT_NAM = new KxTYPE<Cn, 2>;
   (*UPT_NAM)[0] = "V4-2007";
   (*UPT_NAM)[1] = "Scan:2007.1";
-  mData.push_back(std::make_pair("UPT_NAM", UPT_NAM));
+  add("UPT_NAM", UPT_NAM);
 
   calculate();
 }
