@@ -56,6 +56,9 @@
 
 class Record
 {
+  private:
+    typedef vector< std::pair<string, DataType*> > Container;
+
   public:
     enum RecordType
     {
@@ -85,6 +88,20 @@ class Record
 
     Record(Record::RecordType type);
     virtual void clear() = 0;
+
+    string operator[] (const string& name) const
+    {
+       Container::const_iterator target = find(name);
+       assert(target != mData.end());
+       return (target->second)->to_string();
+    }
+
+    DataType& operator[] (const string& name)
+    {
+       Container::iterator target = find(name);
+       assert(target != mData.end());
+       return *(target->second);
+    }
 
     void write(ofstream& outfile)
     {
@@ -119,9 +136,21 @@ class Record
       return *this;
     }
 
-  private:
-    typedef vector< std::pair<string, DataType*> > Container;
+    Container::iterator find(const string& name)
+    {
+      Container::iterator it = mData.begin();
+      for(; (it != mData.end()) && (it->first != name); it++);
+      return it;
+    }
 
+    Container::const_iterator find(const string& name) const
+    {
+      Container::const_iterator it = mData.begin();
+      for(; (it != mData.end()) && (it->first != name); it++);
+      return it;
+    }
+
+  private:
     Record(const Record& rhs);
     Record& operator=(const Record& rhs);
 
