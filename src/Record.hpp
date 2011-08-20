@@ -78,96 +78,108 @@ class Record
     };
 
   public:
-    virtual ~Record() {}
+    virtual ~Record() {for(Container::iterator it = mData.begin(); it != mData.end(); it++) delete (it->second);}
     Record(Record::RecordType type);
     virtual void clear() = 0;
-    virtual void write(ofstream& outfile);
-    virtual void read(ifstream& infile);
-    virtual size_t storage();
-    virtual void to_string(vector<string>& val) const;
+    void write(ofstream& outfile);
+    void read(ifstream& infile);
+    size_t storage();
+    void to_string(vector<string>& val) const;
+
+  protected:
+    void calculate()
+    {
+      *REC_LEN = 0;
+      for(Container::const_iterator it = mData.begin(); it != mData.end(); it++) *REC_LEN += (it->second)->storage();
+    }
 
   private:
+    typedef vector< std::pair<string, DataType*> > Container;
+
     Record(const Record& rhs);
     Record& operator=(const Record& rhs);
 
   protected:
-    U2 REC_LEN;
+    Container       mData;
+
   private:
-    U1 REC_TYP;
-    U1 REC_SUB;
+    U2* REC_LEN;
+    U1* REC_TYP;
+    U1* REC_SUB;
 
 };
 
 Record::Record(Record::RecordType type)
 {
+  REC_LEN = new U2(0);
+  mData.push_back(std::make_pair("REC_LEN", REC_LEN));
+  REC_TYP = new U1(0);
+  mData.push_back(std::make_pair("REC_TYP", REC_TYP));
+  REC_SUB = new U1(0);
+  mData.push_back(std::make_pair("REC_SUB", REC_SUB));
+
   switch(type)
   {
-    case FAR_TYPE:  REC_SUB = STDF_FAR_SUB; REC_TYP = STDF_FILE_DATA; break;
-    case ATR_TYPE:  REC_SUB = STDF_ATR_SUB; REC_TYP = STDF_FILE_DATA; break;
-    case VUR_TYPE:  REC_SUB = STDF_VUR_SUB; REC_TYP = STDF_FILE_DATA; break;
+    case FAR_TYPE:  *REC_SUB = STDF_FAR_SUB; *REC_TYP = STDF_FILE_DATA; break;
+    case ATR_TYPE:  *REC_SUB = STDF_ATR_SUB; *REC_TYP = STDF_FILE_DATA; break;
+    case VUR_TYPE:  *REC_SUB = STDF_VUR_SUB; *REC_TYP = STDF_FILE_DATA; break;
 
-    case MIR_TYPE:  REC_SUB = STDF_MIR_SUB; REC_TYP = STDF_LOT_DATA; break;
-    case MRR_TYPE:  REC_SUB = STDF_MRR_SUB; REC_TYP = STDF_LOT_DATA; break;
-    case PCR_TYPE:  REC_SUB = STDF_PCR_SUB; REC_TYP = STDF_LOT_DATA; break;
-    case HBR_TYPE:  REC_SUB = STDF_HBR_SUB; REC_TYP = STDF_LOT_DATA; break;
-    case SBR_TYPE:  REC_SUB = STDF_SBR_SUB; REC_TYP = STDF_LOT_DATA; break;
-    case PMR_TYPE:  REC_SUB = STDF_PMR_SUB; REC_TYP = STDF_LOT_DATA; break;
-    case PGR_TYPE:  REC_SUB = STDF_PGR_SUB; REC_TYP = STDF_LOT_DATA; break;
-    case PLR_TYPE:  REC_SUB = STDF_PLR_SUB; REC_TYP = STDF_LOT_DATA; break;
-    case RDR_TYPE:  REC_SUB = STDF_RDR_SUB; REC_TYP = STDF_LOT_DATA; break;
-    case SDR_TYPE:  REC_SUB = STDF_SDR_SUB; REC_TYP = STDF_LOT_DATA; break;
-    case PSR_TYPE:  REC_SUB = STDF_PSR_SUB; REC_TYP = STDF_LOT_DATA; break;
-    case NMR_TYPE:  REC_SUB = STDF_NMR_SUB; REC_TYP = STDF_LOT_DATA; break;
-    case CNR_TYPE:  REC_SUB = STDF_CNR_SUB; REC_TYP = STDF_LOT_DATA; break;
-    case SSR_TYPE:  REC_SUB = STDF_SSR_SUB; REC_TYP = STDF_LOT_DATA; break;
-    case CDR_TYPE:  REC_SUB = STDF_CDR_SUB; REC_TYP = STDF_LOT_DATA; break;
+    case MIR_TYPE:  *REC_SUB = STDF_MIR_SUB; *REC_TYP = STDF_LOT_DATA; break;
+    case MRR_TYPE:  *REC_SUB = STDF_MRR_SUB; *REC_TYP = STDF_LOT_DATA; break;
+    case PCR_TYPE:  *REC_SUB = STDF_PCR_SUB; *REC_TYP = STDF_LOT_DATA; break;
+    case HBR_TYPE:  *REC_SUB = STDF_HBR_SUB; *REC_TYP = STDF_LOT_DATA; break;
+    case SBR_TYPE:  *REC_SUB = STDF_SBR_SUB; *REC_TYP = STDF_LOT_DATA; break;
+    case PMR_TYPE:  *REC_SUB = STDF_PMR_SUB; *REC_TYP = STDF_LOT_DATA; break;
+    case PGR_TYPE:  *REC_SUB = STDF_PGR_SUB; *REC_TYP = STDF_LOT_DATA; break;
+    case PLR_TYPE:  *REC_SUB = STDF_PLR_SUB; *REC_TYP = STDF_LOT_DATA; break;
+    case RDR_TYPE:  *REC_SUB = STDF_RDR_SUB; *REC_TYP = STDF_LOT_DATA; break;
+    case SDR_TYPE:  *REC_SUB = STDF_SDR_SUB; *REC_TYP = STDF_LOT_DATA; break;
+    case PSR_TYPE:  *REC_SUB = STDF_PSR_SUB; *REC_TYP = STDF_LOT_DATA; break;
+    case NMR_TYPE:  *REC_SUB = STDF_NMR_SUB; *REC_TYP = STDF_LOT_DATA; break;
+    case CNR_TYPE:  *REC_SUB = STDF_CNR_SUB; *REC_TYP = STDF_LOT_DATA; break;
+    case SSR_TYPE:  *REC_SUB = STDF_SSR_SUB; *REC_TYP = STDF_LOT_DATA; break;
+    case CDR_TYPE:  *REC_SUB = STDF_CDR_SUB; *REC_TYP = STDF_LOT_DATA; break;
 
-    case WIR_TYPE:  REC_SUB = STDF_WIR_SUB; REC_TYP = STDF_WAFER_DATA; break;
-    case WRR_TYPE:  REC_SUB = STDF_WRR_SUB; REC_TYP = STDF_WAFER_DATA; break;
-    case WCR_TYPE:  REC_SUB = STDF_WCR_SUB; REC_TYP = STDF_WAFER_DATA; break;
+    case WIR_TYPE:  *REC_SUB = STDF_WIR_SUB; *REC_TYP = STDF_WAFER_DATA; break;
+    case WRR_TYPE:  *REC_SUB = STDF_WRR_SUB; *REC_TYP = STDF_WAFER_DATA; break;
+    case WCR_TYPE:  *REC_SUB = STDF_WCR_SUB; *REC_TYP = STDF_WAFER_DATA; break;
 
-    case PIR_TYPE:  REC_SUB = STDF_PIR_SUB; REC_TYP = STDF_PART_DATA; break;
-    case PRR_TYPE:  REC_SUB = STDF_PRR_SUB; REC_TYP = STDF_PART_DATA; break;
+    case PIR_TYPE:  *REC_SUB = STDF_PIR_SUB; *REC_TYP = STDF_PART_DATA; break;
+    case PRR_TYPE:  *REC_SUB = STDF_PRR_SUB; *REC_TYP = STDF_PART_DATA; break;
 
-    case TSR_TYPE:  REC_SUB = STDF_TSR_SUB; REC_TYP = STDF_TEST_DATA; break;
+    case TSR_TYPE:  *REC_SUB = STDF_TSR_SUB; *REC_TYP = STDF_TEST_DATA; break;
 
-    case PTR_TYPE:  REC_SUB = STDF_PTR_SUB; REC_TYP = STDF_EXECUTION_DATA; break;
-    case MPR_TYPE:  REC_SUB = STDF_MPR_SUB; REC_TYP = STDF_EXECUTION_DATA; break;
-    case FTR_TYPE:  REC_SUB = STDF_FTR_SUB; REC_TYP = STDF_EXECUTION_DATA; break;
-    case STR_TYPE:  REC_SUB = STDF_STR_SUB; REC_TYP = STDF_EXECUTION_DATA; break;
+    case PTR_TYPE:  *REC_SUB = STDF_PTR_SUB; *REC_TYP = STDF_EXECUTION_DATA; break;
+    case MPR_TYPE:  *REC_SUB = STDF_MPR_SUB; *REC_TYP = STDF_EXECUTION_DATA; break;
+    case FTR_TYPE:  *REC_SUB = STDF_FTR_SUB; *REC_TYP = STDF_EXECUTION_DATA; break;
+    case STR_TYPE:  *REC_SUB = STDF_STR_SUB; *REC_TYP = STDF_EXECUTION_DATA; break;
 
-    case BPS_TYPE:  REC_SUB = STDF_BPS_SUB; REC_TYP = STDF_SEGMENT_DATA; break;
-    case EPS_TYPE:  REC_SUB = STDF_EPS_SUB; REC_TYP = STDF_SEGMENT_DATA; break;
+    case BPS_TYPE:  *REC_SUB = STDF_BPS_SUB; *REC_TYP = STDF_SEGMENT_DATA; break;
+    case EPS_TYPE:  *REC_SUB = STDF_EPS_SUB; *REC_TYP = STDF_SEGMENT_DATA; break;
 
-    case GDR_TYPE:  REC_SUB = STDF_GDR_SUB; REC_TYP = STDF_GENERIC_DATA; break;
-    case DTR_TYPE:  REC_SUB = STDF_DTR_SUB; REC_TYP = STDF_GENERIC_DATA; break;
+    case GDR_TYPE:  *REC_SUB = STDF_GDR_SUB; *REC_TYP = STDF_GENERIC_DATA; break;
+    case DTR_TYPE:  *REC_SUB = STDF_DTR_SUB; *REC_TYP = STDF_GENERIC_DATA; break;
   }
 }
 
 void Record::write(ofstream& outfile)
 {
-  REC_LEN.write(outfile);
-  REC_TYP.write(outfile);
-  REC_SUB.write(outfile);
+  for(Container::const_iterator it = mData.begin(); it != mData.end(); it++) (it->second)->write(outfile);
 }
 
 void Record::read(ifstream& infile)
 {
-  REC_LEN.read(infile);
-  REC_TYP.read(infile);
-  REC_SUB.read(infile);
+  for(Container::const_iterator it = mData.begin(); it != mData.end(); it++) (it->second)->read(infile, 0);
 }
 
 size_t Record::storage()
 {
-  return REC_LEN.storage()+REC_TYP.storage()+REC_SUB.storage();
+  return (*REC_LEN).getValue();
 }
 
 void Record::to_string(vector<string>& val) const
 {
-  val.push_back(REC_LEN.to_string());
-  val.push_back(REC_TYP.to_string());
-  val.push_back(REC_SUB.to_string());
+  for(Container::const_iterator it = mData.begin(); it != mData.end(); it++) val.push_back((it->second)->to_string());
 }
 
 #endif

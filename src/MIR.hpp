@@ -10,25 +10,11 @@
 class MIR : public Record
 {
   public:
-    ~MIR() {for(Container::iterator it = mData.begin(); it != mData.end(); it++) delete (it->second);}
+    ~MIR() {}
     MIR();
     void clear() {}
-    void write(ofstream& outfile);
-    void read(ifstream& infile);
-    size_t storage() {return REC_LEN.getValue();}
-    void to_string(vector<string>& val) const;
 
   private:
-    typedef vector< std::pair<string, DataType*> > Container;
-
-    void calculate()
-    {
-      REC_LEN = this->Record::storage();
-      for(Container::const_iterator it = mData.begin(); it != mData.end(); it++) REC_LEN += (it->second)->storage();
-    }
-
-  private:
-    Container       mData;
 };
 
 MIR::MIR() : Record(Record::MIR_TYPE)
@@ -73,24 +59,6 @@ MIR::MIR() : Record(Record::MIR_TYPE)
     mData.push_back(std::make_pair("SUPR_NAM", new Cn()));   // Supervisor name or ID
 
     calculate();
-}
-
-void MIR::write(ofstream& outfile)
-{
-  this->Record::write(outfile);
-  for(Container::const_iterator it = mData.begin(); it != mData.end(); it++) (it->second)->write(outfile);
-}
-
-void MIR::read(ifstream& infile)
-{
-  this->Record::read(infile);
-  for(Container::const_iterator it = mData.begin(); it != mData.end(); it++) (it->second)->read(infile, 0);
-}
-
-void MIR::to_string(vector<string>& val) const
-{
-  this->Record::to_string(val);
-  for(Container::const_iterator it = mData.begin(); it != mData.end(); it++) val.push_back((it->second)->to_string());
 }
 
 #endif

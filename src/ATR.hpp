@@ -8,45 +8,24 @@ class ATR : public Record
 {
   public:
     ~ATR() {}
-    ATR() : Record(Record::ATR_TYPE) {calculate();}
-    void clear() {MOD_TIM.clear(); CMD_LINE.clear(); calculate();}
-    void write(ofstream& outfile);
-    void read(ifstream& infile);
-    size_t storage() {return REC_LEN.getValue();}
-    void to_string(vector<string>& val) const;
-    void setModtime(unsigned int timestamp) {MOD_TIM = timestamp;}
-    void setCmdline(const string& cmd) {CMD_LINE = cmd; calculate();}
+    ATR();
+    void clear() {(*MOD_TIM).clear(); (*CMD_LINE).clear(); calculate();}
+    void setModtime(unsigned int timestamp) {*MOD_TIM = timestamp;}
+    void setCmdline(const string& cmd) {*CMD_LINE = cmd; calculate();}
 
   private:
-    inline void calculate()
-    {
-      REC_LEN = this->Record::storage()+MOD_TIM.storage()+CMD_LINE.storage();
-    }
-
-  private:
-    U4 MOD_TIM;
-    Cn CMD_LINE;
+    U4* MOD_TIM;    // Date and time of STDF file modification
+    Cn* CMD_LINE;   // Command line of program
 };
 
-void ATR::write(ofstream& outfile)
+ATR::ATR() : Record(Record::ATR_TYPE)
 {
-  this->Record::write(outfile);
-  MOD_TIM.write(outfile);
-  CMD_LINE.write(outfile);
-}
+  MOD_TIM = new U4(0u);
+  mData.push_back(std::make_pair("MOD_TIM", MOD_TIM));
+  CMD_LINE = new Cn();
+  mData.push_back(std::make_pair("CMD_LINE", CMD_LINE));
 
-void ATR::read(ifstream& infile)
-{
-  this->Record::read(infile);
-  MOD_TIM.read(infile);
-  CMD_LINE.read(infile);
-}
-
-void ATR::to_string(vector<string>& val) const
-{
-  this->Record::to_string(val);
-  val.push_back(MOD_TIM.to_string());
-  val.push_back(CMD_LINE.to_string());
+  calculate();
 }
 
 #endif
