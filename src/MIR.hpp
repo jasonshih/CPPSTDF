@@ -1,11 +1,8 @@
 #ifndef _MIR_HPP_
 #define _MIR_HPP_
 
-#include <utility>
-
 #include "DataTypes.hpp"
 #include "Record.hpp"
-
 
 class MIR : public Record
 {

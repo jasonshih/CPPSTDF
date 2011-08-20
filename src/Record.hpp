@@ -78,13 +78,33 @@ class Record
     };
 
   public:
-    virtual ~Record() {for(Container::iterator it = mData.begin(); it != mData.end(); it++) delete (it->second);}
+    virtual ~Record()
+    {
+      for(Container::iterator it = mData.begin(); it != mData.end(); it++) delete (it->second);
+    }
+
     Record(Record::RecordType type);
     virtual void clear() = 0;
-    void write(ofstream& outfile);
-    void read(ifstream& infile);
-    size_t storage();
-    void to_string(vector<string>& val) const;
+
+    void write(ofstream& outfile)
+    {
+      for(Container::const_iterator it = mData.begin(); it != mData.end(); it++) (it->second)->write(outfile);
+    }
+
+    void read(ifstream& infile)
+    {
+      for(Container::const_iterator it = mData.begin(); it != mData.end(); it++) (it->second)->read(infile, 0);
+    }
+
+    size_t storage()
+    {
+      return (*REC_LEN).getValue();
+    }
+
+    void to_string(vector<string>& val) const
+    {
+      for(Container::const_iterator it = mData.begin(); it != mData.end(); it++) val.push_back((it->second)->to_string());
+    }
 
   protected:
     void calculate()
@@ -166,26 +186,6 @@ Record::Record(Record::RecordType type)
     case GDR_TYPE:  *REC_SUB = STDF_GDR_SUB; *REC_TYP = STDF_GENERIC_DATA; break;
     case DTR_TYPE:  *REC_SUB = STDF_DTR_SUB; *REC_TYP = STDF_GENERIC_DATA; break;
   }
-}
-
-void Record::write(ofstream& outfile)
-{
-  for(Container::const_iterator it = mData.begin(); it != mData.end(); it++) (it->second)->write(outfile);
-}
-
-void Record::read(ifstream& infile)
-{
-  for(Container::const_iterator it = mData.begin(); it != mData.end(); it++) (it->second)->read(infile, 0);
-}
-
-size_t Record::storage()
-{
-  return (*REC_LEN).getValue();
-}
-
-void Record::to_string(vector<string>& val) const
-{
-  for(Container::const_iterator it = mData.begin(); it != mData.end(); it++) val.push_back((it->second)->to_string());
 }
 
 #endif
