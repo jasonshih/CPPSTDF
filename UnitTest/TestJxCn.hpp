@@ -1,6 +1,6 @@
 #include <cxxtest/TestSuite.h>
 
-#include "../src/DataTypes.hpp"
+#include "DataTypes.hpp"
 
 class TestJxCn : public CxxTest::TestSuite 
 {
@@ -66,12 +66,12 @@ class TestJxCn : public CxxTest::TestSuite
       const size_t size = 1;
 
       JxTYPE<Cn> stdfStrIn(size);
-      ofstream outfile(filename, ofstream::binary);
+      std::ofstream outfile(filename, std::ofstream::binary);
       stdfStrIn.write(outfile);
       outfile.close();
 
       JxTYPE<Cn> stdfStrOut;
-      ifstream infile(filename, ifstream::binary);
+      std::ifstream infile(filename, std::ifstream::binary);
       stdfStrOut.read(infile, size);
       outfile.close();
 
@@ -89,12 +89,12 @@ class TestJxCn : public CxxTest::TestSuite
       const size_t size = 10;
 
       JxTYPE<Cn> stdfStrIn(size);
-      ofstream outfile(filename, ofstream::binary);
+      std::ofstream outfile(filename, std::ofstream::binary);
       stdfStrIn.write(outfile);
       outfile.close();
 
       JxTYPE<Cn> stdfStrOut;
-      ifstream infile(filename, ifstream::binary);
+      std::ifstream infile(filename, std::ifstream::binary);
       stdfStrOut.read(infile, size);
       outfile.close();
 
@@ -117,12 +117,12 @@ class TestJxCn : public CxxTest::TestSuite
       {
         stdfStrIn[i] = data[i] = "ABCDEF";
       }
-      ofstream outfile(filename, ofstream::binary);
+      std::ofstream outfile(filename, std::ofstream::binary);
       stdfStrIn.write(outfile);
       outfile.close();
 
       JxTYPE<Cn> stdfStrOut;
-      ifstream infile(filename, ifstream::binary);
+      std::ifstream infile(filename, std::ifstream::binary);
       stdfStrOut.read(infile, size);
       outfile.close();
 
@@ -131,7 +131,7 @@ class TestJxCn : public CxxTest::TestSuite
       TS_ASSERT_EQUALS(stdfStrIn.storage(), 140u);
       TS_ASSERT_EQUALS(stdfStrOut.storage(), 140u);
       TS_ASSERT_EQUALS(stdfStrIn.to_string(), stdfStrOut.to_string());
-      string str;
+      std::basic_string<char> str;
       for(size_t i = 0; i < size-1; i++) str.append("ABCDEF,"); str.append("ABCDEF");
       TS_ASSERT_EQUALS(stdfStrIn.to_string(), str);
       TS_ASSERT_EQUALS(stdfStrOut.to_string(), str);

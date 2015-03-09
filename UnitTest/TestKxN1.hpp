@@ -1,6 +1,6 @@
 #include <cxxtest/TestSuite.h>
 
-#include "../src/DataTypes.hpp"
+#include "DataTypes.hpp"
 
 class TestKxN1 : public CxxTest::TestSuite 
 {
@@ -48,6 +48,29 @@ class TestKxN1 : public CxxTest::TestSuite
       TS_ASSERT_EQUALS(stdfStr.storage(), 2u);
     }
 
+    void testCopyConstructor1()
+    {
+      KxN1<3> source("ABC");
+      KxN1<3> stdfStr(source);
+      source = "CBA";
+      TS_ASSERT_EQUALS(stdfStr.to_string(), "ABC");
+      TS_ASSERT_EQUALS(stdfStr.storage(), 2u);
+      TS_ASSERT_DIFFERS(stdfStr.to_string(), source.to_string());
+      TS_ASSERT_EQUALS(source.to_string(), "CBA");
+    }
+
+    void testClone1()
+    {
+      KxN1<3> source("ABC");
+      DataType::DataTypeSharedPtr stdfStr = source.clone();
+      TS_ASSERT_EQUALS(stdfStr->to_string(), "ABC");
+      TS_ASSERT_EQUALS(stdfStr->storage(), 2u);
+      TS_ASSERT_EQUALS(stdfStr->to_string(), source.to_string());
+      source = "CBA";
+      TS_ASSERT_EQUALS(source.to_string(), "CBA");
+      TS_ASSERT_DIFFERS(stdfStr->to_string(), source.to_string());
+    }
+
     void testConstructor4()
     {
       KxN1<16> stdfStr = ("0123456789ABCDEF");
@@ -63,12 +86,12 @@ class TestKxN1 : public CxxTest::TestSuite
       const char *filename = "TestKxN1.testWriteRead1.txt";
 
       KxN1<22> stdfStrIn = ("");
-      ofstream outfile(filename, ofstream::binary);
+      std::ofstream outfile(filename, std::ofstream::binary);
       stdfStrIn.write(outfile);
       outfile.close();
 
       KxN1<22> stdfStrOut;
-      ifstream infile(filename, ifstream::binary);
+      std::ifstream infile(filename, std::ifstream::binary);
       stdfStrOut.read(infile);
       outfile.close();
 
@@ -86,12 +109,12 @@ class TestKxN1 : public CxxTest::TestSuite
       const char *filename = "TestKxN1.testWriteRead2.txt";
 
       KxN1<22> stdfStrIn = ("0123456789ABCDEFabcdef");
-      ofstream outfile(filename, ofstream::binary);
+      std::ofstream outfile(filename, std::ofstream::binary);
       stdfStrIn.write(outfile);
       outfile.close();
 
       KxN1<22> stdfStrOut;
-      ifstream infile(filename, ifstream::binary);
+      std::ifstream infile(filename, std::ifstream::binary);
       stdfStrOut.read(infile);
       outfile.close();
 
@@ -111,12 +134,12 @@ class TestKxN1 : public CxxTest::TestSuite
       KxN1<22> stdfStrIn;
       stdfStrIn[1] = 1;
       stdfStrIn[21] = 0xf;
-      ofstream outfile(filename, ofstream::binary);
+      std::ofstream outfile(filename, std::ofstream::binary);
       stdfStrIn.write(outfile);
       outfile.close();
 
       KxN1<22> stdfStrOut;
-      ifstream infile(filename, ifstream::binary);
+      std::ifstream infile(filename, std::ifstream::binary);
       stdfStrOut.read(infile);
       outfile.close();
 

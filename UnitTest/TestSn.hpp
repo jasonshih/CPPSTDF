@@ -1,6 +1,6 @@
 #include <cxxtest/TestSuite.h>
 
-#include "../src/DataTypes.hpp"
+#include "DataTypes.hpp"
 
 class TestSn : public CxxTest::TestSuite 
 {
@@ -32,25 +32,62 @@ class TestSn : public CxxTest::TestSuite
       TS_ASSERT_EQUALS(stdfStr.max_size(), 65535u);
     }
 
+    void testCopyConstructor1()
+    {
+      Sn stdfStr("ABC");
+      TS_ASSERT_SAME_DATA(stdfStr.mData+2, "ABC", 3);
+      TS_ASSERT_EQUALS(stdfStr.storage(), 5u);
+      TS_ASSERT_EQUALS(stdfStr.max_size(), 65535u);
+      Sn stdfStrC (stdfStr);
+      TS_ASSERT_SAME_DATA(stdfStrC.mData+2, "ABC", 3);
+      TS_ASSERT_EQUALS(stdfStrC.storage(), 5u);
+      TS_ASSERT_EQUALS(stdfStrC.max_size(), 65535u);
+    }
+
+    void testAssigner1()
+    {
+      Sn stdfStr("ABC");
+      TS_ASSERT_SAME_DATA(stdfStr.mData+2, "ABC", 3);
+      TS_ASSERT_EQUALS(stdfStr.storage(), 5u);
+      TS_ASSERT_EQUALS(stdfStr.max_size(), 65535u);
+      Sn stdfStrC;
+      stdfStrC = stdfStr;
+      TS_ASSERT_SAME_DATA(stdfStrC.mData+2, "ABC", 3);
+      TS_ASSERT_EQUALS(stdfStrC.storage(), 5u);
+      TS_ASSERT_EQUALS(stdfStrC.max_size(), 65535u);
+    }
+
+    void testClone1()
+    {
+      Sn stdfStr("ABC");
+      TS_ASSERT_SAME_DATA(stdfStr.mData+2, "ABC", 3);
+      TS_ASSERT_EQUALS(stdfStr.storage(), 5u);
+      TS_ASSERT_EQUALS(stdfStr.max_size(), 65535u);
+      DataType::DataTypeSharedPtr stdfStrP = stdfStr.clone();
+      TS_ASSERT(stdfStrP->to_string() == "ABC");
+      TS_ASSERT_EQUALS(stdfStrP->storage(), 5u);
+      TS_ASSERT_DIFFERS(stdfStrP.get(), &stdfStr);
+    }
+
     void testMergedSize()
     {
-      string str;
+      std::basic_string<char> str;
       Sn stdfStr;
 
       str.assign(stdfStr.max_size(), 'A');
-      TS_ASSERT(stdfStr.merged_size(str) == stdfStr.max_size());
+      TS_ASSERT(stdfStr.merged_size(str.size()) == stdfStr.max_size());
 
       str.assign(stdfStr.max_size()+1, 'A');
-      TS_ASSERT(stdfStr.merged_size(str) == stdfStr.max_size());
+      TS_ASSERT(stdfStr.merged_size(str.size()) == stdfStr.max_size());
 
       str.assign(0, 'A');
-      TS_ASSERT(stdfStr.merged_size(str) == 0);
+      TS_ASSERT(stdfStr.merged_size(str.size()) == 0);
     }
 
     void testMerge()
     {
       Sn stdfStr;
-      string str;
+      std::basic_string<char> str;
 
       str = "";
       stdfStr.clear();
@@ -84,7 +121,7 @@ class TestSn : public CxxTest::TestSuite
       str[0] = 0xFF-5;
       str[1] = 0xFF;
       TS_ASSERT_SAME_DATA(stdfStr.mData, str.data(), stdfStr.max_size()-4);
-      string str1 = "123456789";
+      std::basic_string<char> str1 = "123456789";
       stdfStr += str1;
       str[0] = 0xFF;
       str += str1;
@@ -96,11 +133,11 @@ class TestSn : public CxxTest::TestSuite
       const char *filename = "TestSn.testWriteRead1.txt";
 
       Sn stdfStr;
-      ofstream outfile(filename, ofstream::binary);
+      std::ofstream outfile(filename, std::ofstream::binary);
       stdfStr.write(outfile);
       outfile.close();
 
-      ifstream infile(filename, ifstream::binary);
+      std::ifstream infile(filename, std::ifstream::binary);
       stdfStr.clear();
       stdfStr.read(infile);
       outfile.close();
@@ -115,11 +152,11 @@ class TestSn : public CxxTest::TestSuite
       const char *filename = "TestSn.testWriteRead2.txt";
 
       Sn stdfStr("123456789");
-      ofstream outfile(filename, ofstream::binary);
+      std::ofstream outfile(filename, std::ofstream::binary);
       stdfStr.write(outfile);
       outfile.close();
 
-      ifstream infile(filename,ifstream::binary);
+      std::ifstream infile(filename,std::ifstream::binary);
       stdfStr.clear();
       stdfStr.read(infile);
       outfile.close();
@@ -133,15 +170,15 @@ class TestSn : public CxxTest::TestSuite
     {
       const char *filename = "TestSn.testWriteRead3.txt";
 
-      string str;
+      std::basic_string<char> str;
       str.assign(70000, 'A');
       Sn stdfStrIn(str);
-      ofstream outfile(filename, ofstream::binary);
+      std::ofstream outfile(filename, std::ofstream::binary);
       stdfStrIn.write(outfile);
       outfile.close();
 
       Sn stdfStrOut;
-      ifstream infile(filename,ifstream::binary);
+      std::ifstream infile(filename,std::ifstream::binary);
       stdfStrOut.read(infile);
       outfile.close();
 

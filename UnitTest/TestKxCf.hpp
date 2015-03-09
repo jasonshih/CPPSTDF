@@ -1,6 +1,6 @@
 #include <cxxtest/TestSuite.h>
 
-#include "../src/DataTypes.hpp"
+#include "DataTypes.hpp"
 
 class TestKxCf : public CxxTest::TestSuite 
 {
@@ -34,7 +34,7 @@ class TestKxCf : public CxxTest::TestSuite
 
     void testConstructor2()
     {
-      string abc = "ABCD";
+      std::basic_string<char> abc = "ABCD";
       const size_t siz1 = 30;
       const size_t siz2 = 4;
 
@@ -56,7 +56,7 @@ class TestKxCf : public CxxTest::TestSuite
 
     void testConstructor3()
     {
-      string abc = "ABCD";
+      std::basic_string<char> abc = "ABCD";
       const size_t siz1 = 394;
       const size_t siz2 = 4;
 
@@ -84,12 +84,12 @@ class TestKxCf : public CxxTest::TestSuite
       const size_t siz2 = 0;
 
       KxTYPE<Cf<siz2>, siz1> stdfStrIn;
-      ofstream outfile(filename, ofstream::binary);
+      std::ofstream outfile(filename, std::ofstream::binary);
       stdfStrIn.write(outfile);
       outfile.close();
 
       KxTYPE<Cf<siz2>, siz1> stdfStrOut;
-      ifstream infile(filename, ifstream::binary);
+      std::ifstream infile(filename, std::ifstream::binary);
       stdfStrOut.read(infile);
       outfile.close();
 
@@ -108,12 +108,12 @@ class TestKxCf : public CxxTest::TestSuite
       const size_t siz2 = 0;
 
       KxTYPE<Cf<siz2>, siz1> stdfStrIn;
-      ofstream outfile(filename, ofstream::binary);
+      std::ofstream outfile(filename, std::ofstream::binary);
       stdfStrIn.write(outfile);
       outfile.close();
 
       KxTYPE<Cf<siz2>, siz1> stdfStrOut;
-      ifstream infile(filename, ifstream::binary);
+      std::ifstream infile(filename, std::ifstream::binary);
       stdfStrOut.read(infile);
       outfile.close();
 
@@ -128,7 +128,7 @@ class TestKxCf : public CxxTest::TestSuite
     {
       const char *filename = "TestKxCf.testWriteRead3.txt";
 
-      string abc = "ABCDEF";
+      std::basic_string<char> abc = "ABCDEF";
       const size_t siz1 = 20;
       const size_t siz2 = 6;
 
@@ -137,12 +137,12 @@ class TestKxCf : public CxxTest::TestSuite
       {
         stdfStrIn[i] = abc;
       }
-      ofstream outfile(filename, ofstream::binary);
+      std::ofstream outfile(filename, std::ofstream::binary);
       stdfStrIn.write(outfile);
       outfile.close();
 
       KxTYPE<Cf<siz2>, siz1> stdfStrOut;
-      ifstream infile(filename, ifstream::binary);
+      std::ifstream infile(filename, std::ifstream::binary);
       stdfStrOut.read(infile);
       outfile.close();
 
@@ -151,7 +151,7 @@ class TestKxCf : public CxxTest::TestSuite
       TS_ASSERT_EQUALS(stdfStrIn.storage(), siz1*siz2);
       TS_ASSERT_EQUALS(stdfStrOut.storage(), siz1*siz2);
       TS_ASSERT_EQUALS(stdfStrIn.to_string(), stdfStrOut.to_string());
-      string str;
+      std::basic_string<char> str;
       for(size_t i =  0; i < siz1-1; i++) str.append(abc+","); str.append(abc);
       TS_ASSERT_EQUALS(stdfStrIn.to_string(), str);
       TS_ASSERT_EQUALS(stdfStrOut.to_string(), str);
@@ -161,7 +161,7 @@ class TestKxCf : public CxxTest::TestSuite
     {
       const char *filename = "TestKxCf.testWriteRead4.txt";
 
-      string abc = "ABCDEF";
+      std::basic_string<char> abc = "ABCDEF";
       const size_t siz1 = 420;
       const size_t siz2 = 9;
 
@@ -170,12 +170,12 @@ class TestKxCf : public CxxTest::TestSuite
       {
         stdfStrIn[i] = abc;
       }
-      ofstream outfile(filename, ofstream::binary);
+      std::ofstream outfile(filename, std::ofstream::binary);
       stdfStrIn.write(outfile);
       outfile.close();
 
       KxTYPE<Cf<siz2>, siz1> stdfStrOut;
-      ifstream infile(filename, ifstream::binary);
+      std::ifstream infile(filename, std::ifstream::binary);
       stdfStrOut.read(infile);
       outfile.close();
 

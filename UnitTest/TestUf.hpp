@@ -1,6 +1,6 @@
 #include <cxxtest/TestSuite.h>
 
-#include "../src/DataTypes.hpp"
+#include "DataTypes.hpp"
 
 class TestUf : public CxxTest::TestSuite 
 {
@@ -90,17 +90,48 @@ class TestUf : public CxxTest::TestSuite
       TS_ASSERT(stdfStr.getValue() == 0);
     }
 
+    void testCopyConstructor82()
+    {
+      Uf8 stdfStr = 123456789;
+      Uf8 stdfStrC(stdfStr);
+      TS_ASSERT(stdfStr.getValue() == 123456789);
+      stdfStr.clear();
+      TS_ASSERT(stdfStr.getValue() == 0);
+      TS_ASSERT(stdfStrC.getValue() == 123456789);
+    }
+
+    void testAssigner82()
+    {
+      Uf8 stdfStr = 123456789;
+      Uf8 stdfStrC = 0;
+      stdfStrC = stdfStr;
+      TS_ASSERT(stdfStr.getValue() == 123456789);
+      stdfStr.clear();
+      TS_ASSERT(stdfStr.getValue() == 0);
+      TS_ASSERT(stdfStrC.getValue() == 123456789);
+    }
+
+    void testClone82()
+    {
+      Uf8 stdfStr = 123456789;
+      DataType::DataTypeSharedPtr stdfStrP = stdfStr.clone();
+      TS_ASSERT(stdfStr.getValue() == 123456789);
+      stdfStr.clear();
+      TS_ASSERT(stdfStr.getValue() == 0);
+      TS_ASSERT(stdfStrP->to_string() == "123456789");
+    }
+
     void testWriteRead11()
     {
       const char *filename = "TestUf.testWriteRead11.txt";
 
       Uf1 stdfStrIn;
-      ofstream outfile(filename, ofstream::binary);
+      std::ofstream outfile(filename, std::ofstream::binary);
       stdfStrIn.write(outfile);
       outfile.close();
 
       Uf1 stdfStrOut;
-      ifstream infile(filename, ifstream::binary);
+      std::ifstream infile(filename, std::ifstream::binary);
       stdfStrOut.read(infile);
       outfile.close();
 
@@ -112,12 +143,12 @@ class TestUf : public CxxTest::TestSuite
       const char *filename = "TestUf.testWriteRead21.txt";
 
       Uf2 stdfStrIn;
-      ofstream outfile(filename, ofstream::binary);
+      std::ofstream outfile(filename, std::ofstream::binary);
       stdfStrIn.write(outfile);
       outfile.close();
 
       Uf2 stdfStrOut;
-      ifstream infile(filename, ifstream::binary);
+      std::ifstream infile(filename, std::ifstream::binary);
       stdfStrOut.read(infile);
       outfile.close();
 
@@ -129,12 +160,12 @@ class TestUf : public CxxTest::TestSuite
       const char *filename = "TestUf.testWriteRead41.txt";
 
       Uf4 stdfStrIn;
-      ofstream outfile(filename, ofstream::binary);
+      std::ofstream outfile(filename, std::ofstream::binary);
       stdfStrIn.write(outfile);
       outfile.close();
 
       Uf4 stdfStrOut;
-      ifstream infile(filename, ifstream::binary);
+      std::ifstream infile(filename, std::ifstream::binary);
       stdfStrOut.read(infile);
       outfile.close();
 
@@ -146,12 +177,12 @@ class TestUf : public CxxTest::TestSuite
       const char *filename = "TestUf.testWriteRead81.txt";
 
       Uf8 stdfStrIn;
-      ofstream outfile(filename, ofstream::binary);
+      std::ofstream outfile(filename, std::ofstream::binary);
       stdfStrIn.write(outfile);
       outfile.close();
 
       Uf8 stdfStrOut;
-      ifstream infile(filename, ifstream::binary);
+      std::ifstream infile(filename, std::ifstream::binary);
       stdfStrOut.read(infile);
       outfile.close();
 
@@ -163,13 +194,13 @@ class TestUf : public CxxTest::TestSuite
       const char *filename = "TestUf.testWriteRead12.txt";
 
       Uf1 stdfStrIn = 0xFEDCBA98;
-      ofstream outfile(filename, ofstream::binary);
+      std::ofstream outfile(filename, std::ofstream::binary);
       stdfStrIn.write(outfile);
       outfile.close();
       stdfStrIn = 0x98;
 
       Uf1 stdfStrOut;
-      ifstream infile(filename, ifstream::binary);
+      std::ifstream infile(filename, std::ifstream::binary);
       stdfStrOut.read(infile);
       outfile.close();
 
@@ -189,13 +220,13 @@ class TestUf : public CxxTest::TestSuite
       const char *filename = "TestUf.testWriteRead22.txt";
 
       Uf2 stdfStrIn = 0xFEDCBA98;
-      ofstream outfile(filename, ofstream::binary);
+      std::ofstream outfile(filename, std::ofstream::binary);
       stdfStrIn.write(outfile);
       outfile.close();
       stdfStrIn = 0xBA98;
 
       Uf2 stdfStrOut;
-      ifstream infile(filename, ifstream::binary);
+      std::ifstream infile(filename, std::ifstream::binary);
       stdfStrOut.read(infile);
       outfile.close();
 
@@ -215,12 +246,12 @@ class TestUf : public CxxTest::TestSuite
       const char *filename = "TestUf.testWriteRead42.txt";
 
       Uf4 stdfStrIn = 0xFEDCBA98;
-      ofstream outfile(filename, ofstream::binary);
+      std::ofstream outfile(filename, std::ofstream::binary);
       stdfStrIn.write(outfile);
       outfile.close();
 
       Uf4 stdfStrOut;
-      ifstream infile(filename, ifstream::binary);
+      std::ifstream infile(filename, std::ifstream::binary);
       stdfStrOut.read(infile);
       outfile.close();
 
@@ -240,12 +271,12 @@ class TestUf : public CxxTest::TestSuite
       const char *filename = "TestUf.testWriteRead82.txt";
 
       Uf8 stdfStrIn = 0xFEDCBA9876543210;
-      ofstream outfile(filename, ofstream::binary);
+      std::ofstream outfile(filename, std::ofstream::binary);
       stdfStrIn.write(outfile);
       outfile.close();
 
       Uf8 stdfStrOut;
-      ifstream infile(filename, ifstream::binary);
+      std::ifstream infile(filename, std::ifstream::binary);
       stdfStrOut.read(infile);
       outfile.close();
 

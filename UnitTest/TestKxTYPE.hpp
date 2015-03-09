@@ -1,6 +1,6 @@
 #include <cxxtest/TestSuite.h>
 
-#include "../src/DataTypes.hpp"
+#include "DataTypes.hpp"
 
 class TestKxTYPE : public CxxTest::TestSuite 
 {
@@ -57,12 +57,12 @@ class TestKxTYPE : public CxxTest::TestSuite
       const size_t size = 1;
 
       KxTYPE<I4, size> stdfStrIn;
-      ofstream outfile(filename, ofstream::binary);
+      std::ofstream outfile(filename, std::ofstream::binary);
       stdfStrIn.write(outfile);
       outfile.close();
 
       KxTYPE<I4, size> stdfStrOut;
-      ifstream infile(filename, ifstream::binary);
+      std::ifstream infile(filename, std::ifstream::binary);
       stdfStrOut.read(infile);
       outfile.close();
 
@@ -76,12 +76,12 @@ class TestKxTYPE : public CxxTest::TestSuite
       const size_t size = 10;
 
       KxTYPE<I4, size> stdfStrIn;
-      ofstream outfile(filename, ofstream::binary);
+      std::ofstream outfile(filename, std::ofstream::binary);
       stdfStrIn.write(outfile);
       outfile.close();
 
       KxTYPE<I4, size> stdfStrOut;
-      ifstream infile(filename, ifstream::binary);
+      std::ifstream infile(filename, std::ifstream::binary);
       stdfStrOut.read(infile);
       outfile.close();
 
@@ -100,12 +100,12 @@ class TestKxTYPE : public CxxTest::TestSuite
       {
         stdfStrIn[i] = data[i] = -i;
       }
-      ofstream outfile(filename, ofstream::binary);
+      std::ofstream outfile(filename, std::ofstream::binary);
       stdfStrIn.write(outfile);
       outfile.close();
 
       KxTYPE<I4, size> stdfStrOut;
-      ifstream infile(filename, ifstream::binary);
+      std::ifstream infile(filename, std::ifstream::binary);
       stdfStrOut.read(infile);
       outfile.close();
 

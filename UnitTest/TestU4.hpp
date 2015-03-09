@@ -1,6 +1,6 @@
 #include <cxxtest/TestSuite.h>
 
-#include "../src/DataTypes.hpp"
+#include "DataTypes.hpp"
 
 class TestU4 : public CxxTest::TestSuite 
 {
@@ -38,17 +38,43 @@ class TestU4 : public CxxTest::TestSuite
       TS_ASSERT(stdfStr.mData == 0xFFFFFFFF);
     }
 
+    void testCopyConstructor1()
+    {
+      U4 stdfStr = 0xFFFFFFFF;
+      U4 stdfStrC = stdfStr;
+      TS_ASSERT(stdfStr.mData == 0xFFFFFFFF);
+      TS_ASSERT(stdfStrC.mData == 0xFFFFFFFF);
+    }
+
+    void testAssigner1()
+    {
+      U4 stdfStr = 0xFFFFFFFF;
+      U4 stdfStrC = 0xABC; stdfStrC = stdfStr;
+      TS_ASSERT(stdfStr.mData == 0xFFFFFFFF);
+      TS_ASSERT(stdfStrC.mData == 0xFFFFFFFF);
+    }
+
+    void testClone1()
+    {
+      U4 stdfStr = 0xFFFFFFFF;
+      DataType::DataTypeSharedPtr stdfStrP = stdfStr.clone();
+      TS_ASSERT(stdfStr.mData == 0xFFFFFFFF);
+      TS_ASSERT(stdfStrP->to_string() == stdfStr.to_string());
+      stdfStr = 0xFEDCBA98;
+      TS_ASSERT(stdfStrP->to_string() != stdfStr.to_string());
+    }
+
     void testWriteRead1()
     {
       const char *filename = "TestU4.testWriteRead1.txt";
 
       U4 stdfStrIn;
-      ofstream outfile(filename, ofstream::binary);
+      std::ofstream outfile(filename, std::ofstream::binary);
       stdfStrIn.write(outfile);
       outfile.close();
 
       U4 stdfStrOut;
-      ifstream infile(filename, ifstream::binary);
+      std::ifstream infile(filename, std::ifstream::binary);
       stdfStrOut.read(infile);
       outfile.close();
 
@@ -66,12 +92,12 @@ class TestU4 : public CxxTest::TestSuite
       const char *filename = "TestU4.testWriteRead2.txt";
 
       U4 stdfStrIn = 1000;
-      ofstream outfile(filename, ofstream::binary);
+      std::ofstream outfile(filename, std::ofstream::binary);
       stdfStrIn.write(outfile);
       outfile.close();
 
       U4 stdfStrOut;
-      ifstream infile(filename, ifstream::binary);
+      std::ifstream infile(filename, std::ifstream::binary);
       stdfStrOut.read(infile);
       outfile.close();
 
@@ -91,12 +117,12 @@ class TestU4 : public CxxTest::TestSuite
       const char *filename = "TestU4.testWriteRead3.txt";
 
       U4 stdfStrIn = 4294967295;
-      ofstream outfile(filename, ofstream::binary);
+      std::ofstream outfile(filename, std::ofstream::binary);
       stdfStrIn.write(outfile);
       outfile.close();
 
       U4 stdfStrOut;
-      ifstream infile(filename, ifstream::binary);
+      std::ifstream infile(filename, std::ifstream::binary);
       stdfStrOut.read(infile);
       outfile.close();
 
@@ -116,12 +142,12 @@ class TestU4 : public CxxTest::TestSuite
       const char *filename = "TestU4.testWriteRead4.txt";
 
       U4 stdfStrIn = 4275878552;
-      ofstream outfile(filename, ofstream::binary);
+      std::ofstream outfile(filename, std::ofstream::binary);
       stdfStrIn.write(outfile);
       outfile.close();
 
       U4 stdfStrOut;
-      ifstream infile(filename, ifstream::binary);
+      std::ifstream infile(filename, std::ifstream::binary);
       stdfStrOut.read(infile);
       outfile.close();
 

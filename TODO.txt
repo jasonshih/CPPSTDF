@@ -1,0 +1,26 @@
+
+           STDF Library Document
+
+                             2012-12-17
+****************************************
+Has been done:
+  1, Write the stdf file.
+  2, Read the stdf file.
+  3, Modify the stdf file.
+  4, Append new records in stdf file.
+  5, Can support read new and old version of stdf file by define OLD_STDF_VERSION when compile
+     this library.
+  6, Defined R4 data significant digit is 12, R8 is 21 just for match old vesion.
+  7, If you want to run the UT, you must set OLD_STDF_VERSION to 0, beacuse UT just match the new
+     version.
+  8, In views, two test cases can't run if you use the new stdfreader. because the Bn type
+     has wrong value.
+       /vobs/a93k/formatter/dataformatter/TEST/INPUT/TC1_7_gdr_overflowEDL.in
+       /vobs/a93k/formatter/dataformatter/TEST/INPUT/TC6_08_err_gdr_binary.in
+
+To do:
+  1, Modify the Bn type in old stdf version, that will affects the GDR and PRR Records.
+  2, R4 and R8 need improve numerical precision in new stdf version.
+  3, Modify the STR in old stdf version,becasue the CYC_CNT has wrong value in old stdf
+     version.
+  4, Optimized the stdf library, made the execution mor efficient.

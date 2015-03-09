@@ -1,6 +1,6 @@
 #include <cxxtest/TestSuite.h>
 
-#include "../src/DataTypes.hpp"
+#include "DataTypes.hpp"
 
 class TestCf : public CxxTest::TestSuite 
 {
@@ -62,17 +62,64 @@ class TestCf : public CxxTest::TestSuite
       TS_ASSERT_EQUALS(stdfStr.storage(), 5u);
     }
 
+    void testCopyConstructor1()
+    {
+      Cf5 stdfStr = "AA";
+      TS_ASSERT_EQUALS(stdfStr.mData, "AA");
+      TS_ASSERT_EQUALS(stdfStr.to_string(), "AA   ");
+      TS_ASSERT_EQUALS(stdfStr.storage(), 5u);
+      Cf5 stdfStrC(stdfStr);
+      stdfStr = "CC";
+      TS_ASSERT_EQUALS(stdfStr.mData, "CC");
+      TS_ASSERT_EQUALS(stdfStrC.mData, "AA");
+      TS_ASSERT_EQUALS(stdfStr.to_string(), "CC   ");
+      TS_ASSERT_EQUALS(stdfStrC.to_string(), "AA   ");
+      TS_ASSERT_EQUALS(stdfStr.storage(), 5u);
+      TS_ASSERT_EQUALS(stdfStrC.storage(), 5u);
+    }
+
+    void testAssigner1()
+    {
+      Cf5 stdfStr = "AA";
+      TS_ASSERT_EQUALS(stdfStr.mData, "AA");
+      TS_ASSERT_EQUALS(stdfStr.to_string(), "AA   ");
+      TS_ASSERT_EQUALS(stdfStr.storage(), 5u);
+      Cf5 stdfStrC;
+      stdfStrC = stdfStr;
+      stdfStr = "CC";
+      TS_ASSERT_EQUALS(stdfStr.mData, "CC");
+      TS_ASSERT_EQUALS(stdfStrC.mData, "AA");
+      TS_ASSERT_EQUALS(stdfStr.to_string(), "CC   ");
+      TS_ASSERT_EQUALS(stdfStrC.to_string(), "AA   ");
+      TS_ASSERT_EQUALS(stdfStr.storage(), 5u);
+      TS_ASSERT_EQUALS(stdfStrC.storage(), 5u);
+    }
+
+    void testClone1()
+    {
+      Cf5 stdfStr = "AA";
+      TS_ASSERT_EQUALS(stdfStr.mData, "AA");
+      TS_ASSERT_EQUALS(stdfStr.to_string(), "AA   ");
+      TS_ASSERT_EQUALS(stdfStr.storage(), 5u);
+      DataType::DataTypeSharedPtr stdfStrP = stdfStr.clone();
+      stdfStr = "CC";
+      TS_ASSERT_EQUALS(stdfStr.to_string(), "CC   ");
+      TS_ASSERT_EQUALS(stdfStrP->to_string(), "AA   ");
+      TS_ASSERT_EQUALS(stdfStr.storage(), 5u);
+      TS_ASSERT_EQUALS(stdfStrP->storage(), 5u);
+    }
+
     void testWriteRead1()
     {
       const char *filename = "TestCf.testWriteRead1.txt";
 
       Cf0 stdfStrIn;
-      ofstream outfile(filename, ofstream::binary);
+      std::ofstream outfile(filename, std::ofstream::binary);
       stdfStrIn.write(outfile);
       outfile.close();
 
       Cf0 stdfStrOut;
-      ifstream infile(filename, ifstream::binary);
+      std::ifstream infile(filename, std::ifstream::binary);
       stdfStrOut.read(infile);
       outfile.close();
 
@@ -88,12 +135,12 @@ class TestCf : public CxxTest::TestSuite
       const char *filename = "TestCf.testWriteRead2.txt";
 
       Cf5 stdfStrIn = "123456789";
-      ofstream outfile(filename, ofstream::binary);
+      std::ofstream outfile(filename, std::ofstream::binary);
       stdfStrIn.write(outfile);
       outfile.close();
 
       Cf5 stdfStrOut;
-      ifstream infile(filename, ifstream::binary);
+      std::ifstream infile(filename, std::ifstream::binary);
       stdfStrOut.read(infile);
       outfile.close();
 
@@ -110,12 +157,12 @@ class TestCf : public CxxTest::TestSuite
       const char *filename = "TestCf.testWriteRead3.txt";
 
       Cf5000 stdfStrIn = "123456789";
-      ofstream outfile(filename, ofstream::binary);
+      std::ofstream outfile(filename, std::ofstream::binary);
       stdfStrIn.write(outfile);
       outfile.close();
 
       Cf5000 stdfStrOut;
-      ifstream infile(filename, ifstream::binary);
+      std::ifstream infile(filename, std::ifstream::binary);
       stdfStrOut.read(infile);
       outfile.close();
 

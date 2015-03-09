@@ -1,6 +1,6 @@
 #include <cxxtest/TestSuite.h>
 
-#include "../src/DataTypes.hpp"
+#include "DataTypes.hpp"
 
 class TestJxN1 : public CxxTest::TestSuite 
 {
@@ -30,18 +30,24 @@ class TestJxN1 : public CxxTest::TestSuite
       TS_ASSERT_EQUALS(stdfStr.to_string(), "00000");
       TS_ASSERT_EQUALS(stdfStr.size(), 5u);
       TS_ASSERT_EQUALS(stdfStr.storage(), 3u);
+
+      stdfStr = JxN1(5, '9');
+      TS_ASSERT_EQUALS(stdfStr[0], 9);
+      TS_ASSERT_EQUALS(stdfStr.to_string(), "99999");
+      TS_ASSERT_EQUALS(stdfStr.size(), 5u);
+      TS_ASSERT_EQUALS(stdfStr.storage(), 3u);
     }
 
     void testConstructor2()
     {
-      JxN1 stdfStr = "00000";
-      for(size_t i = 0; i < 5; i++)
+      JxN1 stdfStr = std::string("0123456789ABCDEF");
+      for(size_t i = 0; i < 16; i++)
       {
-        TS_ASSERT_EQUALS(stdfStr[i], 0);
+        TS_ASSERT_EQUALS(stdfStr[i], i);
       }
-      TS_ASSERT_EQUALS(stdfStr.to_string(), "00000");
-      TS_ASSERT_EQUALS(stdfStr.size(), 5u);
-      TS_ASSERT_EQUALS(stdfStr.storage(), 3u);
+      TS_ASSERT_EQUALS(stdfStr.to_string(), "0123456789ABCDEF");
+      TS_ASSERT_EQUALS(stdfStr.size(), 16u);
+      TS_ASSERT_EQUALS(stdfStr.storage(), 8u);
     }
 
     void testConstructor3()
@@ -71,17 +77,40 @@ class TestJxN1 : public CxxTest::TestSuite
       TS_ASSERT_EQUALS(stdfStr.storage(), 8u);
     }
 
+    void testCopyConstructor1()
+    {
+      JxN1 source("ABC");
+      JxN1 stdfStr(source);
+      source = "CBA";
+      TS_ASSERT_EQUALS(stdfStr.to_string(), "ABC");
+      TS_ASSERT_EQUALS(stdfStr.storage(), 2u);
+      TS_ASSERT_DIFFERS(stdfStr.to_string(), source.to_string());
+      TS_ASSERT_EQUALS(source.to_string(), "CBA");
+    }
+
+    void testClone1()
+    {
+      JxN1 source("ABC");
+      DataType::DataTypeSharedPtr stdfStr = source.clone();
+      TS_ASSERT_EQUALS(stdfStr->to_string(), "ABC");
+      TS_ASSERT_EQUALS(stdfStr->storage(), 2u);
+      TS_ASSERT_EQUALS(stdfStr->to_string(), source.to_string());
+      source = "CBA";
+      TS_ASSERT_EQUALS(source.to_string(), "CBA");
+      TS_ASSERT_DIFFERS(stdfStr->to_string(), source.to_string());
+    }
+
     void testWriteRead1()
     {
       const char *filename = "TestJxN1.testWriteRead1.txt";
 
       JxN1 stdfStrIn = ("");
-      ofstream outfile(filename, ofstream::binary);
+      std::ofstream outfile(filename, std::ofstream::binary);
       stdfStrIn.write(outfile);
       outfile.close();
 
       JxN1 stdfStrOut;
-      ifstream infile(filename, ifstream::binary);
+      std::ifstream infile(filename, std::ifstream::binary);
       stdfStrOut.read(infile, 0);
       outfile.close();
 
@@ -98,12 +127,12 @@ class TestJxN1 : public CxxTest::TestSuite
       const char *filename = "TestJxN1.testWriteRead2.txt";
 
       JxN1 stdfStrIn = ("0123456789ABCDEFabcdef");
-      ofstream outfile(filename, ofstream::binary);
+      std::ofstream outfile(filename, std::ofstream::binary);
       stdfStrIn.write(outfile);
       outfile.close();
 
       JxN1 stdfStrOut;
-      ifstream infile(filename, ifstream::binary);
+      std::ifstream infile(filename, std::ifstream::binary);
       stdfStrOut.read(infile, 22);
       outfile.close();
 
@@ -122,12 +151,12 @@ class TestJxN1 : public CxxTest::TestSuite
       JxN1 stdfStrIn(22);
       stdfStrIn[1] = 1;
       stdfStrIn[21] = 0xf;
-      ofstream outfile(filename, ofstream::binary);
+      std::ofstream outfile(filename, std::ofstream::binary);
       stdfStrIn.write(outfile);
       outfile.close();
 
       JxN1 stdfStrOut;
-      ifstream infile(filename, ifstream::binary);
+      std::ifstream infile(filename, std::ifstream::binary);
       stdfStrOut.read(infile, 22);
       outfile.close();
 

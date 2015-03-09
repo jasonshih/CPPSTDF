@@ -1,6 +1,6 @@
 #include <cxxtest/TestSuite.h>
 
-#include "../src/DataTypes.hpp"
+#include "DataTypes.hpp"
 
 class TestU1 : public CxxTest::TestSuite 
 {
@@ -43,12 +43,12 @@ class TestU1 : public CxxTest::TestSuite
       const char *filename = "TestU1.testWriteRead1.txt";
 
       U1 stdfStrIn;
-      ofstream outfile(filename, ofstream::binary);
+      std::ofstream outfile(filename, std::ofstream::binary);
       stdfStrIn.write(outfile);
       outfile.close();
 
       U1 stdfStrOut;
-      ifstream infile(filename, ifstream::binary);
+      std::ifstream infile(filename, std::ifstream::binary);
       stdfStrOut.read(infile);
       outfile.close();
 
@@ -66,12 +66,12 @@ class TestU1 : public CxxTest::TestSuite
       const char *filename = "TestU1.testWriteRead2.txt";
 
       U1 stdfStrIn = 100;
-      ofstream outfile(filename, ofstream::binary);
+      std::ofstream outfile(filename, std::ofstream::binary);
       stdfStrIn.write(outfile);
       outfile.close();
 
       U1 stdfStrOut;
-      ifstream infile(filename, ifstream::binary);
+      std::ifstream infile(filename, std::ifstream::binary);
       stdfStrOut.read(infile);
       outfile.close();
 
@@ -91,12 +91,12 @@ class TestU1 : public CxxTest::TestSuite
       const char *filename = "TestU1.testWriteRead3.txt";
 
       U1 stdfStrIn = 255;
-      ofstream outfile(filename, ofstream::binary);
+      std::ofstream outfile(filename, std::ofstream::binary);
       stdfStrIn.write(outfile);
       outfile.close();
 
       U1 stdfStrOut;
-      ifstream infile(filename, ifstream::binary);
+      std::ifstream infile(filename, std::ifstream::binary);
       stdfStrOut.read(infile);
       outfile.close();
 
@@ -116,12 +116,12 @@ class TestU1 : public CxxTest::TestSuite
       const char *filename = "TestU1.testWriteRead4.txt";
 
       U1 stdfStrIn = 254;
-      ofstream outfile(filename, ofstream::binary);
+      std::ofstream outfile(filename, std::ofstream::binary);
       stdfStrIn.write(outfile);
       outfile.close();
 
       U1 stdfStrOut;
-      ifstream infile(filename, ifstream::binary);
+      std::ifstream infile(filename, std::ifstream::binary);
       stdfStrOut.read(infile);
       outfile.close();
 

@@ -1,6 +1,6 @@
 #include <cxxtest/TestSuite.h>
 
-#include "../src/DataTypes.hpp"
+#include "DataTypes.hpp"
 
 class TestI8 : public CxxTest::TestSuite 
 {
@@ -41,12 +41,12 @@ class TestI8 : public CxxTest::TestSuite
       const char *filename = "TestI8.testWriteRead1.txt";
 
       I8 stdfStrIn;
-      ofstream outfile(filename, ofstream::binary);
+      std::ofstream outfile(filename, std::ofstream::binary);
       stdfStrIn.write(outfile);
       outfile.close();
 
       I8 stdfStrOut;
-      ifstream infile(filename, ifstream::binary);
+      std::ifstream infile(filename, std::ifstream::binary);
       stdfStrOut.read(infile);
       outfile.close();
 
@@ -66,12 +66,12 @@ class TestI8 : public CxxTest::TestSuite
       const char *filename = "TestI8.testWriteRead2.txt";
 
       I8 stdfStrIn = -1;
-      ofstream outfile(filename, ofstream::binary);
+      std::ofstream outfile(filename, std::ofstream::binary);
       stdfStrIn.write(outfile);
       outfile.close();
 
       I8 stdfStrOut;
-      ifstream infile(filename, ifstream::binary);
+      std::ifstream infile(filename, std::ifstream::binary);
       stdfStrOut.read(infile);
       outfile.close();
 
@@ -91,12 +91,12 @@ class TestI8 : public CxxTest::TestSuite
       const char *filename = "TestI8.testWriteRead3.txt";
 
       I8 stdfStrIn = 9223372036854775807;
-      ofstream outfile(filename, ofstream::binary);
+      std::ofstream outfile(filename, std::ofstream::binary);
       stdfStrIn.write(outfile);
       outfile.close();
 
       I8 stdfStrOut;
-      ifstream infile(filename, ifstream::binary);
+      std::ifstream infile(filename, std::ifstream::binary);
       stdfStrOut.read(infile);
       outfile.close();
 
@@ -117,12 +117,12 @@ class TestI8 : public CxxTest::TestSuite
 
       //I8 stdfStrIn = -9223372036854775808;
       I8 stdfStrIn = -0x8000000000000000;
-      ofstream outfile(filename, ofstream::binary);
+      std::ofstream outfile(filename, std::ofstream::binary);
       stdfStrIn.write(outfile);
       outfile.close();
 
       I8 stdfStrOut;
-      ifstream infile(filename, ifstream::binary);
+      std::ifstream infile(filename, std::ifstream::binary);
       stdfStrOut.read(infile);
       outfile.close();
 

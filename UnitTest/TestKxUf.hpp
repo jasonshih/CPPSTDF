@@ -1,6 +1,6 @@
 #include <cxxtest/TestSuite.h>
 
-#include "../src/DataTypes.hpp"
+#include "DataTypes.hpp"
 
 class TestKxUf : public CxxTest::TestSuite 
 {
@@ -61,6 +61,55 @@ class TestKxUf : public CxxTest::TestSuite
       TS_ASSERT_EQUALS(stdfStr.to_string(), ss.str());
     }
 
+    void testCopyConstructor1()
+    {
+      const size_t size = 100;
+      KxTYPE<Uf1, size> source;
+      Uf1 data[size];
+      for(size_t i = 0; i < size; i++)
+      {
+        source[i] = data[i] = i;
+      }
+      KxTYPE<Uf1, size> stdfStr(source);
+
+      for(size_t i = 0; i < size; i++)
+      {
+        TS_ASSERT_EQUALS((stdfStr[i]).getValue(), data[i].getValue());
+        TS_ASSERT_EQUALS(stdfStr[i].to_string(), data[i].to_string());
+      }
+      std::stringstream ss; for(size_t i = 0; i < size-1; i++) ss << i << ','; ss << size-1;
+      TS_ASSERT_EQUALS(stdfStr.to_string(), ss.str());
+      TS_ASSERT_EQUALS(source.to_string(), ss.str());
+      stdfStr.clear();
+      TS_ASSERT_EQUALS(source.to_string(), ss.str());
+      source = stdfStr;
+      ss.str(""); for(size_t i = 0; i < size-1; i++) ss << "0,"; ss << "0";
+      TS_ASSERT_EQUALS(stdfStr.to_string(), ss.str());
+      TS_ASSERT_EQUALS(source.to_string(), ss.str());
+    }
+
+    void testClone1()
+    {
+      const size_t size = 100;
+      KxTYPE<Uf1, size> source;
+      Uf1 data[size];
+      for(size_t i = 0; i < size; i++)
+      {
+        source[i] = data[i] = i;
+      }
+      DataType::DataTypeSharedPtr stdfStr = source.clone();
+
+      std::stringstream ss; for(size_t i = 0; i < size-1; i++) ss << i << ','; ss << size-1;
+      TS_ASSERT_EQUALS(stdfStr->to_string(), ss.str());
+      TS_ASSERT_EQUALS(source.to_string(), ss.str());
+      stdfStr->clear();
+      TS_ASSERT_EQUALS(source.to_string(), ss.str());
+      source = *(boost::dynamic_pointer_cast<KxTYPE<Uf1, size>, DataType>(stdfStr));
+      ss.str(""); for(size_t i = 0; i < size-1; i++) ss << "0,"; ss << "0";
+      TS_ASSERT_EQUALS(stdfStr->to_string(), ss.str());
+      TS_ASSERT_EQUALS(source.to_string(), ss.str());
+    }
+
     void testWriteRead11()
     {
       const char *filename = "TestKxUf.testWriteRead11.txt";
@@ -68,12 +117,12 @@ class TestKxUf : public CxxTest::TestSuite
       const size_t size = 1;
 
       KxTYPE<Uf1, size> stdfStrIn;
-      ofstream outfile(filename, ofstream::binary);
+      std::ofstream outfile(filename, std::ofstream::binary);
       stdfStrIn.write(outfile);
       outfile.close();
 
       KxTYPE<Uf1, size> stdfStrOut;
-      ifstream infile(filename, ifstream::binary);
+      std::ifstream infile(filename, std::ifstream::binary);
       stdfStrOut.read(infile);
       outfile.close();
 
@@ -95,12 +144,12 @@ class TestKxUf : public CxxTest::TestSuite
       const size_t size = 1;
 
       KxTYPE<Uf2, size> stdfStrIn;
-      ofstream outfile(filename, ofstream::binary);
+      std::ofstream outfile(filename, std::ofstream::binary);
       stdfStrIn.write(outfile);
       outfile.close();
 
       KxTYPE<Uf2, size> stdfStrOut;
-      ifstream infile(filename, ifstream::binary);
+      std::ifstream infile(filename, std::ifstream::binary);
       stdfStrOut.read(infile);
       outfile.close();
 
@@ -122,12 +171,12 @@ class TestKxUf : public CxxTest::TestSuite
       const size_t size = 1;
 
       KxTYPE<Uf4, size> stdfStrIn;
-      ofstream outfile(filename, ofstream::binary);
+      std::ofstream outfile(filename, std::ofstream::binary);
       stdfStrIn.write(outfile);
       outfile.close();
 
       KxTYPE<Uf4, size> stdfStrOut;
-      ifstream infile(filename, ifstream::binary);
+      std::ifstream infile(filename, std::ifstream::binary);
       stdfStrOut.read(infile);
       outfile.close();
 
@@ -149,12 +198,12 @@ class TestKxUf : public CxxTest::TestSuite
       const size_t size = 1;
 
       KxTYPE<Uf8, size> stdfStrIn;
-      ofstream outfile(filename, ofstream::binary);
+      std::ofstream outfile(filename, std::ofstream::binary);
       stdfStrIn.write(outfile);
       outfile.close();
 
       KxTYPE<Uf8, size> stdfStrOut;
-      ifstream infile(filename, ifstream::binary);
+      std::ifstream infile(filename, std::ifstream::binary);
       stdfStrOut.read(infile);
       outfile.close();
 
@@ -176,12 +225,12 @@ class TestKxUf : public CxxTest::TestSuite
       const size_t size = 10;
 
       KxTYPE<Uf1, size> stdfStrIn;
-      ofstream outfile(filename, ofstream::binary);
+      std::ofstream outfile(filename, std::ofstream::binary);
       stdfStrIn.write(outfile);
       outfile.close();
 
       KxTYPE<Uf1, size> stdfStrOut;
-      ifstream infile(filename, ifstream::binary);
+      std::ifstream infile(filename, std::ifstream::binary);
       stdfStrOut.read(infile);
       outfile.close();
 
@@ -203,12 +252,12 @@ class TestKxUf : public CxxTest::TestSuite
       const size_t size = 10;
 
       KxTYPE<Uf2, size> stdfStrIn;
-      ofstream outfile(filename, ofstream::binary);
+      std::ofstream outfile(filename, std::ofstream::binary);
       stdfStrIn.write(outfile);
       outfile.close();
 
       KxTYPE<Uf2, size> stdfStrOut;
-      ifstream infile(filename, ifstream::binary);
+      std::ifstream infile(filename, std::ifstream::binary);
       stdfStrOut.read(infile);
       outfile.close();
 
@@ -230,12 +279,12 @@ class TestKxUf : public CxxTest::TestSuite
       const size_t size = 10;
 
       KxTYPE<Uf4, size> stdfStrIn;
-      ofstream outfile(filename, ofstream::binary);
+      std::ofstream outfile(filename, std::ofstream::binary);
       stdfStrIn.write(outfile);
       outfile.close();
 
       KxTYPE<Uf4, size> stdfStrOut;
-      ifstream infile(filename, ifstream::binary);
+      std::ifstream infile(filename, std::ifstream::binary);
       stdfStrOut.read(infile);
       outfile.close();
 
@@ -257,12 +306,12 @@ class TestKxUf : public CxxTest::TestSuite
       const size_t size = 10;
 
       KxTYPE<Uf8, size> stdfStrIn;
-      ofstream outfile(filename, ofstream::binary);
+      std::ofstream outfile(filename, std::ofstream::binary);
       stdfStrIn.write(outfile);
       outfile.close();
 
       KxTYPE<Uf8, size> stdfStrOut;
-      ifstream infile(filename, ifstream::binary);
+      std::ifstream infile(filename, std::ifstream::binary);
       stdfStrOut.read(infile);
       outfile.close();
 
@@ -289,12 +338,12 @@ class TestKxUf : public CxxTest::TestSuite
       {
         stdfStrIn[i] = data[i] = i;
       }
-      ofstream outfile(filename, ofstream::binary);
+      std::ofstream outfile(filename, std::ofstream::binary);
       stdfStrIn.write(outfile);
       outfile.close();
 
       KxTYPE<Uf1, size> stdfStrOut;
-      ifstream infile(filename, ifstream::binary);
+      std::ifstream infile(filename, std::ifstream::binary);
       stdfStrOut.read(infile);
       outfile.close();
 
@@ -328,12 +377,12 @@ class TestKxUf : public CxxTest::TestSuite
       {
         stdfStrIn[i] = data[i] = i;
       }
-      ofstream outfile(filename, ofstream::binary);
+      std::ofstream outfile(filename, std::ofstream::binary);
       stdfStrIn.write(outfile);
       outfile.close();
 
       KxTYPE<Uf2, size> stdfStrOut;
-      ifstream infile(filename, ifstream::binary);
+      std::ifstream infile(filename, std::ifstream::binary);
       stdfStrOut.read(infile);
       outfile.close();
 
@@ -367,12 +416,12 @@ class TestKxUf : public CxxTest::TestSuite
       {
         stdfStrIn[i] = data[i] = i;
       }
-      ofstream outfile(filename, ofstream::binary);
+      std::ofstream outfile(filename, std::ofstream::binary);
       stdfStrIn.write(outfile);
       outfile.close();
 
       KxTYPE<Uf4, size> stdfStrOut;
-      ifstream infile(filename, ifstream::binary);
+      std::ifstream infile(filename, std::ifstream::binary);
       stdfStrOut.read(infile);
       outfile.close();
 
@@ -406,12 +455,12 @@ class TestKxUf : public CxxTest::TestSuite
       {
         stdfStrIn[i] = data[i] = i;
       }
-      ofstream outfile(filename, ofstream::binary);
+      std::ofstream outfile(filename, std::ofstream::binary);
       stdfStrIn.write(outfile);
       outfile.close();
 
       KxTYPE<Uf8, size> stdfStrOut;
-      ifstream infile(filename, ifstream::binary);
+      std::ifstream infile(filename, std::ifstream::binary);
       stdfStrOut.read(infile);
       outfile.close();
 
@@ -445,12 +494,12 @@ class TestKxUf : public CxxTest::TestSuite
       {
         stdfStrIn[i] = data[i] = i+0xFFFF;
       }
-      ofstream outfile(filename, ofstream::binary);
+      std::ofstream outfile(filename, std::ofstream::binary);
       stdfStrIn.write(outfile);
       outfile.close();
 
       KxTYPE<Uf4, size> stdfStrOut;
-      ifstream infile(filename, ifstream::binary);
+      std::ifstream infile(filename, std::ifstream::binary);
       stdfStrOut.read(infile);
       outfile.close();
 

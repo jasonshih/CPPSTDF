@@ -1,6 +1,6 @@
 #include <cxxtest/TestSuite.h>
 
-#include "../src/DataTypes.hpp"
+#include "DataTypes.hpp"
 
 class TestKxCn : public CxxTest::TestSuite 
 {
@@ -43,7 +43,7 @@ class TestKxCn : public CxxTest::TestSuite
       TS_ASSERT_EQUALS(stdfStr.storage(), 5*size);
       TS_ASSERT_EQUALS(stdfStr[88].to_string(), data[88].to_string());
       TS_ASSERT_EQUALS(stdfStr[99].to_string(), data[99].to_string());
-      string str;
+      std::basic_string<char> str;
       for(size_t i = 0; i < size-1; i++) str.append("ABCD,"); str.append("ABCD");
       TS_ASSERT_EQUALS(stdfStr.to_string(), str);
       stdfStr.clear();
@@ -58,12 +58,12 @@ class TestKxCn : public CxxTest::TestSuite
       const size_t size = 1;
 
       KxTYPE<Cn, size> stdfStrIn;
-      ofstream outfile(filename, ofstream::binary);
+      std::ofstream outfile(filename, std::ofstream::binary);
       stdfStrIn.write(outfile);
       outfile.close();
 
       KxTYPE<Cn, size> stdfStrOut;
-      ifstream infile(filename, ifstream::binary);
+      std::ifstream infile(filename, std::ifstream::binary);
       stdfStrOut.read(infile);
       outfile.close();
 
@@ -81,12 +81,12 @@ class TestKxCn : public CxxTest::TestSuite
       const size_t size = 10;
 
       KxTYPE<Cn, size> stdfStrIn;
-      ofstream outfile(filename, ofstream::binary);
+      std::ofstream outfile(filename, std::ofstream::binary);
       stdfStrIn.write(outfile);
       outfile.close();
 
       KxTYPE<Cn, size> stdfStrOut;
-      ifstream infile(filename, ifstream::binary);
+      std::ifstream infile(filename, std::ifstream::binary);
       stdfStrOut.read(infile);
       outfile.close();
 
@@ -109,12 +109,12 @@ class TestKxCn : public CxxTest::TestSuite
       {
         stdfStrIn[i] = data[i] = "ABCDEF";
       }
-      ofstream outfile(filename, ofstream::binary);
+      std::ofstream outfile(filename, std::ofstream::binary);
       stdfStrIn.write(outfile);
       outfile.close();
 
       KxTYPE<Cn, size> stdfStrOut;
-      ifstream infile(filename, ifstream::binary);
+      std::ifstream infile(filename, std::ifstream::binary);
       stdfStrOut.read(infile);
       outfile.close();
 
@@ -123,7 +123,7 @@ class TestKxCn : public CxxTest::TestSuite
       TS_ASSERT_EQUALS(stdfStrIn.storage(), 140u);
       TS_ASSERT_EQUALS(stdfStrOut.storage(), 140u);
       TS_ASSERT_EQUALS(stdfStrIn.to_string(), stdfStrOut.to_string());
-      string str;
+      std::basic_string<char> str;
       for(size_t i = 0; i < size-1; i++) str.append("ABCDEF,"); str.append("ABCDEF");
       TS_ASSERT_EQUALS(stdfStrIn.to_string(), str);
       TS_ASSERT_EQUALS(stdfStrOut.to_string(), str);

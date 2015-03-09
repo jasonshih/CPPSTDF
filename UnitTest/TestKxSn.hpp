@@ -1,6 +1,6 @@
 #include <cxxtest/TestSuite.h>
 
-#include "../src/DataTypes.hpp"
+#include "DataTypes.hpp"
 
 class TestKxSn : public CxxTest::TestSuite 
 {
@@ -43,7 +43,7 @@ class TestKxSn : public CxxTest::TestSuite
       TS_ASSERT_EQUALS(stdfStr.storage(), 6*size);
       TS_ASSERT_EQUALS(stdfStr[8].to_string(), data[8].to_string());
       TS_ASSERT_EQUALS(stdfStr[9].to_string(), data[9].to_string());
-      string str;
+      std::basic_string<char> str;
       for(size_t i = 0; i < size-1; i++) str.append("ABCD,"); str.append("ABCD");
       TS_ASSERT_EQUALS(stdfStr.to_string(), str);
       stdfStr.clear();
@@ -64,7 +64,7 @@ class TestKxSn : public CxxTest::TestSuite
       TS_ASSERT_EQUALS(stdfStr.storage(), 6*size);
       TS_ASSERT_EQUALS(stdfStr[88].to_string(), data[88].to_string());
       TS_ASSERT_EQUALS(stdfStr[93].to_string(), data[93].to_string());
-      string str;
+      std::basic_string<char> str;
       for(size_t i = 0; i < size-1; i++) str.append("ABCD,"); str.append("ABCD");
       TS_ASSERT_EQUALS(stdfStr.to_string(), str);
       stdfStr.clear();
@@ -85,7 +85,7 @@ class TestKxSn : public CxxTest::TestSuite
       TS_ASSERT_EQUALS(stdfStr.storage(), 6*size);
       TS_ASSERT_EQUALS(stdfStr[88].to_string(), data[88].to_string());
       TS_ASSERT_EQUALS(stdfStr[93].to_string(), data[93].to_string());
-      string str;
+      std::basic_string<char> str;
       for(size_t i = 0; i < size-1; i++) str.append("ABCD,"); str.append("ABCD");
       TS_ASSERT_EQUALS(stdfStr.to_string(), str);
       stdfStr.clear();
@@ -100,12 +100,12 @@ class TestKxSn : public CxxTest::TestSuite
       const size_t size = 1;
 
       KxTYPE<Sn, size> stdfStrIn;
-      ofstream outfile(filename, ofstream::binary);
+      std::ofstream outfile(filename, std::ofstream::binary);
       stdfStrIn.write(outfile);
       outfile.close();
 
       KxTYPE<Sn, size> stdfStrOut;
-      ifstream infile(filename, ifstream::binary);
+      std::ifstream infile(filename, std::ifstream::binary);
       stdfStrOut.read(infile);
       outfile.close();
 
@@ -123,12 +123,12 @@ class TestKxSn : public CxxTest::TestSuite
       const size_t size = 10;
 
       KxTYPE<Sn, size> stdfStrIn;
-      ofstream outfile(filename, ofstream::binary);
+      std::ofstream outfile(filename, std::ofstream::binary);
       stdfStrIn.write(outfile);
       outfile.close();
 
       KxTYPE<Sn, size> stdfStrOut;
-      ifstream infile(filename, ifstream::binary);
+      std::ifstream infile(filename, std::ifstream::binary);
       stdfStrOut.read(infile);
       outfile.close();
 
@@ -151,12 +151,12 @@ class TestKxSn : public CxxTest::TestSuite
       {
         stdfStrIn[i] = data[i] = "ABCDEF";
       }
-      ofstream outfile(filename, ofstream::binary);
+      std::ofstream outfile(filename, std::ofstream::binary);
       stdfStrIn.write(outfile);
       outfile.close();
 
       KxTYPE<Sn, size> stdfStrOut;
-      ifstream infile(filename, ifstream::binary);
+      std::ifstream infile(filename, std::ifstream::binary);
       stdfStrOut.read(infile);
       outfile.close();
 
@@ -165,7 +165,7 @@ class TestKxSn : public CxxTest::TestSuite
       TS_ASSERT_EQUALS(stdfStrIn.storage(), 160u);
       TS_ASSERT_EQUALS(stdfStrOut.storage(), 160u);
       TS_ASSERT_EQUALS(stdfStrIn.to_string(), stdfStrOut.to_string());
-      string str;
+      std::basic_string<char> str;
       for(size_t i = 0; i < size-1; i++) str.append("ABCDEF,"); str.append("ABCDEF");
       TS_ASSERT_EQUALS(stdfStrIn.to_string(), str);
       TS_ASSERT_EQUALS(stdfStrOut.to_string(), str);

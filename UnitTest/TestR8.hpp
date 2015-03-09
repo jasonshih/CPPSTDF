@@ -1,6 +1,6 @@
 #include <cxxtest/TestSuite.h>
 
-#include "../src/DataTypes.hpp"
+#include "DataTypes.hpp"
 
 class TestR8 : public CxxTest::TestSuite 
 {
@@ -40,12 +40,12 @@ class TestR8 : public CxxTest::TestSuite
       const char *filename = "TestR8.testWriteRead1.txt";
 
       R8 stdfStrIn;
-      ofstream outfile(filename, ofstream::binary);
+      std::ofstream outfile(filename, std::ofstream::binary);
       stdfStrIn.write(outfile);
       outfile.close();
 
       R8 stdfStrOut;
-      ifstream infile(filename, ifstream::binary);
+      std::ifstream infile(filename, std::ifstream::binary);
       stdfStrOut.read(infile);
       outfile.close();
 
@@ -61,12 +61,12 @@ class TestR8 : public CxxTest::TestSuite
       const char *filename = "TestR8.testWriteRead2.txt";
 
       R8 stdfStrIn = -0.0;
-      ofstream outfile(filename, ofstream::binary);
+      std::ofstream outfile(filename, std::ofstream::binary);
       stdfStrIn.write(outfile);
       outfile.close();
 
       R8 stdfStrOut;
-      ifstream infile(filename, ifstream::binary);
+      std::ifstream infile(filename, std::ifstream::binary);
       stdfStrOut.read(infile);
       outfile.close();
 
@@ -82,12 +82,12 @@ class TestR8 : public CxxTest::TestSuite
       const char *filename = "TestR8.testWriteRead3.txt";
 
       R8 stdfStrIn = 214748364700000000ULL;
-      ofstream outfile(filename, ofstream::binary);
+      std::ofstream outfile(filename, std::ofstream::binary);
       stdfStrIn.write(outfile);
       outfile.close();
 
       R8 stdfStrOut;
-      ifstream infile(filename, ifstream::binary);
+      std::ifstream infile(filename, std::ifstream::binary);
       stdfStrOut.read(infile);
       outfile.close();
 
@@ -103,12 +103,12 @@ class TestR8 : public CxxTest::TestSuite
       const char *filename = "TestR8.testWriteRead4.txt";
 
       R8 stdfStrIn = -2147483647000000009;
-      ofstream outfile(filename, ofstream::binary);
+      std::ofstream outfile(filename, std::ofstream::binary);
       stdfStrIn.write(outfile);
       outfile.close();
 
       R8 stdfStrOut;
-      ifstream infile(filename, ifstream::binary);
+      std::ifstream infile(filename, std::ifstream::binary);
       stdfStrOut.read(infile);
       outfile.close();
 
@@ -124,12 +124,12 @@ class TestR8 : public CxxTest::TestSuite
       const char *filename = "TestR5.testWriteRead4.txt";
 
       R8 stdfStrIn = -0.1234567890123456789;
-      ofstream outfile(filename, ofstream::binary);
+      std::ofstream outfile(filename, std::ofstream::binary);
       stdfStrIn.write(outfile);
       outfile.close();
 
       R8 stdfStrOut;
-      ifstream infile(filename, ifstream::binary);
+      std::ifstream infile(filename, std::ifstream::binary);
       stdfStrOut.read(infile);
       outfile.close();
 
